@@ -1,8 +1,9 @@
-﻿using Trivo.Application.DTOs.Chat;
-using Trivo.Application.DTOs.User;
 using Trivo.Application.Features.Chat.Commands.CreateChat;
 using Trivo.Domain.Enums;
 using Trivo.Domain.Models;
+
+using Trivo.Application.DTOs.Chat;
+using Trivo.Application.DTOs.Users;
 
 namespace Trivo.Application.Features.Chat;
 

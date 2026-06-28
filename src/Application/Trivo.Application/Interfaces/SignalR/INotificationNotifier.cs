@@ -1,4 +1,5 @@
-﻿using Trivo.Application.DTOs.Notification;
+
+using Trivo.Application.DTOs.Notifications;
 
 namespace Trivo.Application.Interfaces.SignalR;
 

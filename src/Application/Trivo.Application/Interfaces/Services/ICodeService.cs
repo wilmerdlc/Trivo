@@ -1,6 +1,7 @@
-using Trivo.Application.DTOs.Email;
 using Trivo.Application.Utils;
 using Trivo.Domain.Enums;
+
+using Trivo.Application.DTOs.Email;
 
 namespace Trivo.Application.Interfaces.Services;
 

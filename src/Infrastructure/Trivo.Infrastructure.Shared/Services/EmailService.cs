@@ -1,9 +1,10 @@
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using Trivo.Application.DTOs.Email;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Domain.Configurations;
+
+using Trivo.Application.DTOs.Email;
 
 namespace Trivo.Infrastructure.Shared.Services;
 

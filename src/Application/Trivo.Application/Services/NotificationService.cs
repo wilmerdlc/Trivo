@@ -1,13 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
-using Trivo.Application.DTOs.Notification;
+using Microsoft.Extensions.Logging;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.SignalR;
 using Trivo.Application.Interfaces.UnitOfWork;
-using Trivo.Application.Mapper;
+using Trivo.Application.Features.Notifications;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
+
+using Trivo.Application.DTOs.Notifications;
 
 namespace Trivo.Application.Services;
 

@@ -1,8 +1,7 @@
-using Trivo.Application.DTOs.Experts;
-using Trivo.Application.DTOs.Match;
-using Trivo.Application.DTOs.Recruiter;
-using Trivo.Application.Mappings;
+using Trivo.Application.Features.Users;
 using Trivo.Domain.Models;
+
+using Trivo.Application.DTOs.Matching;
 
 namespace Trivo.Application.Features.Matching;
 

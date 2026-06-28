@@ -1,11 +1,12 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using Trivo.Application.DTOs.Match;
 using Trivo.Application.Interfaces.SignalR;
 using Trivo.Domain.Enums;
+
+using Trivo.Application.DTOs.Matching;
 
 namespace Trivo.Infrastructure.Shared.SignalR.Hubs;
 

@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
-using Trivo.Application.DTOs.Skills;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
+
+using Trivo.Application.DTOs.Skills;
 
 namespace Trivo.Application.Features.Skills.Query.GetSkillsPagination;
 

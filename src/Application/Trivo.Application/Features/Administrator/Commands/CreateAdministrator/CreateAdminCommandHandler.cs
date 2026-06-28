@@ -6,6 +6,8 @@ using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 
+using Trivo.Application.DTOs.Administrator;
+
 namespace Trivo.Application.Features.Administrator.Commands.CreateAdministrator;
 
 internal sealed class CreateAdminCommandHandler(

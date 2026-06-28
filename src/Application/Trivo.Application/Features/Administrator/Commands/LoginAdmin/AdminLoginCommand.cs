@@ -1,5 +1,6 @@
 using Trivo.Application.Abstractions.Messages;
-using Trivo.Application.DTOs.JWT;
+
+using Trivo.Application.DTOs.Authentication;
 
 namespace Trivo.Application.Features.Administrator.Commands.LoginAdmin;
 

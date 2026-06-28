@@ -1,3 +1,4 @@
+
 using Trivo.Application.DTOs.Email;
 
 namespace Trivo.Application.Interfaces.Services;

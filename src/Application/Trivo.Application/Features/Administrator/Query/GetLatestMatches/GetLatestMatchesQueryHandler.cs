@@ -1,10 +1,12 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
-using Trivo.Application.Features.Administrator.Query.GetLatestMatches.Mappings;
+using Trivo.Application.Features.Administrator;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
+
+using Trivo.Application.DTOs.Administrator;
 
 namespace Trivo.Application.Features.Administrator.Query.GetLatestMatches;
 

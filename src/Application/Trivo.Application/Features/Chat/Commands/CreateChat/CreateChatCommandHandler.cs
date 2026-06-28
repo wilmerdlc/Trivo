@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
-using Trivo.Application.DTOs.Chat;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Interfaces.SignalR;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
+
+using Trivo.Application.DTOs.Chat;
 
 namespace Trivo.Application.Features.Chat.Commands.CreateChat;
 

@@ -1,6 +1,7 @@
-using Trivo.Application.DTOs.Interests;
 using Trivo.Application.Features.Interests.Commands.CreateInterest;
 using Trivo.Domain.Models;
+
+using Trivo.Application.DTOs.Interests;
 
 namespace Trivo.Application.Features.Interests;
 
