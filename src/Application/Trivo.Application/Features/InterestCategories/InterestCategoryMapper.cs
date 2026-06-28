@@ -1,5 +1,6 @@
 using Trivo.Application.Features.InterestCategories.Commands.CreateInterestCategory;
 using Trivo.Domain.Models;
+using Trivo.Application.DTOs.InterestCategories;
 
 namespace Trivo.Application.Features.InterestCategories;
 

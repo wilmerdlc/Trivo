@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
-using Trivo.Application.DTOs.User;
 using Trivo.Application.Interfaces.Repository.Account;
-using Trivo.Application.Mappings;
+using Trivo.Application.Features.Users;
 using Trivo.Application.Utils;
+
+using Trivo.Application.DTOs.Users;
 
 namespace Trivo.Application.Features.Administrator.Query.GetLastBannedUsers;
 

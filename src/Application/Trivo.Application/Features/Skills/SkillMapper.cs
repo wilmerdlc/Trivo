@@ -1,6 +1,7 @@
-using Trivo.Application.DTOs.Skills;
 using Trivo.Application.Features.Skills.Commands.CreateSkill;
 using Trivo.Domain.Models;
+
+using Trivo.Application.DTOs.Skills;
 
 namespace Trivo.Application.Features.Skills;
 

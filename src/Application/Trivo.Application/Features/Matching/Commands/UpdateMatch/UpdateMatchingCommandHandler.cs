@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
-using Trivo.Application.DTOs.Match;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.SignalR;
 using Trivo.Application.Utils;
 using Trivo.Domain.Enums;
+
+using Trivo.Application.DTOs.Matching;
 
 namespace Trivo.Application.Features.Matching.Commands.UpdateMatch;
 
@@ -37,7 +38,7 @@ internal sealed class UpdateMatchingCommandHandler(
 
             var dto = MatchMapper.MapToMatchDetailsDto(match);
 
-            if (request.Status is MatchingUpdateStatus.Completed or MatchingUpdateStatus.Rejected)
+            if (request.Status is MatchUpdateStatus.Completed or MatchUpdateStatus.Rejected)
             {
                 await NotifyByStatusAsync(request.UserId, match.Id, dto, request.Status.Value);
             }
@@ -55,12 +56,12 @@ internal sealed class UpdateMatchingCommandHandler(
 
     #region Private methods
 
-    private Task NotifyByStatusAsync(Guid userId, Guid matchId, MatchDetailsDto dto, MatchingUpdateStatus status)
+    private Task NotifyByStatusAsync(Guid userId, Guid matchId, MatchDetailsDto dto, MatchUpdateStatus status)
     {
         return status switch
         {
-            MatchingUpdateStatus.Completed => matchNotifier.NotifyMatchCompletedAsync(userId, matchId, dto),
-            MatchingUpdateStatus.Rejected  => matchNotifier.NotifyMatchRejectedAsync(userId, matchId, dto),
+            MatchUpdateStatus.Completed => matchNotifier.NotifyMatchCompletedAsync(userId, matchId, dto),
+            MatchUpdateStatus.Rejected  => matchNotifier.NotifyMatchRejectedAsync(userId, matchId, dto),
             _                              => Task.CompletedTask
         };
     }

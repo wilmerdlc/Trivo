@@ -3,6 +3,8 @@ using Trivo.Application.Abstractions.Messages;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Utils;
 
+using Trivo.Application.DTOs.Administrator;
+
 namespace Trivo.Application.Features.Administrator.Query.GetReportedUsersCount;
 
 internal sealed class GetReportedUsersCountQueryHandler(

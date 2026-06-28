@@ -1,10 +1,12 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
-using Trivo.Application.Features.InterestCategories.Commands.CreateInterestCategory;
+using Trivo.Application.Features.InterestCategories;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
+
+using Trivo.Application.DTOs.InterestCategories;
 
 namespace Trivo.Application.Features.InterestCategories.Query.GetPaginatedInterestCategories;
 

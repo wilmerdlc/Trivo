@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
@@ -6,12 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Trivo.Application.DTOs.JWT;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.SignalR; 
 using Trivo.Domain.Configurations;
 using Trivo.Infrastructure.Shared.Services;
 using Trivo.Infrastructure.Shared.SignalR; 
+
+using Trivo.Application.DTOs.Authentication;
 
 namespace Trivo.Infrastructure.Shared;
 

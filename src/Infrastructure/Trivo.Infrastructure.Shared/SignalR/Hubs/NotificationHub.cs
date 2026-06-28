@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using Trivo.Application.DTOs.Notification;
+using Trivo.Application.DTOs;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.SignalR;
 

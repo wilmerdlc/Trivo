@@ -1,3 +1,5 @@
+using Trivo.Application.DTOs.Interests;
+
 namespace Trivo.Application.DTOs.Interests;
 
 public sealed record InterestDto(

@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
-using Trivo.Application.DTOs.Interests;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 using Trivo.Domain.Models;
+
+using Trivo.Application.DTOs.Interests;
 
 namespace Trivo.Application.Features.Interests.Commands.CreateInterest;
 

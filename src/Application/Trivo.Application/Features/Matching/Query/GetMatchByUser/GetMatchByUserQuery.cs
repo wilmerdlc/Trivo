@@ -1,6 +1,7 @@
 using Trivo.Application.Abstractions.Messages;
-using Trivo.Application.DTOs.Match;
 using Trivo.Domain.Enums;
+
+using Trivo.Application.DTOs.Matching;
 
 namespace Trivo.Application.Features.Matching.Query.GetMatchByUser;
 
