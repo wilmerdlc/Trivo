@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Trivo.Application.Features.Chat.Query.GetChatPagination;
 using Trivo.Application.Interfaces.SignalR;
 
 using Trivo.Application.DTOs.Chat;
@@ -25,11 +26,11 @@ public class ChatHub(
 
         logger.LogInformation("User connected: {UserId}", userId);
 
-        // await mediator.Send(new GetChatPagesQuery(
-        //     userId,
-        //     PageNumber: 1,
-        //     PageSize: 9
-        // ));
+        await mediator.Send(new GetChatPaginationQuery(
+            userId,
+            PageNumber: 1,
+            PageSize: 9
+        ));
 
         await base.OnConnectedAsync();
     }
