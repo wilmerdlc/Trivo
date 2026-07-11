@@ -24,14 +24,6 @@ internal sealed class GetMessagePaginationQueryHandler(
             return ResultT<PagedResult<MessageDto>>.Failure(Error.Failure("400", "Request cannot be null."));
         }
 
-        if (request.PageNumber <= 0 || request.PageSize <= 0)
-        {
-            logger.LogWarning("Invalid pagination parameters. PageNumber={PageNumber}, PageSize={PageSize}",
-                request.PageNumber, request.PageSize);
-
-            return ResultT<PagedResult<MessageDto>>.Failure(Error.Failure("400", "Pagination parameters must be greater than zero."));
-        }
-
         var pagedResult = await messageRepository.GetPagedByChatIdAsync(
             request.ChatId,
             request.PageNumber,

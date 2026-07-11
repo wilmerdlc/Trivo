@@ -51,12 +51,6 @@ internal sealed class SendMessageCommandHandler(
             return ResultT<MessageDto>.Failure(Error.Failure("403", "Sender or receiver does not belong to the chat."));
         }
 
-        if (string.IsNullOrEmpty(request.Content))
-        {
-            logger.LogWarning("Message content is empty.");
-            return ResultT<MessageDto>.Failure(Error.Failure("400", "Message content is required."));
-        }
-
         var message = new Message
         {
             MessageId = Guid.NewGuid(),
