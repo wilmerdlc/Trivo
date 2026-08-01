@@ -11,7 +11,6 @@
       <PackageReference Include="FluentValidation" Version="11.10.0" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
       <PackageReference Include="MediatR" Version="12.2.0" />
-      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
       <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.10" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
       <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
@@ -19,10 +18,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Domain\Trivo.Domain\Trivo.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Features\InterestCategories\Commands\" />
     </ItemGroup>
 
 </Project>
