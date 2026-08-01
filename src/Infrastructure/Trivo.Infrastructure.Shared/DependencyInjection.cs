@@ -7,10 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Trivo.Application.Interfaces.Services;
-using Trivo.Application.Interfaces.SignalR; 
+using Trivo.Application.Interfaces.SignalR;
 using Trivo.Domain.Configurations;
 using Trivo.Infrastructure.Shared.Services;
-using Trivo.Infrastructure.Shared.SignalR; 
+using Trivo.Infrastructure.Shared.SignalR;
 
 using Trivo.Application.DTOs.Authentication;
 
@@ -23,12 +23,21 @@ public static class DependencyInjection
         services.AddServices();
         services.AddConfiguration(configuration);
         services.AddJwtAuthentication(configuration);
+        services.AddAiService(configuration);
+    }
+
+    private static void AddAiService(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<AiSetting>(configuration.GetSection("AiSetting"));
+
+        services.AddScoped<IAiCompletionService, OpenAiCompletionService>();
     }
 
     private static void AddServices(this IServiceCollection services)
     {
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ICloudinaryService, CloudinaryService>();
+        services.AddScoped<ICodeService, CodeService>();
 
         #region SignalR
 
