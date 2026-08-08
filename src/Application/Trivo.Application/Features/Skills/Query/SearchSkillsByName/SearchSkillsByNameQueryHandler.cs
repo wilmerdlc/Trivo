@@ -37,7 +37,7 @@ internal sealed class SearchSkillsByNameQueryHandler(
             logger.LogInformation("No skills found matching the name: '{Name}'.", request.Name);
 
             return ResultT<IEnumerable<SkillWithIdDto>>.Failure(
-                Error.Failure("404", "No skills were found matching the provided name."));
+                Error.NotFound("404", "No skills were found matching the provided name."));
         }
 
         var skillDtos = skills.Select(x => new SkillWithIdDto(
