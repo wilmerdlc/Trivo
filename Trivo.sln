@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivo.Domain", "src\Domain\Trivo.Domain\Trivo.Domain.csproj", "{1279E826-867B-4464-B978-88D6CE2E7DB3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivo.Infrastructure.Shared", "src\Infrastructure\Trivo.Infrastructure.Shared\Trivo.Infrastructure.Shared.csproj", "{AD6CED7E-8CDA-4058-B078-E69D9B8DD50F}"
@@ -7,6 +8,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivo.Application", "src\Application\Trivo.Application\Trivo.Application.csproj", "{F6B7A416-C408-452F-B42D-D1E0F8861230}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivo.Infrastructure.Persistence", "src\Infrastructure\Trivo.Infrastructure.Persistence\Trivo.Infrastructure.Persistence.csproj", "{166294DE-A04D-462C-B053-E699CD7A5293}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2DB79FC7-8139-4ED9-9428-FCA4FC90E76E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{3F50ABBF-2203-4FB0-88D2-671B8B482327}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivo.API", "src\API\Trivo.API\Trivo.API.csproj", "{7DE17F71-3ED4-4033-8622-9A35B40176B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +37,13 @@ Global
 		{166294DE-A04D-462C-B053-E699CD7A5293}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{166294DE-A04D-462C-B053-E699CD7A5293}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{166294DE-A04D-462C-B053-E699CD7A5293}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DE17F71-3ED4-4033-8622-9A35B40176B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DE17F71-3ED4-4033-8622-9A35B40176B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DE17F71-3ED4-4033-8622-9A35B40176B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE17F71-3ED4-4033-8622-9A35B40176B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3F50ABBF-2203-4FB0-88D2-671B8B482327} = {2DB79FC7-8139-4ED9-9428-FCA4FC90E76E}
+		{7DE17F71-3ED4-4033-8622-9A35B40176B3} = {3F50ABBF-2203-4FB0-88D2-671B8B482327}
 	EndGlobalSection
 EndGlobal
