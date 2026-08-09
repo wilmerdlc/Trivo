@@ -1,5 +1,3 @@
-using System.Text.Json;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
@@ -40,9 +38,7 @@ try
     builder.Services.AddInfrastructureShared(builder.Configuration);
     builder.Services.AddVersioning();
 
-    builder.Services.AddHealthChecks()
-        .AddDbContextCheck<TrivoContext>(name: "postgresql")
-        .AddRedis(builder.Configuration.GetConnectionString("Redis")!, name: "redis");
+    builder.Services.AddApiHealthChecks(builder.Configuration);
 
     builder.Services.AddCors(options =>
     {
@@ -106,28 +102,7 @@ try
 
     app.MapControllers();
 
-    app.MapHealthChecks("/health", new HealthCheckOptions
-    {
-        ResponseWriter = async (context, report) =>
-        {
-            context.Response.ContentType = "application/json";
-
-            var payload = new
-            {
-                status = report.Status.ToString(),
-                totalDurationMs = report.TotalDuration.TotalMilliseconds,
-                checks = report.Entries.Select(entry => new
-                {
-                    name = entry.Key,
-                    status = entry.Value.Status.ToString(),
-                    description = entry.Value.Description,
-                    durationMs = entry.Value.Duration.TotalMilliseconds
-                })
-            };
-
-            await context.Response.WriteAsync(JsonSerializer.Serialize(payload));
-        }
-    });
+    app.MapApiHealthChecks();
 
     app.MapHub<ChatHub>("/hubs/chat");
     app.MapHub<UserRecommendationHub>("/hubs/recommendations");
