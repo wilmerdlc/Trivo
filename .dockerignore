@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.idea/
+.git/
+.gitignore
+.env
+.env.template
+*.md
+compose.yaml
+docker-compose.prod.yml
+Dockerfile
+.dockerignore
+src/API/Trivo.API/appsettings.Development.json
