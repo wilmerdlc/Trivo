@@ -55,7 +55,7 @@ public static class DependencyInjection
     private static IServiceCollection AddJwtAuthentication(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.Configure<JwtSetting>(configuration.GetSection("JWTConfigurations"));
+        services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
 
         services.AddAuthentication(options =>
             {
@@ -73,10 +73,10 @@ public static class DependencyInjection
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
-                    ValidIssuer = configuration["JWTConfigurations:Issuer"],
-                    ValidAudience = configuration["JWTConfigurations:Audience"],
+                    ValidIssuer = configuration["JwtSetting:Issuer"],
+                    ValidAudience = configuration["JwtSetting:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(configuration["JWTConfigurations:Key"] ?? string.Empty))
+                        Encoding.UTF8.GetBytes(configuration["JwtSetting:Key"] ?? string.Empty))
                 };
 
                 options.Events = new JwtBearerEvents
