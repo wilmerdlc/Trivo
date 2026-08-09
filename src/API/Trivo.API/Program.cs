@@ -1,5 +1,8 @@
+using System.Text.Json;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Serilog.Events;
 using Trivo.API.Extensions;
 using Trivo.API.Filters;
 using Trivo.Application;
@@ -37,6 +40,10 @@ try
     builder.Services.AddInfrastructureShared(builder.Configuration);
     builder.Services.AddVersioning();
 
+    builder.Services.AddHealthChecks()
+        .AddDbContextCheck<TrivoContext>(name: "postgresql")
+        .AddRedis(builder.Configuration.GetConnectionString("Redis")!, name: "redis");
+
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowFrontendDev", policy =>
@@ -62,7 +69,14 @@ try
 
     app.UseWebSockets();
 
-    app.UseSerilogRequestLogging();
+    app.UseSerilogRequestLogging(options =>
+    {
+        options.GetLevel = (httpContext, elapsed, ex) => ex is not null || httpContext.Response.StatusCode > 499
+            ? LogEventLevel.Error
+            : httpContext.Request.Path.StartsWithSegments("/health")
+                ? LogEventLevel.Verbose
+                : LogEventLevel.Information;
+    });
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
@@ -75,7 +89,15 @@ try
         });
     }
 
-    app.UseHttpsRedirection();
+    // The container only ever binds http:// (ASPNETCORE_URLS=http://+:5026, no
+    // certificate available yet), so there's no https endpoint to redirect to
+    // in Production. UseHttpsRedirection would just log a warning on every
+    // request. Once a reverse proxy/load balancer terminates TLS in front of
+    // it, this should be revisited alongside UseForwardedHeaders().
+    if (!app.Environment.IsProduction())
+    {
+        app.UseHttpsRedirection();
+    }
 
     app.UseCustomExceptionHandler();
 
@@ -83,6 +105,29 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
+
+    app.MapHealthChecks("/health", new HealthCheckOptions
+    {
+        ResponseWriter = async (context, report) =>
+        {
+            context.Response.ContentType = "application/json";
+
+            var payload = new
+            {
+                status = report.Status.ToString(),
+                totalDurationMs = report.TotalDuration.TotalMilliseconds,
+                checks = report.Entries.Select(entry => new
+                {
+                    name = entry.Key,
+                    status = entry.Value.Status.ToString(),
+                    description = entry.Value.Description,
+                    durationMs = entry.Value.Duration.TotalMilliseconds
+                })
+            };
+
+            await context.Response.WriteAsync(JsonSerializer.Serialize(payload));
+        }
+    });
 
     app.MapHub<ChatHub>("/hubs/chat");
     app.MapHub<UserRecommendationHub>("/hubs/recommendations");
