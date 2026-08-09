@@ -26,8 +26,8 @@ try
         .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
         .AddEnvironmentVariables();
 
-    // Add services to the container.
 
+    // Add services to the container.
     builder.Services.AddControllers(options => { options.Filters.Add<ResultFilter>(); });
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -39,6 +39,16 @@ try
     builder.Services.AddVersioning();
 
     builder.Services.AddApiHealthChecks(builder.Configuration);
+
+    // Registration only — app.UseHsts() is intentionally not wired into the
+    // pipeline yet. The Production container has no TLS in front of it today,
+    // so sending this header there would tell browsers to only use HTTPS
+    builder.Services.AddHsts(options =>
+    {
+        options.Preload = false;
+        options.IncludeSubDomains = true;
+        options.MaxAge = TimeSpan.FromDays(7); // start moderate, raise once verified stable behind real TLS
+    });
 
     builder.Services.AddCors(options =>
     {
