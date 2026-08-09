@@ -1,4 +1,5 @@
-﻿using Trivo.Application.DTOs.User;
+
+using Trivo.Application.DTOs.Users;
 
 namespace Trivo.Application.Interfaces.SignalR;
 

@@ -1,0 +1,4 @@
+# TODO: Build the API image (see Dockerfile) and push it to a container registry
+# (e.g. Docker Hub, GHCR) as part of this pipeline. compose.prod.yaml pulls the
+# image via the ${API_IMAGE} env var, so a deploy step still needs to build/tag/
+# push it before that compose file can be applied anywhere.

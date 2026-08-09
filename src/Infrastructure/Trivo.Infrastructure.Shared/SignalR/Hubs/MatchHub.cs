@@ -1,11 +1,13 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using Trivo.Application.DTOs.Match;
+using Trivo.Application.Features.Matching.Query.GetMatchByUser;
 using Trivo.Application.Interfaces.SignalR;
 using Trivo.Domain.Enums;
+
+using Trivo.Application.DTOs.Matching;
 
 namespace Trivo.Infrastructure.Shared.SignalR.Hubs;
 
@@ -75,25 +77,25 @@ public class MatchHub(
             logger.LogInformation("User with valid role connected: {UserId} - Role: {Role}", 
                 userId, role.ToString());
 
-            // var result = await mediator.Send(new GetMatchesByUserQuery
-            // (
-            //     userId,
-            //     pageNumber,
-            //     pageSize,
-            //     role
-            // ));
-            //
-            // if (!result.IsSuccess)
-            // {
-            //     logger.LogWarning("No matches found for user {UserId} with role {Role}.",
-            //         userId, role);
-            //     
-            //     await Clients.User(userId.ToString()).ReceiveMatchesAsync(new List<MatchDto>());
-            //     await base.OnConnectedAsync();
-            //     return;
-            // }
+            var result = await mediator.Send(new GetMatchByUserQuery
+            (
+                userId,
+                pageNumber,
+                pageSize,
+                role
+            ));
 
-            // await Clients.User(userId.ToString()).ReceiveMatchesAsync(result.Value);
+            if (!result.IsSuccess)
+            {
+                logger.LogWarning("No matches found for user {UserId} with role {Role}.",
+                    userId, role);
+
+                await Clients.User(userId.ToString()).ReceiveMatchesAsync(new List<MatchDto>());
+                await base.OnConnectedAsync();
+                return;
+            }
+
+            await Clients.User(userId.ToString()).ReceiveMatchesAsync(result.Value);
 
             await base.OnConnectedAsync();
         }

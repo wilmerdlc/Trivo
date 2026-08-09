@@ -1,4 +1,4 @@
-﻿using Trivo.Application.DTOs;
+
 using Trivo.Application.DTOs.Chat;
 
 namespace Trivo.Application.Interfaces.SignalR;

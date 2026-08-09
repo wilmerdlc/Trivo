@@ -1,6 +1,7 @@
-using Trivo.Application.DTOs.JWT;
 using Trivo.Application.Utils;
 using Trivo.Domain.Models;
+
+using Trivo.Application.DTOs.Authentication;
 
 namespace Trivo.Application.Interfaces.Services;
 

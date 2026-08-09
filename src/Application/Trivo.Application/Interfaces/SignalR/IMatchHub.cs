@@ -1,4 +1,5 @@
-﻿using Trivo.Application.DTOs.Match;
+
+using Trivo.Application.DTOs.Matching;
 
 namespace Trivo.Application.Interfaces.SignalR;
 

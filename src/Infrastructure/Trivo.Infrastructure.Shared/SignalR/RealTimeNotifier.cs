@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Trivo.Application.DTOs;
-using Trivo.Application.DTOs.Chat;
+using Microsoft.AspNetCore.SignalR;
 using Trivo.Application.Interfaces.SignalR;
 using Trivo.Infrastructure.Shared.SignalR.Hubs;
+
+using Trivo.Application.DTOs.Chat;
 
 namespace Trivo.Infrastructure.Shared.SignalR;
 

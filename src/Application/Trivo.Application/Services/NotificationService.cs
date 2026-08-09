@@ -1,12 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
-using Trivo.Application.DTOs.Notification;
+using Microsoft.Extensions.Logging;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.SignalR;
-using Trivo.Application.Mapper;
+using Trivo.Application.Interfaces.UnitOfWork;
+using Trivo.Application.Features.Notifications;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
+
+using Trivo.Application.DTOs.Notifications;
 
 namespace Trivo.Application.Services;
 
@@ -14,7 +16,8 @@ public class NotificationService(
     INotificationNotifier notificationNotifier,
     ILogger<NotificationService> logger,
     IUserRepository userRepository,
-    INotificationRepository notificationRepository
+    INotificationRepository notificationRepository,
+    IUnitOfWork unitOfWork
 ) : INotificationService
 {
     public async Task<ResultT<PagedResult<NotificationDto>>> GetNotificationsAsync(Guid userId,
@@ -110,6 +113,8 @@ public class NotificationService(
 
         await notificationNotifier.NotifyNotificationMarkedAsReadAsync(userId, notificationId, notificationDto);
 
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
         logger.LogInformation("Notification {NotificationId} updated to 'read' for user {UserId}",
             notificationId, userId);
 
@@ -148,7 +153,7 @@ public class NotificationService(
         CancellationToken cancellationToken)
     {
         var notification = await notificationRepository.GetByIdAsync(notificationId, cancellationToken);
-        
+
         if (notification is null)
         {
             logger.LogWarning("Notification with ID {NotificationId} does not exist", notificationId);
@@ -175,6 +180,8 @@ public class NotificationService(
         var notificationDto = NotificationMapper.MapToDto(notification);
 
         await notificationNotifier.NotifyNotificationDeletedAsync(userId, notificationId, notificationDto);
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation("Notification {NotificationId} successfully deleted for user {UserId}",
             notificationId, userId);
@@ -206,6 +213,8 @@ public class NotificationService(
         var notificationEntity = NotificationMapper.MapToEntity(notificationDto);
 
         await notificationRepository.CreateAsync(notificationEntity, cancellationToken);
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
             "Notification successfully created - ID: {NotificationId}, Type: {Type}, User: {UserId}",

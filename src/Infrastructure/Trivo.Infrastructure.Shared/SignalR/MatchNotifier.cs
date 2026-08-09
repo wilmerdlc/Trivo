@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Trivo.Application.DTOs.Match;
+using Microsoft.AspNetCore.SignalR;
 using Trivo.Application.Interfaces.SignalR;
 using Trivo.Infrastructure.Shared.SignalR.Hubs;
+
+using Trivo.Application.DTOs.Matching;
 
 namespace Trivo.Infrastructure.Shared.SignalR;
 

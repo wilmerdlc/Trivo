@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
@@ -6,12 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Trivo.Application.DTOs.JWT;
 using Trivo.Application.Interfaces.Services;
-using Trivo.Application.Interfaces.SignalR; 
+using Trivo.Application.Interfaces.SignalR;
 using Trivo.Domain.Configurations;
 using Trivo.Infrastructure.Shared.Services;
-using Trivo.Infrastructure.Shared.SignalR; 
+using Trivo.Infrastructure.Shared.SignalR;
+
+using Trivo.Application.DTOs.Authentication;
 
 namespace Trivo.Infrastructure.Shared;
 
@@ -22,12 +23,21 @@ public static class DependencyInjection
         services.AddServices();
         services.AddConfiguration(configuration);
         services.AddJwtAuthentication(configuration);
+        services.AddAiService(configuration);
+    }
+
+    private static void AddAiService(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<AiSetting>(configuration.GetSection("AiSetting"));
+
+        services.AddScoped<IAiCompletionService, OpenAiCompletionService>();
     }
 
     private static void AddServices(this IServiceCollection services)
     {
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ICloudinaryService, CloudinaryService>();
+        services.AddScoped<ICodeService, CodeService>();
 
         #region SignalR
 
@@ -45,7 +55,7 @@ public static class DependencyInjection
     private static IServiceCollection AddJwtAuthentication(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.Configure<JwtSetting>(configuration.GetSection("JWTConfigurations"));
+        services.Configure<JwtSetting>(configuration.GetSection("JwtSetting"));
 
         services.AddAuthentication(options =>
             {
@@ -63,10 +73,10 @@ public static class DependencyInjection
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
-                    ValidIssuer = configuration["JWTConfigurations:Issuer"],
-                    ValidAudience = configuration["JWTConfigurations:Audience"],
+                    ValidIssuer = configuration["JwtSetting:Issuer"],
+                    ValidAudience = configuration["JwtSetting:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(configuration["JWTConfigurations:Key"] ?? string.Empty))
+                        Encoding.UTF8.GetBytes(configuration["JwtSetting:Key"] ?? string.Empty))
                 };
 
                 options.Events = new JwtBearerEvents

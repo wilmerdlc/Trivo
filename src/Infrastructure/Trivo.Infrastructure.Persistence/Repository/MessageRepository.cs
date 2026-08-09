@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Trivo.Application.DTOs;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Pagination;
 using Trivo.Domain.Models;
 using Trivo.Infrastructure.Persistence.Base;
 using Trivo.Infrastructure.Persistence.Context;
+
+using Trivo.Application.DTOs.Chat;
 
 namespace Trivo.Infrastructure.Persistence.Repository;
 

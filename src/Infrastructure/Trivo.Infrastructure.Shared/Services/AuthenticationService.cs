@@ -3,13 +3,14 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Trivo.Application.DTOs.JWT;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Utils;
 using Trivo.Domain.Configurations;
 using Trivo.Domain.Enums;
 using Trivo.Domain.Models;
+
+using Trivo.Application.DTOs.Authentication;
 
 namespace Trivo.Infrastructure.Shared.Services;
 
