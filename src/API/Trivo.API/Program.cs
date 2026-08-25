@@ -125,7 +125,9 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "An error has occurred");
+    Log.Fatal(ex, "Application terminated unexpectedly");
+    Console.Error.WriteLine(ex);
+    Environment.ExitCode = 1;
 }
 finally
 {
