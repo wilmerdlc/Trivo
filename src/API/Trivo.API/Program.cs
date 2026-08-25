@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
 using Trivo.API.Extensions;
@@ -88,10 +89,11 @@ try
     if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     {
         app.UseSwagger();
-        app.UseSwaggerUI(c =>
+        app.MapScalarApiReference("swagger", options =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
-            c.RoutePrefix = "swagger";
+            options.WithTitle("Trivo API")
+                .WithTheme(ScalarTheme.Purple)
+                .WithOpenApiRoutePattern("/swagger/{documentName}.json");
         });
     }
 
