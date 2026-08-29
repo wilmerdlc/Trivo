@@ -21,6 +21,18 @@ src/
 
 ## Running locally
 
+**Quick start** (once `.env` and `appsettings.Development.json` are filled in — see steps 2 and 4 below for the first time you set this up):
+
+```bash
+dotnet dev-certs https --trust
+docker compose up -d
+dotnet run --project src/API/Trivo.API
+```
+
+The API is then at `https://localhost:7146`, with the API reference UI at `https://localhost:7146/swagger`.
+
+Full steps, for the first time you set this up:
+
 1. **Trust the local HTTPS development certificate** (required — the app only serves HTTPS in local dev, see [Properties/launchSettings.json](src/API/Trivo.API/Properties/launchSettings.json)):
 
    ```bash
@@ -66,7 +78,7 @@ src/
    dotnet run --project src/API/Trivo.API
    ```
 
-   This uses the `https` launch profile — the app is served at `https://localhost:7146` and applies pending EF Core migrations automatically on startup. Swagger UI opens at `/swagger`.
+   This uses the `https` launch profile — the app is served at `https://localhost:7146` and applies pending EF Core migrations automatically on startup. The API reference UI (Scalar, browsing the same OpenAPI spec Swagger generates) opens at `/swagger`.
 
    Seq's web UI is available at `http://localhost:<SEQ_PORT_UI>` (whatever you set in `.env`) for browsing structured logs.
 
@@ -128,3 +140,20 @@ docker push wdelacruzdev/trivo-backend:<tag>
 ## Logging
 
 Serilog writes to the console and to Seq (`compose.yaml`/`compose.prod.yaml` both run a `seq` container). Locally, Seq's UI is at `http://localhost:<SEQ_PORT_UI>`; in production it resolves internally via the `seq` service name (see `appsettings.Production.json`).
+
+## Working with this repo in Claude Code (optional)
+
+None of this is required to build, run, or contribute to Trivo — it only matters if you use [Claude Code](https://claude.com/claude-code) against this repo, backend or frontend side.
+
+- **`.claude/skills/`** — committed, project-specific skills (CQRS/Result/Repository conventions, EF Core patterns, nullable reference types, etc.). They're picked up automatically by Claude Code from this repo; no install step needed.
+- **`CLAUDE.md`** — repo-level instructions Claude Code always loads, including the rules for using `graphify` (see below).
+- **`graphify-out/`** — a generated knowledge graph of the codebase (god nodes, community structure, cross-file relationships: `graph.json`, `GRAPH_REPORT.md`, `manifest.json`, `graph.html`). It's committed so the graph is available without anyone having to generate it first; `graphify-out/cache/` (pure local cache, regenerable) is gitignored.
+- **`graphify`** itself is a separate CLI tool, not a dependency of this repo — it's only needed if you want Claude to query the graph (`graphify query "<question>"`, `graphify path "<A>" "<B>"`, `graphify explain "<concept>"`) instead of grepping raw files. To set it up locally:
+
+  ```bash
+  uv tool install graphifyy   # or: pipx install graphifyy
+  graphify claude install     # wires the CLAUDE.md hook + PreToolUse guard for your machine
+  ```
+
+  `graphify claude install` writes machine-specific hooks to `.claude/settings.local.json`, which is gitignored — each developer sets this up independently, it's never shared via git.
+- After changing code, run `graphify update .` to refresh the graph (AST-only, no API cost) so it stays accurate for the next session.
