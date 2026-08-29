@@ -366,3 +366,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Claude Code - machine-specific local settings (hooks with absolute paths, etc.)
+.claude/settings.local.json
+
+# graphify - local cache (AST cache, stat index); regenerate with `graphify update .`
+graphify-out/cache/
