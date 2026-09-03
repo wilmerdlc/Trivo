@@ -34,5 +34,9 @@ public class RecruiterConfig : IEntityTypeConfiguration<Recruiter>
         builder.Property(r => r.UserId)
             .HasColumnName("FKUserId")
             .IsRequired();
+
+        // At most one Recruiter row per user — same reasoning as ExpertConfig's unique index.
+        builder.HasIndex(r => r.UserId)
+            .IsUnique();
     }
 }

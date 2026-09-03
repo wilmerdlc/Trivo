@@ -36,5 +36,10 @@ public class ExpertConfig : IEntityTypeConfiguration<Expert>
         builder.Property(e => e.UserId)
             .HasColumnName("FKUserId")
             .IsRequired();
+
+        // At most one Expert row per user — GetUserRecommendationsQueryHandler's
+        // ToDictionary(e => e.UserId) assumes this, and would throw otherwise.
+        builder.HasIndex(e => e.UserId)
+            .IsUnique();
     }
 }

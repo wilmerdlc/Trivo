@@ -10,6 +10,7 @@ namespace Trivo.Application.Features.Experts.Commands.CreateExpert;
 
 internal sealed class CreateExpertCommandHandler(
     IExpertRepository expertRepository,
+    IRecruiterRepository recruiterRepository,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     ILogger<CreateExpertCommandHandler> logger
@@ -23,6 +24,22 @@ internal sealed class CreateExpertCommandHandler(
             logger.LogError("The user with id {UserId} does not exist.", request.UserId);
 
             return ResultT<ExpertDto>.Failure(Error.NotFound("404", "The user does not exist"));
+        }
+
+        var existingExpert = await expertRepository.GetByUserIdAsync(request.UserId, cancellationToken);
+        if (existingExpert is not null)
+        {
+            logger.LogWarning("User {UserId} already has an expert profile.", request.UserId);
+
+            return ResultT<ExpertDto>.Failure(Error.Conflict("409", "You already have an expert profile."));
+        }
+
+        var existingRecruiter = await recruiterRepository.GetByUserIdAsync(request.UserId, cancellationToken);
+        if (existingRecruiter is not null)
+        {
+            logger.LogWarning("User {UserId} already has a recruiter profile; cannot also become an expert.", request.UserId);
+
+            return ResultT<ExpertDto>.Failure(Error.Conflict("409", "You already have a recruiter profile — a user can only be an expert or a recruiter, not both."));
         }
 
         var expert = request.ToExpertEntity(Guid.NewGuid());

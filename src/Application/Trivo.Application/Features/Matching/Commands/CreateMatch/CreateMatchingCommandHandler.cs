@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.SignalR;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
@@ -16,14 +18,15 @@ internal sealed class CreateMatchingCommandHandler(
     IMatchRepository matchingRepository,
     IRecruiterRepository recruiterRepository,
     IExpertRepository expertRepository,
+    IUserRepository userRepository,
     IMatchNotifier matchingNotifier,
+    ICacheService cache,
     IUnitOfWork unitOfWork
 ) : ICommandHandler<CreateMatchingCommand, MatchDetailsDto>
 {
     public async Task<ResultT<MatchDetailsDto>> Handle(CreateMatchingCommand request,
         CancellationToken cancellationToken)
     {
-        // This method loads the user's skills and interests entities
         var recruiter = await recruiterRepository.GetByIdAsync(request.RecruiterId!.Value, cancellationToken);
         if (recruiter is null)
         {
@@ -32,13 +35,31 @@ internal sealed class CreateMatchingCommandHandler(
             return ResultT<MatchDetailsDto>.Failure(Error.NotFound("404", "The specified recruiter was not found."));
         }
 
-        // This method loads the user's skills and interests entities
         var expert = await expertRepository.GetByIdAsync(request.ExpertId!.Value, cancellationToken);
         if (expert is null)
         {
             logger.LogWarning("Expert with ID {ExpertId} was not found.", request.ExpertId);
 
             return ResultT<MatchDetailsDto>.Failure(Error.NotFound("404", "The specified expert was not found."));
+        }
+
+        var recruiterUserStatus = await userRepository.GetStatusAsync(recruiter.UserId!.Value, cancellationToken);
+        var expertUserStatus = await userRepository.GetStatusAsync(expert.UserId!.Value, cancellationToken);
+        if (recruiterUserStatus == UserStatus.Banned.ToString() || expertUserStatus == UserStatus.Banned.ToString())
+        {
+            logger.LogWarning("Attempted to match a banned user. Recruiter {RecruiterId} (status {RecruiterStatus}), Expert {ExpertId} (status {ExpertStatus}).",
+                recruiter.Id, recruiterUserStatus, expert.Id, expertUserStatus);
+
+            return ResultT<MatchDetailsDto>.Failure(Error.Failure("400", "This match cannot be created — one of the users is banned."));
+        }
+
+        var existingMatch = await matchingRepository.GetAsync(expert.Id, recruiter.Id, cancellationToken);
+        if (existingMatch is not null && existingMatch.MatchStatus != MatchStatus.Rejected.ToString())
+        {
+            logger.LogWarning("A match already exists between recruiter {RecruiterId} and expert {ExpertId} with status {Status}.",
+                recruiter.Id, expert.Id, existingMatch.MatchStatus);
+
+            return ResultT<MatchDetailsDto>.Failure(Error.Conflict("409", "A match already exists between these users."));
         }
 
         if (!StatusByRole.TryGetValue(request.CreatedBy!.Value, out var value))
@@ -63,10 +84,12 @@ internal sealed class CreateMatchingCommandHandler(
         await matchingRepository.CreateAsync(matching, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
+        await cache.InvalidateByTagsAsync([CacheKeys.AdminMatchesTag], cancellationToken);
+
         logger.LogInformation("A new match was created between recruiter {RecruiterId} and expert {ExpertId}.",
             matching.RecruiterId, matching.ExpertId);
 
-        var savedMatching = await matchingRepository.GetByIdAsync(matching.Id, cancellationToken);
+        var savedMatching = await matchingRepository.GetDetailsByIdAsync(matching.Id, cancellationToken);
 
         var mappedExpert = MatchMapper.MapToExpertDto(savedMatching!.Expert!.User!, expert);
         var mappedRecruiter = MatchMapper.MapToRecruiterDto(savedMatching.Recruiter!.User!, recruiter);

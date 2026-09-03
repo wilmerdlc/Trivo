@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.SignalR;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
@@ -17,6 +19,7 @@ internal sealed class CreateMatchRejectionCommandHandler(
     IRecruiterRepository recruiterRepository,
     IExpertRepository expertRepository,
     IMatchNotifier matchNotifier,
+    ICacheService cache,
     IUnitOfWork unitOfWork
 ) : ICommandHandler<CreateMatchRejectionCommand, string>
 {
@@ -36,6 +39,15 @@ internal sealed class CreateMatchRejectionCommandHandler(
             logger.LogWarning("Expert with ID {ExpertId} was not found.", request.ExpertId);
 
             return ResultT<string>.Failure(Error.NotFound("404", "The specified expert was not found."));
+        }
+
+        var existingMatch = await matchRepository.GetAsync(expert.Id, recruiter.Id, cancellationToken);
+        if (existingMatch is not null && existingMatch.MatchStatus != MatchStatus.Rejected.ToString())
+        {
+            logger.LogWarning("A match already exists between recruiter {RecruiterId} and expert {ExpertId} with status {Status}; use the status-update flow instead of creating a rejection.",
+                recruiter.Id, expert.Id, existingMatch.MatchStatus);
+
+            return ResultT<string>.Failure(Error.Conflict("409", "A match already exists between these users. Use the update-status endpoint instead."));
         }
 
         if (!StatusByRole.TryGetValue(request.CreatedBy!.Value, out var value))
@@ -60,10 +72,12 @@ internal sealed class CreateMatchRejectionCommandHandler(
         await matchRepository.CreateAsync(match, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
+        await cache.InvalidateByTagsAsync([CacheKeys.AdminMatchesTag], cancellationToken);
+
         logger.LogInformation("The rejection of the match between recruiter {RecruiterId} and expert {ExpertId} was registered.",
             recruiter.Id, expert.Id);
 
-        var savedMatch = await matchRepository.GetByIdAsync(match.Id, cancellationToken);
+        var savedMatch = await matchRepository.GetDetailsByIdAsync(match.Id, cancellationToken);
 
         var mappedExpert = MatchMapper.MapToExpertDto(savedMatch!.Expert!.User!, expert);
         var mappedRecruiter = MatchMapper.MapToRecruiterDto(savedMatch.Recruiter!.User!, recruiter);

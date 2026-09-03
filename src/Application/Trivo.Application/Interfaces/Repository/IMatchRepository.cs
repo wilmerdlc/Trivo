@@ -45,9 +45,26 @@ public interface IMatchRepository : IGenericRepository<Match>
     Task<IEnumerable<Match>> GetAsRecruiterAsync(Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Gets a match by its unique identifier.
+    /// Gets a match by its unique identifier, with the expert's and recruiter's full user
+    /// details (skills, interests). Use the inherited <see cref="IGenericRepository{TEntity}.GetByIdAsync"/>
+    /// instead when only the match's own scalar fields are needed.
     /// </summary>
-    Task<Match?> GetByIdAsync(Guid matchId, CancellationToken cancellationToken);
+    Task<Match?> GetDetailsByIdAsync(Guid matchId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Gets the User IDs of everyone this user already has a match record with (any status,
+    /// either role side). Used to keep recommendations from re-suggesting someone the user is
+    /// already matched, pending, or rejected with.
+    /// </summary>
+    Task<IReadOnlyList<Guid>> GetMatchedCounterpartUserIdsAsync(Guid userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Gets the skill/interest IDs of counterparts from this user's already-decided matches,
+    /// split by outcome — IDs from <c>Completed</c> matches vs. IDs from <c>Rejected</c> ones.
+    /// Used to nudge future recommendation ranking toward/away from those traits.
+    /// </summary>
+    Task<(IReadOnlyList<Guid> AcceptedIds, IReadOnlyList<Guid> RejectedIds)> GetMatchHistorySignalAsync(
+        Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Updates the status of a match.

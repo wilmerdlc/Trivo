@@ -1,7 +1,10 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.SignalR;
+using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 using Trivo.Domain.Enums;
 
@@ -12,7 +15,9 @@ namespace Trivo.Application.Features.Matching.Commands.UpdateMatch;
 internal sealed class UpdateMatchingCommandHandler(
     ILogger<UpdateMatchingCommandHandler> logger,
     IMatchRepository matchRepository,
-    IMatchNotifier matchNotifier
+    IMatchNotifier matchNotifier,
+    ICacheService cache,
+    IUnitOfWork unitOfWork
 ) : ICommandHandler<UpdateMatchingCommand, MatchDetailsDto>
 {
     public async Task<ResultT<MatchDetailsDto>> Handle(UpdateMatchingCommand request, CancellationToken cancellationToken)
@@ -35,6 +40,9 @@ internal sealed class UpdateMatchingCommandHandler(
         if (request.MissingByMatching is MissingByMatching.Expert or MissingByMatching.Recruiter)
         {
             await matchRepository.UpdateStatusAsync(request.MatchingId, request.Status, cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+
+            await cache.InvalidateByTagsAsync([CacheKeys.AdminMatchesTag], cancellationToken);
 
             var dto = MatchMapper.MapToMatchDetailsDto(match);
 
