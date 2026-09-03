@@ -49,13 +49,11 @@ public class RecruiterRepository(TrivoContext context) : GenericRepository<Recru
             .FirstOrDefaultAsync(r => r.UserId == userId, cancellationToken);
     }
 
-    /// <summary>
-    /// Overrides the base GetByIdAsync to include related User, Skills, and Interests.
-    /// </summary>
-    public new async Task<Recruiter?> GetByIdAsync(Guid recruiterId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<Recruiter>> GetDetailsByUserIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken)
     {
         return await Context.Set<Recruiter>()
             .AsNoTracking()
+            .Where(r => r.UserId != null && userIds.Contains(r.UserId.Value))
             .Include(r => r.User)
             .ThenInclude(u => u!.UserSkills)!
             .ThenInclude(us => us.Skill)
@@ -63,7 +61,7 @@ public class RecruiterRepository(TrivoContext context) : GenericRepository<Recru
             .ThenInclude(u => u!.UserInterests)!
             .ThenInclude(ui => ui.Interest)
             .AsSplitQuery()
-            .FirstOrDefaultAsync(r => r.Id == recruiterId, cancellationToken);
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Recruiter?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)

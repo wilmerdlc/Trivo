@@ -30,7 +30,24 @@ public static class DependencyInjection
     {
         services.Configure<AiSetting>(configuration.GetSection("AiSetting"));
 
-        services.AddScoped<IAiCompletionService, OpenAiCompletionService>();
+        // AiSetting:Provider picks the IEmbeddingService implementation ("OpenAI" default, or
+        // "Gemini") — both stay in the codebase so switching providers is a config change, not a
+        // code change.
+        var provider = configuration["AiSetting:Provider"];
+
+        services.AddHttpClient<GoogleGeminiEmbeddingService>(client =>
+        {
+            client.BaseAddress = new Uri("https://generativelanguage.googleapis.com/");
+        });
+
+        if (string.Equals(provider, "Gemini", StringComparison.OrdinalIgnoreCase))
+        {
+            services.AddScoped<IEmbeddingService>(sp => sp.GetRequiredService<GoogleGeminiEmbeddingService>());
+        }
+        else
+        {
+            services.AddScoped<IEmbeddingService, OpenAiEmbeddingService>();
+        }
     }
 
     private static void AddServices(this IServiceCollection services)
@@ -38,6 +55,7 @@ public static class DependencyInjection
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ICloudinaryService, CloudinaryService>();
         services.AddScoped<ICodeService, CodeService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         #region SignalR
 

@@ -5,4 +5,4 @@ namespace Trivo.Application.Features.Skills.Commands.UpdateSkill;
 public sealed record UpdateSkillCommand(
     Guid UserId,
     List<Guid> SkillIds
-) : ICommand<string>;
+) : ICommand<string>, IUserOwnedRequest;

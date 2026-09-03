@@ -1,7 +1,11 @@
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
+using Trivo.Application.Features.Users.Events;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 
@@ -11,6 +15,8 @@ internal sealed class UpdateInterestCommandHandler(
     ILogger<UpdateInterestCommandHandler> logger,
     IInterestRepository interestRepository,
     IUserRepository userRepository,
+    IPublisher publisher,
+    ICacheService cache,
     IUnitOfWork unitOfWork
 ) : ICommandHandler<UpdateInterestCommand, string>
 {
@@ -27,6 +33,9 @@ internal sealed class UpdateInterestCommandHandler(
 
         await interestRepository.UpdateUserInterestsAsync(request.UserId, request.InterestIds.ToList(), cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await publisher.Publish(new UserProfileChangedEvent(request.UserId), cancellationToken);
+        await cache.InvalidateByTagsAsync([CacheKeys.UserTag(request.UserId)], cancellationToken);
 
         logger.LogInformation("Interests for user {UserId} successfully updated.", request.UserId);
 

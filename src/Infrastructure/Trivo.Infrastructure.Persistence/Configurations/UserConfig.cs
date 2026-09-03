@@ -80,5 +80,13 @@ public class UserConfig : IEntityTypeConfiguration<User>
         builder.Property(u => u.UserStatus)
             .IsRequired()
             .HasColumnType("varchar(50)");
+
+        builder.Property(u => u.ProfileEmbedding)
+            .HasColumnType("vector(1536)")
+            .IsRequired(false);
+
+        builder.Property(u => u.ProfileTextHash)
+            .HasMaxLength(64)
+            .IsRequired(false);
     }
 }

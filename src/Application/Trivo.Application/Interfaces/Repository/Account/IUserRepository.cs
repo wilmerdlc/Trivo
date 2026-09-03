@@ -1,4 +1,6 @@
+using Pgvector;
 using Trivo.Application.Interfaces.Repository.Base;
+using Trivo.Domain.Enums;
 using Trivo.Domain.Models;
 
 namespace Trivo.Application.Interfaces.Repository.Account;
@@ -36,15 +38,7 @@ public interface IUserRepository : IGenericRepository<User>
     /// <param name="email">User email.</param>
     /// <param name="cancellationToken">Token to cancel the operation.</param>
     /// <returns>The found user or null if they do not exist.</returns>
-    Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Searches for a user by their username.
-    /// </summary>
-    /// <param name="username">Username to search for.</param>
-    /// <param name="cancellationToken">Token to cancel the operation.</param>
-    /// <returns>The found user or null if they do not exist.</returns>
-    Task<User> GetByUsernameAsync(string username, CancellationToken cancellationToken);
+    Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken);
 
     /// <summary>
     /// Filters and retrieves users who have at least one of the specified interests or skills.
@@ -110,7 +104,7 @@ public interface IUserRepository : IGenericRepository<User>
     /// <param name="userId">The unique identifier of the user.</param>
     /// <param name="cancellationToken">Token to cancel the asynchronous operation if necessary.</param>
     /// <returns>A user with their full details.</returns>
-    Task<User> GetDetailsByIdAsync(Guid userId, CancellationToken cancellationToken);
+    Task<User?> GetDetailsByIdAsync(Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Gets a specific user along with their interests and skills.
@@ -146,16 +140,6 @@ public interface IUserRepository : IGenericRepository<User>
         CancellationToken cancellationToken);
 
     /// <summary>
-    /// Gets a list of potential users for matching, based on the role and current user ID.
-    /// </summary>
-    /// <param name="currentUserId">ID of the user performing the search.</param>
-    /// <param name="role">The user role to filter targets (e.g., "Expert", "Apprentice").</param>
-    /// <param name="cancellationToken">Token to cancel the asynchronous operation.</param>
-    /// <returns>A collection of <see cref="User"/> objects as potential targets.</returns>
-    Task<IEnumerable<User>> GetTargetUsersAsync(Guid currentUserId, string role,
-        CancellationToken cancellationToken);
-
-    /// <summary>
     /// Gets the role assigned to a specific user.
     /// </summary>
     /// <param name="userId">The user ID.</param>
@@ -166,4 +150,36 @@ public interface IUserRepository : IGenericRepository<User>
     Task<User?> GetExpertAndRecruiterRelationshipsByUserIdAsync(Guid userId, CancellationToken cancellationToken);
 
     Task<User?> GetByIdWithRelationshipsAsync(Guid id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Updates a user's profile embedding vector and the hash of the text it was generated from.
+    /// </summary>
+    /// <param name="userId">The user ID.</param>
+    /// <param name="embedding">The new embedding vector.</param>
+    /// <param name="profileTextHash">SHA-256 hash of the profile text the embedding was generated from.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    Task UpdateProfileEmbeddingAsync(Guid userId, Vector embedding, string profileTextHash, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Finds the users whose profile embedding is closest (cosine distance) to the given vector,
+    /// restricted to the target role and excluding the given user. Returns the raw distance
+    /// alongside each candidate so the caller can apply its own relevance cutoff (e.g. cut at the
+    /// largest gap between consecutive distances) — a fixed absolute distance threshold doesn't
+    /// generalize well, since "close" vs. "far" is relative to each individual query's own score
+    /// distribution, not a single global number.
+    /// </summary>
+    /// <param name="userId">User to exclude from the results.</param>
+    /// <param name="embedding">The reference embedding to compare against.</param>
+    /// <param name="targetRole">Role the candidates must belong to.</param>
+    /// <param name="poolSize">
+    /// How many closest candidates to fetch — larger than the final page size, so the caller has
+    /// enough of the distance curve to detect a genuine relevance cutoff.
+    /// </param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    Task<IReadOnlyList<(User User, double Distance)>> GetSimilarUsersAsync(
+        Guid userId,
+        Vector embedding,
+        Roles targetRole,
+        int poolSize,
+        CancellationToken cancellationToken);
 }

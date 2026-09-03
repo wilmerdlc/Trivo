@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Pgvector;
+using Pgvector.EntityFrameworkCore;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Domain.Enums;
 using Trivo.Domain.Models;
@@ -24,17 +26,11 @@ public class UserRepository(TrivoContext context) :
             .Select(u => u.UserStatus)
             .FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken) =>
-        (await Context.Set<User>()
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken) =>
+        await Context.Set<User>()
             .AsNoTracking()
             .Where(u => u.Email == email)
-            .FirstOrDefaultAsync(cancellationToken))!;
-
-    public async Task<User> GetByUsernameAsync(string username, CancellationToken cancellationToken) =>
-        (await Context.Set<User>()
-            .AsNoTracking()
-            .Where(u => u.Username == username)
-            .FirstOrDefaultAsync(cancellationToken))!;
+            .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<List<Guid?>> GetSkillsAsync(Guid userId, CancellationToken cancellationToken) =>
         await Context.Set<UserSkill>()
@@ -64,9 +60,9 @@ public class UserRepository(TrivoContext context) :
     public async Task<bool> UsernameExistsAsync(string username, CancellationToken cancellationToken) =>
         await ValidateAsync(u => u.Username == username, cancellationToken);
 
-    public async Task<User> GetDetailsByIdAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<User?> GetDetailsByIdAsync(Guid userId, CancellationToken cancellationToken)
     {
-        return (await Context.Set<User>()
+        return await Context.Set<User>()
             .AsNoTracking()
             .Where(u => u.Id == userId)
             .Select(u => new User
@@ -99,7 +95,7 @@ public class UserRepository(TrivoContext context) :
                     }).ToList()
             })
             .AsSingleQuery()
-            .FirstOrDefaultAsync(cancellationToken))!;
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<User>> GetByInterestsAndSkillsAsync(
@@ -184,16 +180,13 @@ public class UserRepository(TrivoContext context) :
 
     public async Task<string> GetUserRoleAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var user = await Context.Set<User>()
-            .AsNoTracking()
-            .Include(u => u.Experts)
-            .Include(u => u.Recruiters)
-            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        // Existence checks on Expert/Recruiter directly — no need to load the User row (or its
+        // full Experts/Recruiters collections) just to test whether they're non-empty.
+        if (await Context.Set<Expert>().AnyAsync(e => e.UserId == userId, cancellationToken))
+            return Roles.Expert.ToString();
 
-        if (user == null) return "No Role";
-
-        if (user.Experts?.Any() == true) return Roles.Expert.ToString();
-        if (user.Recruiters?.Any() == true) return Roles.Recruiter.ToString();
+        if (await Context.Set<Recruiter>().AnyAsync(r => r.UserId == userId, cancellationToken))
+            return Roles.Recruiter.ToString();
 
         return "No Role";
     }
@@ -219,24 +212,60 @@ public class UserRepository(TrivoContext context) :
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<User>> GetTargetUsersAsync(Guid currentUserId, string role,
+    public async Task UpdateProfileEmbeddingAsync(Guid userId, Vector embedding, string profileTextHash, CancellationToken cancellationToken)
+    {
+        // The caller (e.g. CreateUserCommandHandler) often already tracks a User with this same
+        // Id in this same scoped DbContext — attaching a brand-new stub instance for it would
+        // throw ("already being tracked"). Reuse the tracked instance when there is one instead.
+        var trackedUser = Context.ChangeTracker.Entries<User>()
+            .FirstOrDefault(e => e.Entity.Id == userId)?.Entity;
+
+        // Targeted single-column update: only this property gets marked modified, so the rest
+        // of the (required) columns aren't overwritten with defaults, which is what the generic
+        // Update(entity) would do here.
+        var user = trackedUser ?? new User { Id = userId };
+
+        if (trackedUser is null)
+        {
+            Context.Attach(user);
+        }
+
+        user.ProfileEmbedding = embedding;
+        user.ProfileTextHash = profileTextHash;
+        Context.Entry(user).Property(u => u.ProfileEmbedding).IsModified = true;
+        Context.Entry(user).Property(u => u.ProfileTextHash).IsModified = true;
+
+        await Task.CompletedTask;
+    }
+
+    public async Task<IReadOnlyList<(User User, double Distance)>> GetSimilarUsersAsync(
+        Guid userId,
+        Vector embedding,
+        Roles targetRole,
+        int poolSize,
         CancellationToken cancellationToken)
     {
         var query = Context.Set<User>()
             .AsNoTracking()
+            .Where(u => u.Id != userId && u.ProfileEmbedding != null &&
+                        u.UserStatus == Domain.Enums.UserStatus.Active.ToString());
+
+        query = targetRole switch
+        {
+            Roles.Expert => query.Where(u => u.Experts != null && u.Experts.Any()),
+            Roles.Recruiter => query.Where(u => u.Recruiters != null && u.Recruiters.Any()),
+            _ => query
+        };
+
+        var results = await query
             .Include(u => u.UserInterests)!.ThenInclude(ui => ui.Interest)
             .Include(u => u.UserSkills)!.ThenInclude(uh => uh.Skill)
-            .Where(u => u.Id != currentUserId);
+            .Select(u => new { User = u, Distance = u.ProfileEmbedding!.CosineDistance(embedding) })
+            .OrderBy(x => x.Distance)
+            .Take(poolSize)
+            .AsSplitQuery()
+            .ToListAsync(cancellationToken);
 
-        if (role == Roles.Recruiter.ToString())
-        {
-            query = query.Where(u => u.Experts != null && u.Experts.Any());
-        }
-        else if (role == Roles.Expert.ToString())
-        {
-            query = query.Where(u => u.Recruiters != null && u.Recruiters.Any());
-        }
-
-        return await query.AsSplitQuery().ToListAsync(cancellationToken);
+        return results.Select(r => (r.User, r.Distance)).ToList();
     }
 }

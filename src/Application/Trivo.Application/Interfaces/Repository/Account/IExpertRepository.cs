@@ -34,9 +34,9 @@ public interface IExpertRepository : IGenericRepository<Expert>
     Task<Expert?> GetDetailsAsync(Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Gets an expert by their specific identifier.
+    /// Gets the details of every expert whose user ID is in the given list, in one query.
     /// </summary>
-    Task<Expert?> GetByIdAsync(Guid expertId, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Expert>> GetDetailsByUserIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken);
 
     /// <summary>
     /// Gets the expert record associated with a specific user ID.

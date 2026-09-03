@@ -28,9 +28,9 @@ public interface IRecruiterRepository : IGenericRepository<Recruiter>
     Task<Recruiter?> GetDetailsAsync(Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Gets a recruiter by their specific identifier.
+    /// Gets the details of every recruiter whose user ID is in the given list, in one query.
     /// </summary>
-    Task<Recruiter?> GetByIdAsync(Guid recruiterId, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Recruiter>> GetDetailsByUserIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken);
 
     /// <summary>
     /// Gets the recruiter record associated with a specific user ID.

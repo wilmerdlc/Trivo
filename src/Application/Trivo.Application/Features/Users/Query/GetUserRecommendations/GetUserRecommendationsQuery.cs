@@ -9,4 +9,4 @@ public sealed record GetUserRecommendationsQuery(
     Guid UserId,
     int PageNumber,
     int PageSize
-) : IQuery<PagedResult<UserAiRecommendationDto>>;
+) : IQuery<PagedResult<UserAiRecommendationDto>>, IUserOwnedRequest;

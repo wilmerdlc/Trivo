@@ -1,6 +1,8 @@
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
 using Trivo.Application.Features.Users.Commands.CreateUser.Mappings;
+using Trivo.Application.Features.Users.Events;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Interfaces.Services;
@@ -22,6 +24,7 @@ internal sealed class CreateUserCommandHandler(
     ICodeService codeService,
     IEmailService emailService,
     IAiNotifier aiNotifier,
+    IPublisher publisher,
     IUnitOfWork unitOfWork,
     ILogger<CreateUserCommandHandler> logger
 ) : ICommandHandler<CreateUserCommand, UserDto>
@@ -104,6 +107,8 @@ internal sealed class CreateUserCommandHandler(
                 Subject: "Confirm your account"
             )
         );
+
+        await publisher.Publish(new UserProfileChangedEvent(user.Id), cancellationToken);
 
         var userWithRelationships = await userRepository.GetByIdWithRelationshipsAsync(user.Id, cancellationToken);
 

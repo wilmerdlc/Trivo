@@ -50,12 +50,11 @@ public class ExpertRepository(TrivoContext context) : GenericRepository<Expert>(
             .FirstOrDefaultAsync(e => e.UserId == userId, cancellationToken);
     }
 
-    /// <summary>
-    /// Overrides the base GetByIdAsync to include User, Skills, and Interests.
-    /// </summary>
-    public new async Task<Expert?> GetByIdAsync(Guid expertId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<Expert>> GetDetailsByUserIdsAsync(IEnumerable<Guid> userIds, CancellationToken cancellationToken)
     {
         return await Context.Set<Expert>()
+            .AsNoTracking()
+            .Where(e => e.UserId != null && userIds.Contains(e.UserId.Value))
             .Include(e => e.User)
             .ThenInclude(u => u!.UserSkills)!
             .ThenInclude(us => us.Skill)
@@ -63,7 +62,7 @@ public class ExpertRepository(TrivoContext context) : GenericRepository<Expert>(
             .ThenInclude(u => u!.UserInterests)!
             .ThenInclude(ui => ui.Interest)
             .AsSplitQuery()
-            .FirstOrDefaultAsync(e => e.Id == expertId, cancellationToken);
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Expert?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
