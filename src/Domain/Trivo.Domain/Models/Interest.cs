@@ -14,7 +14,5 @@ public sealed class Interest : BaseEntity
 
     public User? User { get; set; }
 
-    public ICollection<InterestCategory>? Categories { get; set; }
-
     public ICollection<UserInterest> UserInterests { get; set; } = new List<UserInterest>();
 }

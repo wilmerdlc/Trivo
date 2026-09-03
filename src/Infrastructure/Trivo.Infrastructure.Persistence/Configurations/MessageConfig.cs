@@ -45,5 +45,23 @@ public class MessageConfig : IEntityTypeConfiguration<Message>
         builder.Property(m => m.ReceiverId)
             .HasColumnName("FKReceiverId")
             .IsRequired();
+
+        // Relationships
+        // Two FKs to User (Sender/Receiver) can't be inferred by convention, and both use
+        // Restrict to avoid the multiple-cascade-paths error a delete on User would otherwise hit.
+        builder.HasOne(m => m.Sender)
+            .WithMany(u => u.SentMessages)
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(m => m.Receiver)
+            .WithMany(u => u.ReceivedMessages)
+            .HasForeignKey(m => m.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(m => m.Chat)
+            .WithMany(c => c.Messages)
+            .HasForeignKey(m => m.ChatId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

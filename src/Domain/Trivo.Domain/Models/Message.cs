@@ -27,6 +27,4 @@ public sealed class Message
     public Chat? Chat { get; set; }
 
     public ICollection<Report>? Reports { get; set; }
-
-    public ICollection<Chat>? Chats { get; set; }
 }
