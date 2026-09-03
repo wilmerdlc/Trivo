@@ -9,6 +9,13 @@ namespace Trivo.Application.Pagination;
 public static class PaginationValidator
 {
     /// <summary>
+    /// Upper bound for PageSize across all paginated queries. Without one, PageSize was
+    /// unbounded on 9 of the 11 paginated endpoints — a client could request PageSize=int.MaxValue
+    /// and force a full-table read into memory.
+    /// </summary>
+    public const int MaxPageSize = 100;
+
+    /// <summary>
     /// Validates that the provided pagination parameters are strictly greater than zero.
     /// </summary>
     /// <typeparam name="T">The type of the expected result payload.</typeparam>

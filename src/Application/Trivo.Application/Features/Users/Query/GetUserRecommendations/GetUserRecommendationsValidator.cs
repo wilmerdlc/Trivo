@@ -1,14 +1,14 @@
 using FluentValidation;
 using Trivo.Application.Pagination;
 
-namespace Trivo.Application.Features.Messages.Query.GetMessagePagination;
+namespace Trivo.Application.Features.Users.Query.GetUserRecommendations;
 
-public sealed class GetMessagePaginationValidator : AbstractValidator<GetMessagePaginationQuery>
+public sealed class GetUserRecommendationsValidator : AbstractValidator<GetUserRecommendationsQuery>
 {
-    public GetMessagePaginationValidator()
+    public GetUserRecommendationsValidator()
     {
-        RuleFor(x => x.ChatId)
-            .NotEmpty().WithMessage("Chat ID is required.");
+        RuleFor(x => x.UserId)
+            .NotEmpty().WithMessage("User ID is required.");
 
         RuleFor(x => x.PageNumber)
             .GreaterThan(0).WithMessage("Page number must be greater than zero.");
