@@ -70,23 +70,6 @@ public class InterestRepository(TrivoContext context)
         return new PagedResult<Interest>(items, total, pageNumber, pageSize);
     }
 
-    // ===== IMPLEMENTADO =====
-    public async Task<IEnumerable<User>> GetUsersByCategoryAsync(
-        Guid categoryId,
-        CancellationToken cancellationToken)
-    {
-        return await _context.Set<User>()
-            .AsNoTracking()
-            .Include(u => u.UserInterests)!
-            .ThenInclude(ui => ui.Interest)
-            .Include(u => u.UserSkills)!
-            .ThenInclude(us => us.Skill)
-            .Where(u => u.UserInterests!
-                .Any(ui => ui.Interest != null && ui.Interest.CategoryId == categoryId))
-            .AsSplitQuery()
-            .ToListAsync(cancellationToken);
-    }
-
     public async Task<PagedResult<Interest>> GetPagedByCategoriesAsync(
         IEnumerable<Guid> categoryIds,
         int pageNumber,
@@ -107,25 +90,6 @@ public class InterestRepository(TrivoContext context)
             .ToListAsync(cancellationToken);
 
         return new PagedResult<Interest>(items, total, pageNumber, pageSize);
-    }
-
-    // ===== IMPLEMENTADO =====
-    public async Task<IEnumerable<User>> GetUsersByIdsAsync(
-        IEnumerable<Guid> interestIds,
-        CancellationToken cancellationToken)
-    {
-        var idSet = interestIds.ToHashSet();
-
-        return await _context.Set<User>()
-            .AsNoTracking()
-            .Include(u => u.UserInterests)!
-            .ThenInclude(ui => ui.Interest)
-            .Include(u => u.UserSkills)!
-            .ThenInclude(us => us.Skill)
-            .Where(u => u.UserInterests!
-                .Any(ui => ui.InterestId.HasValue && idSet.Contains(ui.InterestId.Value)))
-            .AsSplitQuery()
-            .ToListAsync(cancellationToken);
     }
 
     public async Task<PagedResult<Interest>> GetSimplePagedByCategoriesAsync(
@@ -155,45 +119,11 @@ public class InterestRepository(TrivoContext context)
         return new PagedResult<Interest>(items, total, pageNumber, pageSize);
     }
 
-    public async Task<IEnumerable<User>> FindUsersByCategoryAsync(
-        Guid categoryId,
-        CancellationToken cancellationToken)
+    public async Task<Interest?> GetByIdAsync(Guid interestId, CancellationToken cancellationToken)
     {
-        return await _context.Set<User>()
+        return await _context.Set<Interest>()
             .AsNoTracking()
-            .Include(u => u.UserInterests)!
-            .ThenInclude(ui => ui.Interest)
-            .Include(u => u.UserSkills)!
-            .ThenInclude(us => us.Skill)
-            .Where(u => u.UserInterests!
-                .Any(ui => ui.Interest != null && ui.Interest.CategoryId == categoryId))
-            .AsSplitQuery()
-            .ToListAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<User>> FindUsersByInterestIdsAsync(
-        IEnumerable<Guid> interestIds,
-        CancellationToken cancellationToken)
-    {
-        var idSet = interestIds.ToHashSet();
-
-        return await _context.Set<User>()
-            .AsNoTracking()
-            .Include(u => u.UserInterests)!
-            .ThenInclude(ui => ui.Interest)
-            .Include(u => u.UserSkills)!
-            .ThenInclude(us => us.Skill)
-            .Where(u => u.UserInterests!
-                .Any(ui => ui.InterestId.HasValue && idSet.Contains(ui.InterestId.Value)))
-            .AsSplitQuery()
-            .ToListAsync(cancellationToken);
-    }
-
-    public async Task<Interest> GetByIdAsync(Guid interestId, CancellationToken cancellationToken)
-    {
-        return (await _context.Set<Interest>()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(i => i.Id == interestId, cancellationToken))!;
+            .FirstOrDefaultAsync(i => i.Id == interestId, cancellationToken);
     }
 
     public async Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken)

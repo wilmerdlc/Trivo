@@ -49,10 +49,10 @@ public class AdministratorRepository(TrivoContext context) :
     public async Task<bool> IsUsernameInUseAsync(string username, Guid userId, CancellationToken cancellationToken) =>
         await ValidateAsync(u => u.Username == username && u.Id != userId, cancellationToken);
 
-    public async Task<Administrator> GetByEmailAsync(string email, CancellationToken cancellationToken) =>
-        (await Context.Set<Administrator>()
+    public async Task<Administrator?> GetByEmailAsync(string email, CancellationToken cancellationToken) =>
+        await Context.Set<Administrator>()
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken))!;
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
     public async Task<bool> IsEmailInUseAsync(string email, Guid excludeUserId, CancellationToken cancellationToken) =>
         await ValidateAsync(u => u.Email == email && u.Id != excludeUserId, cancellationToken);

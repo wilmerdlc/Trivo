@@ -19,9 +19,10 @@ public sealed class NotificationRepository(TrivoContext context)
         int pageSize,
         CancellationToken cancellationToken)
     {
+        // No Include(n => n.User) — NotificationDto only ever reads the UserId scalar, never
+        // the User navigation, so loading it was pure waste on every page of notifications.
         var query = Context.Set<Notification>()
             .AsNoTracking()
-            .Include(n => n.User)
             .Where(n => n.UserId == userId);
 
         var totalCount = await query.CountAsync(cancellationToken);

@@ -23,7 +23,7 @@ public interface IInterestCategoryRepository : IValidation<InterestCategory>
     /// <param name="interestCategoryId">The identifier of the interest category to search for.</param>
     /// <param name="cancellationToken">Cancellation token for the asynchronous operation.</param>
     /// <returns>A task that returns the found interest category.</returns>
-    Task<InterestCategory> GetByIdAsync(Guid interestCategoryId, CancellationToken cancellationToken);
+    Task<InterestCategory?> GetByIdAsync(Guid interestCategoryId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves a paged list of existing interest categories in the database.

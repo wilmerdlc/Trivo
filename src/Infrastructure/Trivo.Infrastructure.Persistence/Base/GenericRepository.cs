@@ -11,8 +11,8 @@ public class GenericRepository<TEntity>(TrivoContext context) : IGenericReposito
 {
     protected readonly TrivoContext Context = context;
 
-    public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
-        (await Context.Set<TEntity>().FindAsync([id], cancellationToken))!;
+    public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
+        await Context.Set<TEntity>().FindAsync([id], cancellationToken);
 
     public async Task<PagedResult<TEntity>> GetPagedAsync(int pageNumber, int pageSize,
         CancellationToken cancellationToken)

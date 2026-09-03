@@ -5,7 +5,7 @@ namespace Trivo.Application.Interfaces.Repository.Base;
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {
-    Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     Task<PagedResult<TEntity>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
 

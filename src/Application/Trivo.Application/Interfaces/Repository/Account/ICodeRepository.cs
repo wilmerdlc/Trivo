@@ -17,7 +17,7 @@ public interface ICodeRepository
     /// <param name="id">The identifier of the code.</param>
     /// <param name="cancellationToken">Token to cancel the operation.</param>
     /// <returns>The found code, or null if it does not exist.</returns>
-    Task<Code> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Code?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Searches for a code by its value.
@@ -25,7 +25,7 @@ public interface ICodeRepository
     /// <param name="code">The code value to search for.</param>
     /// <param name="cancellationToken">Token to cancel the operation.</param>
     /// <returns>The found code, or null if it does not exist.</returns>
-    Task<Code> FindAsync(string code, CancellationToken cancellationToken);
+    Task<Code?> FindAsync(string code, CancellationToken cancellationToken);
 
     /// <summary>
     /// Deletes a code.

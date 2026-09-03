@@ -36,14 +36,6 @@ public interface IInterestRepository : IValidation<Interest>
     Task<PagedResult<Interest>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Gets all users that belong to at least one interest within a specific category.
-    /// </summary>
-    /// <param name="categoryId">Category identifier.</param>
-    /// <param name="cancellationToken">Token to cancel the operation.</param>
-    /// <returns>Collection of matching users.</returns>
-    Task<IEnumerable<User>> GetUsersByCategoryAsync(Guid categoryId, CancellationToken cancellationToken);
-
-    /// <summary>
     /// Retrieves a paginated list of interests filtered by one or more category identifiers.
     /// </summary>
     /// <param name="categoryIds">Collection of category identifiers.</param>
@@ -60,14 +52,6 @@ public interface IInterestRepository : IValidation<Interest>
     /// <param name="cancellationToken">Token to cancel the operation.</param>
     /// <returns>The interest if found; otherwise null.</returns>
     Task<Interest?> GetByIdAsync(Guid interestId, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Gets users that are associated with any of the provided interest identifiers.
-    /// </summary>
-    /// <param name="interestIds">Interest identifiers used as filter.</param>
-    /// <param name="cancellationToken">Token to cancel the operation.</param>
-    /// <returns>Collection of users matching at least one interest.</returns>
-    Task<IEnumerable<User>> GetUsersByIdsAsync(IEnumerable<Guid> interestIds, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves a paginated list of interests filtered by categories,

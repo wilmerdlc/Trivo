@@ -33,22 +33,6 @@ public interface ISkillRepository : IValidation<Skill>
     Task<PagedResult<Skill>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Retrieves a skill by its unique identifier.
-    /// </summary>
-    /// <param name="skillId">The identifier of the skill to retrieve.</param>
-    /// <param name="cancellationToken">Token to cancel the asynchronous operation.</param>
-    /// <returns>A task that returns the requested skill.</returns>
-    Task<Skill> GetByIdAsync(Guid skillId, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Retrieves users who are assigned the specified skills.
-    /// </summary>
-    /// <param name="skillIds">Collection of skill identifiers to filter users.</param>
-    /// <param name="cancellationToken">Token to cancel the asynchronous operation.</param>
-    /// <returns>A task that returns a collection of users who possess any of the specified skills.</returns>
-    Task<IEnumerable<User>> GetUsersBySkillsAsync(IEnumerable<Guid> skillIds, CancellationToken cancellationToken);
-
-    /// <summary>
     /// Verifies if a skill already exists with the specified name, regardless of the category.
     /// </summary>
     /// <param name="name">The name of the skill to verify.</param>

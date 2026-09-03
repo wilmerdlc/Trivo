@@ -60,30 +60,6 @@ public class SkillRepository(TrivoContext context) : Validation<Skill>(context),
         return new PagedResult<Skill>(items, total, pageNumber, pageSize);
     }
 
-    public async Task<Skill> GetByIdAsync(Guid skillId, CancellationToken cancellationToken)
-    {
-        return (await _context.Set<Skill>()
-            .FirstOrDefaultAsync(x => x.SkillId == skillId, cancellationToken))!;
-    }
-
-    public async Task<IEnumerable<User>> GetUsersBySkillsAsync(
-        IEnumerable<Guid> skillIds,
-        CancellationToken cancellationToken)
-    {
-        var skillSet = skillIds.ToHashSet();
-
-        return await _context.Set<User>()
-            .AsNoTracking()
-            .Include(u => u.UserSkills!)
-            .ThenInclude(us => us.Skill)
-            .Include(u => u.UserInterests!)
-            .ThenInclude(ui => ui.Interest)
-            .Where(u => u.UserSkills!
-                .Any(us => us.SkillId.HasValue && skillSet.Contains(us.SkillId.Value)))
-            .AsSingleQuery()
-            .ToListAsync(cancellationToken);
-    }
-
     public async Task<bool> NameExistsAsync(string name, CancellationToken cancellationToken)
     {
         return await Validate(x => x.Name == name, cancellationToken);

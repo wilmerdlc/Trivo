@@ -17,11 +17,11 @@ public class InterestCategoryRepository(TrivoContext context)
         await _context.Set<InterestCategory>().AddAsync(category, cancellationToken);
     }
 
-    public async Task<InterestCategory> GetByIdAsync(Guid categoryId, CancellationToken cancellationToken)
+    public async Task<InterestCategory?> GetByIdAsync(Guid categoryId, CancellationToken cancellationToken)
     {
-        return (await _context.Set<InterestCategory>()
+        return await _context.Set<InterestCategory>()
             .AsNoTracking()
-            .FirstOrDefaultAsync(ci => ci.CategoryId == categoryId, cancellationToken))!;
+            .FirstOrDefaultAsync(ci => ci.CategoryId == categoryId, cancellationToken);
     }
 
     public async Task<PagedResult<InterestCategory>> GetPagedAsync(int pageNumber, int pageSize,

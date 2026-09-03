@@ -13,15 +13,15 @@ public class CodeRepository(TrivoContext context) : GenericRepository<Code>(cont
         await Context.Set<Code>().AddAsync(code, cancellationToken);
     }
 
-    public async Task<Code> GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
-        (await Context.Set<Code>()
+    public async Task<Code?> GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
+        await Context.Set<Code>()
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.CodeId == id, cancellationToken))!;
+            .FirstOrDefaultAsync(c => c.CodeId == id, cancellationToken);
 
-    public async Task<Code> FindAsync(string code, CancellationToken cancellationToken) =>
-        (await Context.Set<Code>()
+    public async Task<Code?> FindAsync(string code, CancellationToken cancellationToken) =>
+        await Context.Set<Code>()
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Value == code, cancellationToken))!;
+            .FirstOrDefaultAsync(c => c.Value == code, cancellationToken);
 
     public async Task DeleteAsync(Code code, CancellationToken cancellationToken)
     {

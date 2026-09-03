@@ -19,7 +19,7 @@ public interface IAdministratorRepository : IGenericRepository<Administrator>
 
     Task<bool> IsUsernameInUseAsync(string username, Guid userId, CancellationToken cancellationToken);
 
-    Task<Administrator> GetByEmailAsync(string email, CancellationToken cancellationToken);
+    Task<Administrator?> GetByEmailAsync(string email, CancellationToken cancellationToken);
 
     Task<bool> IsEmailInUseAsync(string email, Guid excludeUserId, CancellationToken cancellationToken);
 

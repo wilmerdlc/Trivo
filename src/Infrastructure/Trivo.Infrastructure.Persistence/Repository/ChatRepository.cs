@@ -71,14 +71,6 @@ public class ChatRepository(TrivoContext context) : GenericRepository<Chat>(cont
         return new PagedResult<Chat>(chats, total, page, pageSize);
     }
 
-    public async Task<Chat> GetByIdAsync(Guid chatId, CancellationToken cancellationToken)
-        => (await Context.Set<Chat>()
-            .Include(c => c.ChatUsers)!
-            .ThenInclude(cu => cu.User)
-            .Include(c => c.Messages)
-            .Where(c => c.Id == chatId)
-            .FirstOrDefaultAsync(cancellationToken))!;
-
     public async Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         => await Context.Set<User>()
             .Where(u => u.Id == userId)
@@ -99,68 +91,19 @@ public class ChatRepository(TrivoContext context) : GenericRepository<Chat>(cont
         => await Context.Set<Chat>()
             .AnyAsync(c => c.Id == chatId, cancellationToken);
 
-    public async Task<Chat?> FindOneToOneChatAsync(Guid senderId, Guid receiverId, CancellationToken cancellationToken)
+    public async Task<bool> OneToOneChatExistsAsync(Guid senderId, Guid receiverId, CancellationToken cancellationToken)
     {
         return await Context.Set<Chat>()
-            .Include(c => c.ChatUsers)!
-            .ThenInclude(cu => cu.User)
-            .Include(c => c.Messages)
-            .ThenInclude(m => m.Sender)
-            .Include(c => c.Messages)
-            .ThenInclude(m => m.Receiver)
             .Where(c => c.ChatType == ChatType.Private.ToString())
-            .Where(c => c.ChatUsers!.Any(cu => cu.UserId == senderId) &&
-                        c.ChatUsers!.Any(cu => cu.UserId == receiverId))
-            .OrderByDescending(c => c.Messages.Max(m => m.SentAt))
-            .FirstOrDefaultAsync(cancellationToken);
+            .AnyAsync(c => c.ChatUsers!.Any(cu => cu.UserId == senderId) &&
+                           c.ChatUsers!.Any(cu => cu.UserId == receiverId), cancellationToken);
     }
 
-    public async Task<Chat?> GetChatWithUsersAndMessagesAsync(Guid chatId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<Guid>> GetChatUserIdsAsync(Guid chatId, CancellationToken cancellationToken)
     {
-        return await Context.Set<Chat>()
-            .Where(c => c.Id == chatId)
-            .Select(c => new Chat
-            {
-                Id = c.Id,
-                CreatedAt = c.CreatedAt,
-                ChatUsers = c.ChatUsers!.Select(cu => new ChatUser
-                {
-                    UserId = cu.UserId,
-                    ChatName = cu.ChatName,
-                    User = new User
-                    {
-                        Id = cu.User!.Id,
-                        Username = cu.User.Username,
-                        FirstName = cu.User.FirstName,
-                        LastName = cu.User.LastName,
-                        ProfilePicture = cu.User.ProfilePicture
-                    }
-                }).ToList(),
-                Messages = c.Messages
-                    .OrderByDescending(m => m.SentAt)
-                    .Select(m => new Message
-                    {
-                        MessageId = m.MessageId,
-                        Content = m.Content,
-                        SentAt = m.SentAt,
-                        Status = m.Status,
-                        Sender = new User
-                        {
-                            Id = m.Sender!.Id,
-                            FirstName = m.Sender.FirstName,
-                            LastName = m.Sender.LastName,
-                            ProfilePicture = m.Sender.ProfilePicture
-                        },
-                        Receiver = new User
-                        {
-                            Id = m.Receiver!.Id,
-                            FirstName = m.Receiver.FirstName,
-                            LastName = m.Receiver.LastName,
-                            ProfilePicture = m.Receiver.ProfilePicture
-                        }
-                    }).ToList()
-            })
-            .AsNoTracking()
-            .FirstOrDefaultAsync(cancellationToken);
+        return await Context.Set<ChatUser>()
+            .Where(cu => cu.ChatId == chatId && cu.UserId != null)
+            .Select(cu => cu.UserId!.Value)
+            .ToListAsync(cancellationToken);
     }
 }

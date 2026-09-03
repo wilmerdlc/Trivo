@@ -13,13 +13,17 @@ public interface IChatRepository : IGenericRepository<Chat>
     Task<PagedResult<Chat>> GetChatsByUserIdPagedAsync(Guid userId, int page, int pageSize,
         CancellationToken cancellationToken);
 
-    Task<Chat> GetByIdAsync(Guid chatId, CancellationToken cancellationToken);
-
     Task<bool> IsUserInChatAsync(Guid chatId, Guid userId, CancellationToken cancellationToken);
 
     Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken);
 
-    Task<Chat?> FindOneToOneChatAsync(Guid senderId, Guid receiverId, CancellationToken cancellationToken);
+    /// <summary>
+    /// Checks whether a one-to-one chat already exists between the two users.
+    /// </summary>
+    Task<bool> OneToOneChatExistsAsync(Guid senderId, Guid receiverId, CancellationToken cancellationToken);
 
-    Task<Chat?> GetChatWithUsersAndMessagesAsync(Guid chatId, CancellationToken cancellationToken);
+    /// <summary>
+    /// Gets the IDs of every user in a chat, for notification fan-out.
+    /// </summary>
+    Task<IReadOnlyList<Guid>> GetChatUserIdsAsync(Guid chatId, CancellationToken cancellationToken);
 }
