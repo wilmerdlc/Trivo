@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Features.Chat.Query.GetChatPagination;
+using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.SignalR;
 
 using Trivo.Application.DTOs.Chat;
@@ -13,7 +14,8 @@ namespace Trivo.Infrastructure.Shared.SignalR.Hubs;
 public class ChatHub(
     ILogger<ChatHub> logger,
     IMediator mediator,
-    IRealTimeNotifier realTimeNotifier
+    IRealTimeNotifier realTimeNotifier,
+    IChatRepository chatRepository
 ) : Hub<IChatHub>
 {
     public override async Task OnConnectedAsync()
@@ -42,7 +44,7 @@ public class ChatHub(
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task SendMessage(MessageDto message)
+    public async Task SendMessage(MessageDto message, CancellationToken cancellationToken = default)
     {
         var senderId = Context.UserIdentifier;
 
@@ -52,7 +54,23 @@ public class ChatHub(
             return;
         }
 
-        logger.LogInformation("User {SenderId} sends message to {ReceiverId}: {Content}", 
+        // This only relays a real-time notification — the message itself is persisted via the
+        // REST/SendMessageCommand path, which already does this same check. Without it here too,
+        // any connected client could push a fabricated "message" to an arbitrary ReceiverId for a
+        // ChatId they have nothing to do with.
+        var chatExists = await chatRepository.ExistsAsync(message.ChatId, cancellationToken);
+        var senderBelongs = chatExists && await chatRepository.IsUserInChatAsync(message.ChatId, senderGuid, cancellationToken);
+        var receiverBelongs = chatExists && await chatRepository.IsUserInChatAsync(message.ChatId, message.ReceiverId, cancellationToken);
+
+        if (!senderBelongs || !receiverBelongs)
+        {
+            logger.LogWarning(
+                "Rejected SendMessage: sender {SenderId} or receiver {ReceiverId} does not belong to chat {ChatId}",
+                senderGuid, message.ReceiverId, message.ChatId);
+            return;
+        }
+
+        logger.LogInformation("User {SenderId} sends message to {ReceiverId}: {Content}",
             senderId, message.ReceiverId, message.Content);
 
         await Clients.User(message.ReceiverId.ToString())

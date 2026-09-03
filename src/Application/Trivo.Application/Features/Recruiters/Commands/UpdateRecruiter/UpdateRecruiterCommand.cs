@@ -6,5 +6,6 @@ namespace Trivo.Application.Features.Recruiters.Commands.UpdateRecruiter;
 
 public sealed record UpdateRecruiterCommand(
     Guid RecruiterId,
+    Guid RequesterId,
     string CompanyName
 ) : ICommand<RecruiterDto>;

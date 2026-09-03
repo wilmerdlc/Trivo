@@ -17,7 +17,7 @@ namespace Trivo.API.Controllers.V1;
 public class MatchController(ISender sender) : ControllerBase
 {
     [HttpPost]
-    // [Authorize]
+    [Authorize]
     public async Task<ResultT<MatchDetailsDto>> CreateMatchAsync(
         [FromBody] CreateMatchingCommand command,
         CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ public class MatchController(ISender sender) : ControllerBase
     }
 
     [HttpPut]
-    // [Authorize]
+    [Authorize]
     public async Task<ResultT<MatchDetailsDto>> UpdateMatchStatusAsync(
         [FromBody] UpdateMatchingCommand command,
         CancellationToken cancellationToken)
@@ -35,7 +35,7 @@ public class MatchController(ISender sender) : ControllerBase
     }
 
     [HttpPost("reject")]
-    // [Authorize]
+    [Authorize]
     public async Task<ResultT<string>> RejectMatchAsync(
         [FromBody] CreateMatchRejectionCommand command,
         CancellationToken cancellationToken)

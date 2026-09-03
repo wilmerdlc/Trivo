@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 
@@ -10,6 +12,7 @@ namespace Trivo.Application.Features.Recruiters.Commands.UpdateRecruiter;
 
 internal sealed class UpdateRecruiterCommandHandler(
     IRecruiterRepository recruiterRepository,
+    ICacheService cache,
     IUnitOfWork unitOfWork,
     ILogger<UpdateRecruiterCommandHandler> logger
 ) : ICommandHandler<UpdateRecruiterCommand, RecruiterDto>
@@ -30,10 +33,21 @@ internal sealed class UpdateRecruiterCommandHandler(
             return ResultT<RecruiterDto>.Failure(Error.NotFound("404", "The recruiter does not exist."));
         }
 
+        if (recruiter.UserId != request.RequesterId)
+        {
+            logger.LogWarning(
+                "User {RequesterId} attempted to update recruiter {RecruiterId}, which belongs to a different user.",
+                request.RequesterId, request.RecruiterId);
+
+            return ResultT<RecruiterDto>.Failure(Error.Unauthorized("403", "You can only update your own recruiter profile."));
+        }
+
         recruiter.CompanyName = request.CompanyName;
 
         await recruiterRepository.UpdateAsync(recruiter, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await cache.InvalidateByTagsAsync([CacheKeys.UserTag(recruiter.UserId!.Value)], cancellationToken);
 
         logger.LogInformation("Recruiter '{RecruiterId}' updated successfully.", recruiter.Id);
 

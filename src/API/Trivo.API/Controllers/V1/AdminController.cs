@@ -142,6 +142,7 @@ public class AdminController(ISender sender) : ControllerBase
     }
 
     [HttpGet("count/users-report")]
+    [Authorize(Roles = "Administrator")]
     [SwaggerOperation(
         Summary = "Reported users count",
         Description = "Gets the total number of users who have been reported on the platform."

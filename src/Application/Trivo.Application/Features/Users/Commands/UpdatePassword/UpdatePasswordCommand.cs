@@ -7,4 +7,4 @@ public sealed record UpdatePasswordCommand(
     string OldPassword,
     string NewPassword,
     string ConfirmPassword
-) : ICommand<string>;
+) : ICommand<string>, IUserOwnedRequest;

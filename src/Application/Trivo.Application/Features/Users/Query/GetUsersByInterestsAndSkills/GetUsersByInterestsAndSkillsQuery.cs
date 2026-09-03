@@ -6,6 +6,7 @@ using Trivo.Application.DTOs.Users;
 namespace Trivo.Application.Features.Users.Query.GetUsersByInterestsAndSkills;
 
 public sealed record GetUsersByInterestsAndSkillsQuery(
+    Guid RequesterId,
     int PageNumber,
     int PageSize,
     List<Guid> SkillIds,

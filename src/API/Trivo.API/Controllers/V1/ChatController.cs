@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Trivo.Application.Features.Chat.Commands.CreateChat;
 using Trivo.Application.Utils;
@@ -14,6 +15,7 @@ namespace Trivo.API.Controllers.V1;
 public class ChatController(ISender sender) : ControllerBase
 {
     [HttpPost]
+    [Authorize]
     public async Task<ResultT<ChatDto>> CreateChatAsync(
         [FromBody] CreateChatCommand command,
         CancellationToken cancellationToken)

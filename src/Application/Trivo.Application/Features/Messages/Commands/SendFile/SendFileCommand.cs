@@ -10,4 +10,7 @@ public sealed record SendFileCommand(
     Guid SenderId,
     Guid ReceiverId,
     IFormFile File
-) : ICommand<MessageDto>;
+) : ICommand<MessageDto>, IUserOwnedRequest
+{
+    Guid IUserOwnedRequest.UserId => SenderId;
+}

@@ -3,11 +3,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Trivo.API.Controllers.V1.Requests;
-using Trivo.Application.Features.Users.Commands.ChangePassword;
 using Trivo.Application.Features.Users.Commands.ConfirmAccount;
 using Trivo.Application.Features.Users.Commands.CreateUser;
 using Trivo.Application.Features.Users.Commands.ForgotPassword;
 using Trivo.Application.Features.Users.Commands.LoginUser;
+using Trivo.Application.Features.Users.Commands.ResetPassword;
 using Trivo.Application.Features.Users.Commands.UpdateBiography;
 using Trivo.Application.Features.Users.Commands.UpdatePassword;
 using Trivo.Application.Features.Users.Commands.UpdateProfilePicture;
@@ -18,8 +18,10 @@ using Trivo.Application.Features.Users.Query.GetUserBiography;
 using Trivo.Application.Features.Users.Query.GetUserDetails;
 using Trivo.Application.Features.Users.Query.GetUserInterests;
 using Trivo.Application.Features.Users.Query.GetUserProfilePicture;
+using Trivo.Application.Features.Users.Query.GetUserRecommendations;
 using Trivo.Application.Features.Users.Query.GetUserSkills;
 using Trivo.Application.Features.Users.Query.GetUsersByInterestsAndSkills;
+using Trivo.Application.Helpers;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
@@ -71,6 +73,17 @@ public class UserController(
         return await sender.Send(new GetUserDetailsQuery(userId), cancellationToken);
     }
 
+    [HttpGet("{userId}/recommendations")]
+    [Authorize]
+    public async Task<ResultT<PagedResult<UserAiRecommendationDto>>> GetUserRecommendationsAsync(
+        [FromRoute] Guid userId,
+        [FromQuery] int pageNumber,
+        [FromQuery] int pageSize,
+        CancellationToken cancellationToken)
+    {
+        return await sender.Send(new GetUserRecommendationsQuery(userId, pageNumber, pageSize), cancellationToken);
+    }
+
     [HttpPost("auth")]
     public async Task<ResultT<TokenResponseDto>> LoginAsync(
         [FromBody] LoginUserCommand command,
@@ -93,7 +106,7 @@ public class UserController(
         [FromBody] ChangePasswordRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new ChangePasswordCommand(email, request.NewPassword, request.ConfirmPassword);
+        var command = new ResetPasswordCommand(email, request.Code, request.NewPassword, request.ConfirmPassword);
         return await sender.Send(command, cancellationToken);
     }
 
@@ -197,14 +210,14 @@ public class UserController(
     }
 
     [HttpPost("filter-by-interests-and-ability")]
-    // [Authorize]
+    [Authorize]
     public async Task<ResultT<PagedResult<UserAiRecommendationDto>>> GetUsersByInterestsAndSkillsAsync(
         [FromBody] FilterUsersByInterestsAndSkillsRequest request,
         [FromQuery] int pageNumber,
         [FromQuery] int pageSize,
         CancellationToken cancellationToken)
     {
-        var query = new GetUsersByInterestsAndSkillsQuery(pageNumber, pageSize, request.SkillIds, request.InterestIds);
+        var query = new GetUsersByInterestsAndSkillsQuery(HttpContext.GetUserId(), pageNumber, pageSize, request.SkillIds, request.InterestIds);
         return await sender.Send(query, cancellationToken);
     }
 

@@ -31,8 +31,8 @@ internal sealed class CreateChatCommandHandler(
             return ResultT<ChatDto>.Failure(Error.Failure("400", "Sender and receiver cannot be the same user."));
         }
 
-        var existingChat = await chatRepository.FindOneToOneChatAsync(request.SenderId, request.ReceiverId, cancellationToken);
-        if (existingChat is not null)
+        var chatExists = await chatRepository.OneToOneChatExistsAsync(request.SenderId, request.ReceiverId, cancellationToken);
+        if (chatExists)
         {
             logger.LogWarning("Chat already exists between {SenderId} and {ReceiverId}", request.SenderId, request.ReceiverId);
             return ResultT<ChatDto>.Failure(Error.Failure("400", "A chat already exists between these users."));

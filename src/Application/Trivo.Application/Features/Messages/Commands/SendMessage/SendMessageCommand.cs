@@ -9,4 +9,7 @@ public sealed record SendMessageCommand(
     Guid SenderId,
     Guid ReceiverId,
     string Content
-) : ICommand<MessageDto>;
+) : ICommand<MessageDto>, IUserOwnedRequest
+{
+    Guid IUserOwnedRequest.UserId => SenderId;
+}

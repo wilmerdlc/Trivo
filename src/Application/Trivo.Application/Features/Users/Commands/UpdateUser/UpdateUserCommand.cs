@@ -8,4 +8,4 @@ public sealed record UpdateUserCommand(
     Guid UserId,
     string Username,
     string Email
-) : ICommand<UpdateUserDto>;
+) : ICommand<UpdateUserDto>, IUserOwnedRequest;

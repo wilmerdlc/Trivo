@@ -4,4 +4,4 @@ using Trivo.Application.DTOs.Users;
 
 namespace Trivo.Application.Features.Users.Query.GetUserBiography;
 
-public sealed record GetUserBiographyQuery(Guid UserId) : IQuery<UserBiographyDto>;
+public sealed record GetUserBiographyQuery(Guid UserId) : IQuery<UserBiographyDto>, IUserOwnedRequest;

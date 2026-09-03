@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Trivo.API.Controllers.V1.Requests;
 using Trivo.Application.Features.Experts.Commands.CreateExpert;
 using Trivo.Application.Features.Experts.Commands.UpdateExpert;
+using Trivo.Application.Helpers;
 using Trivo.Application.Utils;
 
 using Trivo.Application.DTOs.Expert;
@@ -33,7 +34,7 @@ public class ExpertController(ISender sender) : ControllerBase
         [FromBody] UpdateExpertRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateExpertCommand(expertId, request.AvailableForProjects, request.Hired);
+        var command = new UpdateExpertCommand(expertId, HttpContext.GetUserId(), request.AvailableForProjects, request.Hired);
         return await sender.Send(command, cancellationToken);
     }
 }

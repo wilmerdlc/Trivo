@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Trivo.API.Controllers.V1.Requests;
 using Trivo.Application.Features.Recruiters.Commands.CreateRecruiter;
 using Trivo.Application.Features.Recruiters.Commands.UpdateRecruiter;
+using Trivo.Application.Helpers;
 using Trivo.Application.Utils;
 
 using Trivo.Application.DTOs.Recruiter;
@@ -35,7 +36,7 @@ public class RecruiterController(ISender sender) : ControllerBase
         [FromBody] UpdateRecruiterRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateRecruiterCommand(recruiterId, request.CompanyName);
+        var command = new UpdateRecruiterCommand(recruiterId, HttpContext.GetUserId(), request.CompanyName);
         return await sender.Send(command, cancellationToken);
     }
 }

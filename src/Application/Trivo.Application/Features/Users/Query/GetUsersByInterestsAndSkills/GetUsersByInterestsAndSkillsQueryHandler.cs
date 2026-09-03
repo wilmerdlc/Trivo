@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
 using Trivo.Application.Features.Matching;
@@ -13,8 +12,7 @@ namespace Trivo.Application.Features.Users.Query.GetUsersByInterestsAndSkills;
 
 internal sealed class GetUsersByInterestsAndSkillsQueryHandler(
     ILogger<GetUsersByInterestsAndSkillsQueryHandler> logger,
-    IUserRepository userRepository,
-    IDistributedCache cache
+    IUserRepository userRepository
 ) : IQueryHandler<GetUsersByInterestsAndSkillsQuery, PagedResult<UserAiRecommendationDto>>
 {
     public async Task<ResultT<PagedResult<UserAiRecommendationDto>>> Handle(
@@ -35,7 +33,9 @@ internal sealed class GetUsersByInterestsAndSkillsQueryHandler(
         }
 
         var users = (await userRepository.GetByInterestsAndSkillsAsync(
-            request.InterestIds, request.SkillIds, cancellationToken)).ToList();
+            request.InterestIds, request.SkillIds, cancellationToken))
+            .Where(u => u.Id != request.RequesterId)
+            .ToList();
 
         if (users.Count == 0)
         {
@@ -46,22 +46,12 @@ internal sealed class GetUsersByInterestsAndSkillsQueryHandler(
             );
         }
 
-        var cacheKey =
-            $"users-by-interests-skills:{string.Join("-", request.InterestIds)}:{string.Join("-", request.SkillIds)}:{request.PageNumber}:{request.PageSize}";
-
-        var result = await cache.GetOrCreateAsync(
-            cacheKey,
-            () =>
-            {
-                var pageUsers = users.Paginate(request.PageNumber, request.PageSize).ToList();
-                var pageDtos = pageUsers.Select(MapUser).ToList();
-
-                return Task.FromResult(
-                    new PagedResult<UserAiRecommendationDto>(pageDtos, users.Count, request.PageNumber, request.PageSize)
-                );
-            },
-            cancellationToken: cancellationToken
-        );
+        // Not cached, deliberately — this is a candidate-discovery endpoint. A stale entry here
+        // could keep showing a banned or already-matched user, or hide someone whose availability
+        // just changed; that's a correctness risk this app can't accept for matchmaking results.
+        var pageUsers = users.Paginate(request.PageNumber, request.PageSize).ToList();
+        var pageDtos = pageUsers.Select(MapUser).ToList();
+        var result = new PagedResult<UserAiRecommendationDto>(pageDtos, users.Count, request.PageNumber, request.PageSize);
 
         logger.LogInformation(
             "Users filtered successfully by interests and skills. Total found: {TotalUsers}",

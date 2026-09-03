@@ -10,4 +10,7 @@ public sealed record SendImageCommand(
     Guid SenderId,
     Guid ReceiverId,
     IFormFile Image
-) : ICommand<MessageDto>;
+) : ICommand<MessageDto>, IUserOwnedRequest
+{
+    Guid IUserOwnedRequest.UserId => SenderId;
+}
