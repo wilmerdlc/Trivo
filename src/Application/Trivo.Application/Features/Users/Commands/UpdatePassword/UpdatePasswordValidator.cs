@@ -9,14 +9,13 @@ public sealed class UpdatePasswordValidator : AbstractValidator<UpdatePasswordCo
         RuleFor(x => x.UserId)
             .NotEmpty().WithMessage("The user ID is required.");
 
+        // No length checks on the old password: it's being verified against an existing hash.
         RuleFor(x => x.OldPassword)
-            .NotEmpty().WithMessage("The old password is required.")
-            .MinimumLength(6).WithMessage("The old password must be at least 6 characters long.")
-            .MaximumLength(30).WithMessage("The old password must not exceed 30 characters.");
+            .NotEmpty().WithMessage("The old password is required.");
 
         RuleFor(x => x.NewPassword)
             .NotEmpty().WithMessage("The new password is required.")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long.")
+            .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
             .MaximumLength(30).WithMessage("Password must not exceed 30 characters.");
 
         RuleFor(x => x.ConfirmPassword)

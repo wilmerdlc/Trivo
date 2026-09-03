@@ -29,7 +29,7 @@ public sealed class CreateUserValidator : AbstractValidator<CreateUserCommand>
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required.")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long.")
+            .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
             .MaximumLength(30).WithMessage("Password must not exceed 30 characters.");
 
         RuleFor(x => x.Username)

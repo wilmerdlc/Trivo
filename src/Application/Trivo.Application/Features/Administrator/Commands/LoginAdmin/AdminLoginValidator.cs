@@ -11,9 +11,8 @@ public sealed class AdminLoginCommandValidator : AbstractValidator<AdminLoginCom
             .EmailAddress().WithMessage("A valid email address must be provided.")
             .MaximumLength(100).WithMessage("Email must not exceed 100 characters.");
 
+        // No length checks: this validates a password against an existing hash, not a new one.
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required.")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long.")
-            .MaximumLength(30).WithMessage("Password must not exceed 30 characters.");
+            .NotEmpty().WithMessage("Password is required.");
     }
 }

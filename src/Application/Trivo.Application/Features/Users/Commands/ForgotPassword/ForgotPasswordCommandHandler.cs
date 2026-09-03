@@ -16,15 +16,21 @@ internal sealed class ForgotPasswordCommandHandler(
     ILogger<ForgotPasswordCommandHandler> logger
 ) : ICommandHandler<ForgotPasswordCommand, string>
 {
+    // Deliberately returns the same success message whether or not the email is registered —
+    // a differing response here lets an attacker enumerate registered emails one request at a
+    // time. The actual code/email is only sent when a user is found.
+    private const string GenericResponse =
+        "If an account exists with this email, a recovery code has been sent to it.";
+
     public async Task<ResultT<string>> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByEmailAsync(request.Email, cancellationToken);
 
         if (user is null)
         {
-            logger.LogWarning("No user was found with email '{Email}'.", request.Email);
+            logger.LogWarning("Password recovery requested for unregistered email '{Email}'.", request.Email);
 
-            return ResultT<string>.Failure(Error.NotFound("404", "No user exists with this email."));
+            return ResultT<string>.Success(GenericResponse);
         }
 
         var code = await codeService.GenerateCodeAsync(user.Id, CodeType.PasswordRecovery, cancellationToken);
@@ -54,6 +60,6 @@ internal sealed class ForgotPasswordCommandHandler(
             user.Id
         );
 
-        return ResultT<string>.Success("The recovery code has been sent successfully.");
+        return ResultT<string>.Success(GenericResponse);
     }
 }

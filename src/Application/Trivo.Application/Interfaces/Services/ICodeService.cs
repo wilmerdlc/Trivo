@@ -53,6 +53,17 @@ public interface ICodeService
     Task<Result> IsCodeAvailableAsync(string code, CancellationToken cancellationToken);
 
     /// <summary>
+    /// Validates a password-recovery code for the given user (belongs to them, correct type,
+    /// unused, not expired) and marks it as used. Callers must only reset the password after
+    /// this succeeds.
+    /// </summary>
+    /// <param name="userId">ID of the user requesting the password reset.</param>
+    /// <param name="code">The code received by the user.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>The result of the operation.</returns>
+    Task<Result> ValidatePasswordRecoveryCodeAsync(Guid userId, string code, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Validates if a code is correct and active.
     /// </summary>
     /// <param name="code">The code to validate.</param>
