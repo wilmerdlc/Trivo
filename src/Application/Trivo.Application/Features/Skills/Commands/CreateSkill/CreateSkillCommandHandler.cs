@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 
@@ -14,6 +16,7 @@ internal sealed class CreateSkillCommandHandler(
     ISkillRepository skillRepository,
     IUserRepository userRepository,
     IUserSkillRepository userSkillRepository,
+    ICacheService cache,
     IUnitOfWork unitOfWork
 ) : ICommandHandler<CreateSkillCommand, SkillDto>
 {
@@ -41,6 +44,8 @@ internal sealed class CreateSkillCommandHandler(
         await skillRepository.CreateAsync(skill, cancellationToken);
         await userSkillRepository.AddAsync(userSkill, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await cache.InvalidateByTagsAsync([CacheKeys.SkillCatalogTag, CacheKeys.UserTag(user.Id)], cancellationToken);
 
         logger.LogInformation("Skill '{Name}' created with ID {SkillId} and linked to user {UserId}.",
             skill.Name, skill.SkillId, user.Id);

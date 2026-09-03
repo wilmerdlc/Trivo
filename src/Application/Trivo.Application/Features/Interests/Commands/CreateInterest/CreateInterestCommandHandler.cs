@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 using Trivo.Domain.Models;
@@ -14,6 +16,7 @@ internal sealed class CreateInterestCommandHandler(
     IInterestCategoryRepository interestCategoryRepository,
     IUserInterestRepository userInterestRepository,
     IInterestRepository interestRepository,
+    ICacheService cache,
     IUnitOfWork unitOfWork
 ) : ICommandHandler<CreateInterestCommand, InterestDetailsDto>
 {
@@ -49,6 +52,14 @@ internal sealed class CreateInterestCommandHandler(
         await interestRepository.AddAsync(interestEntity, cancellationToken);
         await userInterestRepository.AddAsync(userInterest, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var tags = new List<string> { CacheKeys.InterestCatalogTag };
+        if (request.CreatedBy.HasValue)
+        {
+            tags.Add(CacheKeys.UserTag(request.CreatedBy.Value));
+        }
+
+        await cache.InvalidateByTagsAsync(tags, cancellationToken);
 
         logger.LogInformation("Interest '{Name}' created with ID {InterestId}.", interestEntity.Name,
             interestEntity.Id);

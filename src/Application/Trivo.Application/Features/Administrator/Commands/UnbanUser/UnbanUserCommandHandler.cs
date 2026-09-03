@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 
@@ -10,6 +12,7 @@ internal sealed class UnbanUserCommandHandler(
     ILogger<UnbanUserCommandHandler> logger,
     IAdministratorRepository adminRepository,
     IUserRepository userRepository,
+    ICacheService cache,
     IUnitOfWork unitOfWork
 ) : ICommandHandler<UnbanUserCommand, string>
 {
@@ -29,6 +32,8 @@ internal sealed class UnbanUserCommandHandler(
         await adminRepository.UnbanAsync(request.UserId, cancellationToken);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await cache.InvalidateByTagsAsync([CacheKeys.AdminUsersTag], cancellationToken);
 
         logger.LogInformation("User with ID {UserId} has been unbanned.", user.Id);
 

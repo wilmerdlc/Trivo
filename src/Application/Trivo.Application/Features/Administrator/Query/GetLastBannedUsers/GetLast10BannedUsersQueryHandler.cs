@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Features.Users;
 using Trivo.Application.Utils;
 
@@ -12,15 +13,15 @@ namespace Trivo.Application.Features.Administrator.Query.GetLastBannedUsers;
 internal sealed class GetLast10BannedUsersQueryHandler(
     ILogger<GetLast10BannedUsersQueryHandler> logger,
     IAdministratorRepository adminRepository,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<GetLast10BannedUsersQuery, IEnumerable<UserDto>>
 {
     public async Task<ResultT<IEnumerable<UserDto>>> Handle(
         GetLast10BannedUsersQuery request,
         CancellationToken cancellationToken)
     {
-        var cachedUsers = await cache.GetOrCreateAsync(
-            "get-last-banned-users",
+        var cachedUsers = await cache.GetOrSetAsync(
+            CacheKeys.AdminLastBannedUsers,
             async () =>
             {
                 var bannedUsers = await adminRepository.GetLast10BannedUsersAsync(cancellationToken);
@@ -29,7 +30,8 @@ internal sealed class GetLast10BannedUsersQueryHandler(
                     .Select(UserMapper.MapUserDto)
                     .ToList();
             },
-            cancellationToken: cancellationToken
+            CacheProfiles.Hot with { Tags = [CacheKeys.AdminUsersTag] },
+            cancellationToken
         );
 
         if (!cachedUsers!.Any())

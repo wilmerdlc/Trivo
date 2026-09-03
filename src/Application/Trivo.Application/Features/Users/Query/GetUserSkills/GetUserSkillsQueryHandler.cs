@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Utils;
 
 using Trivo.Application.DTOs.Skills;
@@ -11,7 +12,7 @@ namespace Trivo.Application.Features.Users.Query.GetUserSkills;
 internal sealed class GetUserSkillsQueryHandler(
     ILogger<GetUserSkillsQueryHandler> logger,
     IUserRepository userRepository,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<GetUserSkillsQuery, IEnumerable<SkillWithIdDto>>
 {
     public async Task<ResultT<IEnumerable<SkillWithIdDto>>> Handle(GetUserSkillsQuery request, CancellationToken cancellationToken)
@@ -24,15 +25,16 @@ internal sealed class GetUserSkillsQueryHandler(
             return ResultT<IEnumerable<SkillWithIdDto>>.Failure(Error.NotFound("404", "The user does not exist"));
         }
 
-        var skills = await cache.GetOrCreateAsync(
-            $"user-skills-{request.UserId}",
+        var skills = await cache.GetOrSetAsync(
+            CacheKeys.UserSkills(request.UserId),
             async () =>
             {
                 var userSkills = await userRepository.GetSkillsByUserIdAsync(request.UserId, cancellationToken);
 
                 return UserMapper.MapToSkills(userSkills.ToList());
             },
-            cancellationToken: cancellationToken
+            CacheProfiles.Warm with { Tags = [CacheKeys.UserTag(request.UserId)] },
+            cancellationToken
         );
 
         if (!skills.Any())

@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 
@@ -10,6 +12,7 @@ namespace Trivo.Application.Features.Users.Commands.UpdateUser;
 
 internal sealed class UpdateUserCommandHandler(
     IUserRepository userRepository,
+    ICacheService cache,
     IUnitOfWork unitOfWork,
     ILogger<UpdateUserCommandHandler> logger
 ) : ICommandHandler<UpdateUserCommand, UpdateUserDto>
@@ -48,6 +51,8 @@ internal sealed class UpdateUserCommandHandler(
 
         await userRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await cache.InvalidateByTagsAsync([CacheKeys.UserTag(user.Id)], cancellationToken);
 
         logger.LogInformation("User with ID '{UserId}' updated successfully.", user.Id);
 

@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pgvector.EntityFrameworkCore;
+using StackExchange.Redis;
 using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Interfaces.Repository.Base;
 using Trivo.Application.Interfaces.Services;
+using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Domain.Common;
 using Trivo.Infrastructure.Persistence.Base;
 using Trivo.Infrastructure.Persistence.Context;
@@ -36,8 +39,14 @@ public static class DependencyInjection
         services.AddDbContext<TrivoContext>(postgres =>
         {
             postgres.UseNpgsql(configuration.GetConnectionString("TrivoContext"),
-                b => { b.MigrationsAssembly("Trivo.Infrastructure.Persistence"); });
+                b =>
+                {
+                    b.MigrationsAssembly("Trivo.Infrastructure.Persistence");
+                    b.UseVector();
+                });
         });
+
+        services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<TrivoContext>());
     }
 
     private static void AddRepositories(this IServiceCollection services, IConfiguration configuration)
@@ -69,5 +78,11 @@ public static class DependencyInjection
         string connectionString = configuration.GetConnectionString("Redis")!;
         services.AddStackExchangeRedisCache(options => { options.Configuration = connectionString; }
         );
+
+        // Singleton: IConnectionMultiplexer is thread-safe and expensive to create (manages its own
+        // pool of TCP connections) — registering it per-scope/transient would open and tear down
+        // connections on every request.
+        services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(connectionString));
+        services.AddSingleton<ICacheService, RedisCacheService>();
     }
 }

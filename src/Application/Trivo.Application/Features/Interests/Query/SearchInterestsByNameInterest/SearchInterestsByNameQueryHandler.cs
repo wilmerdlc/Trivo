@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Utils;
 
 using Trivo.Application.DTOs.Interests;
@@ -11,7 +12,7 @@ namespace Trivo.Application.Features.Interests.Query.SearchInterestsByNameIntere
 internal sealed class SearchInterestsByNameQueryHandler(
     ILogger<SearchInterestsByNameQueryHandler> logger,
     IInterestRepository interestRepository,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<SearchInterestsByNameQuery, IEnumerable<InterestWithIdDto>>
 {
     public async Task<ResultT<IEnumerable<InterestWithIdDto>>> Handle(SearchInterestsByNameQuery request,
@@ -25,17 +26,16 @@ internal sealed class SearchInterestsByNameQueryHandler(
                 Error.Failure("400", "The interest name cannot be empty."));
         }
 
-        // ToLowerInvariant() ensures the cache key is consistent regardless of how the user typed it
-        var cacheKey = $"search-interest-by-name-{request.Name.Trim().ToLowerInvariant()}";
-
-        var cachedDtos = await cache.GetOrCreateAsync(cacheKey,
+        var cachedDtos = await cache.GetOrSetAsync(
+            CacheKeys.InterestSearch(request.Name),
             async () =>
             {
                 var interests = await interestRepository.SearchByNameAsync(request.Name, cancellationToken);
 
                 return interests.ToInterestWithIdDtoList();
             },
-            cancellationToken: cancellationToken);
+            CacheProfiles.Cold with { Tags = [CacheKeys.InterestCatalogTag] },
+            cancellationToken);
 
         var dtoList = cachedDtos?.ToList();
         if (dtoList is null || !dtoList.Any())

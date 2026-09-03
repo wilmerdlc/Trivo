@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Utils;
 
 using Trivo.Application.DTOs.Skills;
@@ -11,7 +12,7 @@ namespace Trivo.Application.Features.Skills.Query.SearchSkillsByName;
 internal sealed class SearchSkillsByNameQueryHandler(
     ILogger<SearchSkillsByNameQueryHandler> logger,
     ISkillRepository skillRepository,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<SearchSkillsByNameQuery, IEnumerable<SkillWithIdDto>>
 {
     public async Task<ResultT<IEnumerable<SkillWithIdDto>>> Handle(SearchSkillsByNameQuery request, CancellationToken cancellationToken)
@@ -24,12 +25,11 @@ internal sealed class SearchSkillsByNameQueryHandler(
                 Error.Failure("400", "The skill name cannot be empty."));
         }
 
-        var cacheKey = $"search-skills-by-name-{request.Name.Trim().ToLowerInvariant()}";
-
-        var skills = await cache.GetOrCreateAsync(
-            cacheKey,
+        var skills = await cache.GetOrSetAsync(
+            CacheKeys.SkillSearch(request.Name),
             async () => await skillRepository.SearchByNameAsync(request.Name, cancellationToken),
-            cancellationToken: cancellationToken
+            CacheProfiles.Cold with { Tags = [CacheKeys.SkillCatalogTag] },
+            cancellationToken
         );
 
         if (!skills.Any())

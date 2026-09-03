@@ -1,8 +1,9 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Features.InterestCategories;
 using Trivo.Application.Interfaces.Repository;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
 
@@ -12,7 +13,7 @@ namespace Trivo.Application.Features.InterestCategories.Query.GetPaginatedIntere
 
 internal sealed class GetPaginatedInterestCategoriesQueryHandler(
     ILogger<GetPaginatedInterestCategoriesQueryHandler> logger,
-    IDistributedCache cache,
+    ICacheService cache,
     IInterestCategoryRepository repository
 ) : IQueryHandler<GetPaginatedInterestCategoriesQuery, PagedResult<InterestCategoryDto>>
 {
@@ -32,21 +33,23 @@ internal sealed class GetPaginatedInterestCategoriesQueryHandler(
             return validationFailure;
         }
 
-        string cacheKey = $"get-paginated-interest-categories-{request.PageNumber}-{request.PageSize}";
+        var pagedEntities = await cache.GetOrSetAsync(
+            CacheKeys.InterestCategoriesPaged(request.PageNumber, request.PageSize),
+            async () =>
+            {
+                var paged = await repository.GetPagedAsync(request.PageNumber, request.PageSize, cancellationToken);
 
-        var pagedEntities = await cache.GetOrCreateAsync(cacheKey, async () =>
-        {
-            var paged = await repository.GetPagedAsync(request.PageNumber, request.PageSize, cancellationToken);
+                var dtoList = paged.Items?.Select(entity => entity.ToDto()).ToList() ?? [];
 
-            var dtoList = paged.Items?.Select(entity => entity.ToDto()).ToList() ?? [];
-
-            return new PagedResult<InterestCategoryDto>(
-                items: dtoList,
-                totalItems: paged.TotalItems,
-                currentPage: request.PageNumber,
-                pageSize: request.PageSize
-            );
-        }, cancellationToken: cancellationToken);
+                return new PagedResult<InterestCategoryDto>(
+                    items: dtoList,
+                    totalItems: paged.TotalItems,
+                    currentPage: request.PageNumber,
+                    pageSize: request.PageSize
+                );
+            },
+            CacheProfiles.Cold with { Tags = [CacheKeys.InterestCategoryCatalogTag] },
+            cancellationToken);
 
         logger.LogInformation("Successfully retrieved {Count} interest categories for page {PageNumber}.",
             pagedEntities.Items!.Count(), request.PageNumber);

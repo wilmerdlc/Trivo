@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Features.Users;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
@@ -13,7 +14,7 @@ namespace Trivo.Application.Features.Administrator.Query.GetLatestUsersPaged;
 internal sealed class GetLatestUsersPagedQueryHandler(
     ILogger<GetLatestUsersPagedQueryHandler> logger,
     IAdministratorRepository adminRepository,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<GetLatestUsersPagedQuery, PagedResult<UserDto>>
 {
     public async Task<ResultT<PagedResult<UserDto>>> Handle(
@@ -39,8 +40,8 @@ internal sealed class GetLatestUsersPagedQueryHandler(
                 Error.Failure("400", "Page number and page size must be greater than zero."));
         }
 
-        var pagedResult = await cache.GetOrCreateAsync(
-            $"admin:latest-users:p{request.PageNumber}:s{request.PageSize}",
+        var pagedResult = await cache.GetOrSetAsync(
+            CacheKeys.AdminLatestUsers(request.PageNumber, request.PageSize),
             async () =>
             {
                 var result = await adminRepository.GetPagedLatestUsersAsync(
@@ -61,7 +62,8 @@ internal sealed class GetLatestUsersPagedQueryHandler(
 
                 return paginated;
             },
-            cancellationToken: cancellationToken
+            CacheProfiles.Hot with { Tags = [CacheKeys.AdminUsersTag] },
+            cancellationToken
         );
 
         logger.LogInformation(

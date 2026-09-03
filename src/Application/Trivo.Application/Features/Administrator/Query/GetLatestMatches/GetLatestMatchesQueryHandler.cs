@@ -1,8 +1,9 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Features.Administrator;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
 
@@ -12,7 +13,7 @@ namespace Trivo.Application.Features.Administrator.Query.GetLatestMatches;
 
 internal sealed class GetLatestMatchesQueryHandler(
     ILogger<GetLatestMatchesQueryHandler> logger,
-    IDistributedCache cache,
+    ICacheService cache,
     IAdministratorRepository administratorRepository
 ) : IQueryHandler<GetLatestMatchesQuery, PagedResult<AdminMatchDto>>
 {
@@ -56,10 +57,8 @@ internal sealed class GetLatestMatchesQueryHandler(
             );
         }
 
-        var cacheKey = $"latest-matches-{request.PageNumber}-{request.PageSize}";
-
-        var result = await cache.GetOrCreateAsync(
-            cacheKey,
+        var result = await cache.GetOrSetAsync(
+            CacheKeys.AdminLatestMatches(request.PageNumber, request.PageSize),
             async () =>
             {
                 var dtoList = pagedMatches.Items!.Select(x => x.ToAdminDto()).ToList();
@@ -71,7 +70,8 @@ internal sealed class GetLatestMatchesQueryHandler(
                     request.PageSize
                 );
             },
-            cancellationToken: cancellationToken
+            CacheProfiles.Hot with { Tags = [CacheKeys.AdminMatchesTag] },
+            cancellationToken
         );
 
         logger.LogInformation(

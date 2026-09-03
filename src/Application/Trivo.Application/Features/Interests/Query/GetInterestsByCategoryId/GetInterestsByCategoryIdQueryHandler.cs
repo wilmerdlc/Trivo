@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
 
@@ -12,7 +13,7 @@ namespace Trivo.Application.Features.Interests.Query.GetInterestsByCategoryId;
 internal sealed class GetInterestsByCategoryIdQueryHandler(
     ILogger<GetInterestsByCategoryIdQueryHandler> logger,
     IInterestRepository interestRepository,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<GetInterestsByCategoryIdQuery, PagedResult<InterestByCategoryIdDto>>
 {
     public async Task<ResultT<PagedResult<InterestByCategoryIdDto>>> Handle(GetInterestsByCategoryIdQuery request,
@@ -43,11 +44,8 @@ internal sealed class GetInterestsByCategoryIdQueryHandler(
                 Error.Failure("400", "At least one category must be provided."));
         }
 
-        // Cache key includes category IDs and pagination parameters to ensure uniqueness
-        string cacheKey =
-            $"get-interests-by-category-{string.Join("-", request.CategoryIds)}-{request.PageNumber}-{request.PageSize}";
-
-        var pagedResponse = await cache.GetOrCreateAsync(cacheKey,
+        var pagedResponse = await cache.GetOrSetAsync(
+            CacheKeys.InterestsByCategory(request.CategoryIds, request.PageNumber, request.PageSize),
             async () =>
             {
                 var paged = await interestRepository.GetPagedByCategoriesAsync(request.CategoryIds,
@@ -65,7 +63,9 @@ internal sealed class GetInterestsByCategoryIdQueryHandler(
                 );
 
                 return pagedResponse;
-            }, cancellationToken: cancellationToken);
+            },
+            CacheProfiles.Cold with { Tags = [CacheKeys.InterestCatalogTag] },
+            cancellationToken);
 
 
         logger.LogInformation("Interests by category successfully retrieved. Categories: {CategoryIds}, Total: {Total}",

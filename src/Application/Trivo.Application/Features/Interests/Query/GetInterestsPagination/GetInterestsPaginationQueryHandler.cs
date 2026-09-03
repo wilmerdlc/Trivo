@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
 
@@ -12,7 +13,7 @@ namespace Trivo.Application.Features.Interests.Query.GetInterestsPagination;
 internal sealed class GetInterestsPaginationQueryHandler(
     ILogger<GetInterestsPaginationQueryHandler> logger,
     IInterestRepository interestRepository,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<GetInterestsPaginationQuery, PagedResult<InterestDto>>
 {
     public async Task<ResultT<PagedResult<InterestDto>>> Handle(GetInterestsPaginationQuery request,
@@ -28,8 +29,8 @@ internal sealed class GetInterestsPaginationQueryHandler(
                 Error.Failure("400", "Pagination parameters must be greater than zero."));
         }
 
-        var pagedResult = await cache.GetOrCreateAsync(
-            $"paginated-interests-{request.PageNumber}-{request.PageSize}",
+        var pagedResult = await cache.GetOrSetAsync(
+            CacheKeys.InterestsPaged(request.PageNumber, request.PageSize),
             async () =>
             {
                 var paginationResult = await interestRepository.GetPagedAsync(
@@ -48,7 +49,8 @@ internal sealed class GetInterestsPaginationQueryHandler(
                     pageSize: request.PageSize
                 );
             },
-            cancellationToken: cancellationToken
+            CacheProfiles.Cold with { Tags = [CacheKeys.InterestCatalogTag] },
+            cancellationToken
         );
 
         logger.LogInformation(

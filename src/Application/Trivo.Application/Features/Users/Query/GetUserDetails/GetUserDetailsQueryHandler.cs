@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Utils;
 
 using Trivo.Application.DTOs.Users;
@@ -13,20 +14,23 @@ internal sealed class GetUserDetailsQueryHandler(
     IExpertRepository expertRepository,
     IRecruiterRepository recruiterRepository,
     ILogger<GetUserDetailsQueryHandler> logger,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<GetUserDetailsQuery, UserDetailsDto>
 {
     public async Task<ResultT<UserDetailsDto>> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
     {
-        var userDetails = await cache.GetOrCreateAsync(
-            $"user-details-{request.UserId}",
+        var userTag = CacheKeys.UserTag(request.UserId);
+
+        var userDetails = await cache.GetOrSetAsync(
+            CacheKeys.UserDetails(request.UserId),
             async () =>
             {
                 var user = await userRepository.GetDetailsByIdAsync(request.UserId, cancellationToken);
 
                 return user is null ? null : UserMapper.MapToUserDetailsDto(user);
             },
-            cancellationToken: cancellationToken
+            CacheProfiles.Warm with { Tags = [userTag] },
+            cancellationToken
         );
 
         if (userDetails is null)
@@ -38,15 +42,16 @@ internal sealed class GetUserDetailsQueryHandler(
 
         if (await expertRepository.IsUserExpertAsync(request.UserId, cancellationToken))
         {
-            var expertDetails = await cache.GetOrCreateAsync(
-                $"user-details-expert-{request.UserId}",
+            var expertDetails = await cache.GetOrSetAsync(
+                CacheKeys.UserDetailsExpert(request.UserId),
                 async () =>
                 {
                     var expert = await expertRepository.GetDetailsAsync(request.UserId, cancellationToken);
 
                     return UserMapper.MapToExpertDetailsDto(userDetails, expert);
                 },
-                cancellationToken: cancellationToken
+                CacheProfiles.Warm with { Tags = [userTag] },
+                cancellationToken
             );
 
             logger.LogInformation("Expert details retrieved successfully for user '{UserId}'.", request.UserId);
@@ -56,15 +61,16 @@ internal sealed class GetUserDetailsQueryHandler(
 
         if (await recruiterRepository.IsUserRecruiterAsync(request.UserId, cancellationToken))
         {
-            var recruiterDetails = await cache.GetOrCreateAsync(
-                $"user-details-recruiter-{request.UserId}",
+            var recruiterDetails = await cache.GetOrSetAsync(
+                CacheKeys.UserDetailsRecruiter(request.UserId),
                 async () =>
                 {
                     var recruiter = await recruiterRepository.GetDetailsAsync(request.UserId, cancellationToken);
 
                     return UserMapper.MapToRecruiterDetailsDto(userDetails, recruiter);
                 },
-                cancellationToken: cancellationToken
+                CacheProfiles.Warm with { Tags = [userTag] },
+                cancellationToken
             );
 
             logger.LogInformation("Recruiter details retrieved successfully for user '{UserId}'.", request.UserId);

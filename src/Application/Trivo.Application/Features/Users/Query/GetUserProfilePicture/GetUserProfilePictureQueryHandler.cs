@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository.Account;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Utils;
 
 using Trivo.Application.DTOs.Users;
@@ -11,20 +12,21 @@ namespace Trivo.Application.Features.Users.Query.GetUserProfilePicture;
 internal sealed class GetUserProfilePictureQueryHandler(
     ILogger<GetUserProfilePictureQueryHandler> logger,
     IUserRepository userRepository,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<GetUserProfilePictureQuery, UserProfilePictureDto>
 {
     public async Task<ResultT<UserProfilePictureDto>> Handle(GetUserProfilePictureQuery request, CancellationToken cancellationToken)
     {
-        var profilePicture = await cache.GetOrCreateAsync(
-            $"user-profile-picture-{request.UserId}",
+        var profilePicture = await cache.GetOrSetAsync(
+            CacheKeys.UserProfilePicture(request.UserId),
             async () =>
             {
                 var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
 
                 return user is null ? null : new UserProfilePictureDto(user.ProfilePicture);
             },
-            cancellationToken: cancellationToken
+            CacheProfiles.Warm with { Tags = [CacheKeys.UserTag(request.UserId)] },
+            cancellationToken
         );
 
         if (profilePicture is null)

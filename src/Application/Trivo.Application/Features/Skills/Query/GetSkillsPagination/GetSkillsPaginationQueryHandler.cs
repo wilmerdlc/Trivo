@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Interfaces.Repository;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
 
@@ -12,7 +13,7 @@ namespace Trivo.Application.Features.Skills.Query.GetSkillsPagination;
 internal sealed class GetSkillsPaginationQueryHandler(
     ILogger<GetSkillsPaginationQueryHandler> logger,
     ISkillRepository skillRepository,
-    IDistributedCache cache
+    ICacheService cache
 ) : IQueryHandler<GetSkillsPaginationQuery, PagedResult<SkillDto>>
 {
     public async Task<ResultT<PagedResult<SkillDto>>> Handle(GetSkillsPaginationQuery request, CancellationToken cancellationToken)
@@ -26,8 +27,8 @@ internal sealed class GetSkillsPaginationQueryHandler(
                 Error.Failure("400", "Pagination parameters must be greater than zero."));
         }
 
-        var pagedResult = await cache.GetOrCreateAsync(
-            $"paginated-skills-{request.PageNumber}-{request.PageSize}",
+        var pagedResult = await cache.GetOrSetAsync(
+            CacheKeys.SkillsPaged(request.PageNumber, request.PageSize),
             async () =>
             {
                 var paginationResult = await skillRepository.GetPagedAsync(
@@ -44,7 +45,8 @@ internal sealed class GetSkillsPaginationQueryHandler(
                     pageSize: request.PageSize
                 );
             },
-            cancellationToken: cancellationToken
+            CacheProfiles.Cold with { Tags = [CacheKeys.SkillCatalogTag] },
+            cancellationToken
         );
 
         logger.LogInformation(

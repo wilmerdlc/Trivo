@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
+using Trivo.Application.Caching;
 using Trivo.Application.Features.InterestCategories;
 using Trivo.Application.Interfaces.Repository;
+using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.UnitOfWork;
 using Trivo.Application.Utils;
 using Trivo.Domain.Models;
@@ -13,6 +15,7 @@ namespace Trivo.Application.Features.InterestCategories.Commands.CreateInterestC
 internal sealed class CreateInterestCategoryCommandHandler(
     ILogger<CreateInterestCategoryCommandHandler> logger,
     IInterestCategoryRepository interestCategoryRepository,
+    ICacheService cache,
     IUnitOfWork unitOfWork
 )
     : ICommandHandler<CreateInterestCategoryCommand, InterestCategoryDto>
@@ -33,6 +36,8 @@ internal sealed class CreateInterestCategoryCommandHandler(
         await interestCategoryRepository.CreateAsync(interestCategory, cancellationToken);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await cache.InvalidateByTagsAsync([CacheKeys.InterestCategoryCatalogTag], cancellationToken);
 
         logger.LogInformation("Successfully created interest category with ID {CategoryId} and name '{Name}'.",
             interestCategory.CategoryId, interestCategory.Name);

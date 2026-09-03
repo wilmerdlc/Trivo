@@ -47,17 +47,12 @@ internal sealed class GetMessagePaginationQueryHandler(
             pageSize: request.PageSize
         );
 
-        var chat = await chatRepository.GetChatWithUsersAndMessagesAsync(request.ChatId, cancellationToken);
-        if (chat is null)
+        var userIds = await chatRepository.GetChatUserIdsAsync(request.ChatId, cancellationToken);
+        if (userIds.Count == 0)
         {
             logger.LogWarning("Chat not found for message pagination notification.");
             return ResultT<PagedResult<MessageDto>>.Failure(Error.Failure("404", "Chat not found."));
         }
-
-        var userIds = chat.ChatUsers!
-            .Where(cu => cu.UserId.HasValue)
-            .Select(cu => cu.UserId!.Value)
-            .ToList();
 
         foreach (var userId in userIds)
         {
