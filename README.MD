@@ -47,7 +47,7 @@ Full steps, for the first time you set this up:
    cp .env.template .env
    ```
 
-   Fill in the `Local (compose.yaml)` section of `.env` (DB credentials, ports, Redis/Seq passwords). You don't need the `Production` section for local development.
+   Fill in the `Local (compose.yaml)` section of `.env` (DB credentials, ports, Redis/Seq passwords). You don't need the `Production` section for local development. If you'd rather not have the unused `Production` variables in your `.env` at all, use `.env.development.template` instead — it only has the `Local` ones.
 
 3. **Start the infrastructure containers** (PostgreSQL, pgAdmin, Seq, Redis):
 
@@ -66,7 +66,7 @@ Full steps, for the first time you set this up:
      "JwtSetting": { "Key": "...", "Issuer": "...", "Audience": "...", "DurationInMinutes": 30 },
      "EmailSetting": { "EmailFrom": "...", "SmtpHost": "...", "SmtpPort": 587, "SmtpUser": "...", "SmtpPassword": "...", "DisplayName": "..." },
      "CloudinarySetting": { "CloudinaryUrl": "..." },
-     "AiSetting": { "Model": "gpt-4o-mini", "ApiKey": "<your OpenAI API key>" }
+     "AiSetting": { "Provider": "OpenAI", "EmbeddingModel": "text-embedding-3-small", "ApiKey": "<your OpenAI API key>" }
    }
    ```
 

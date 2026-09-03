@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Trivo.API.Middlewares;
 
-public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+public class ExceptionHandlingMiddleware(
+    RequestDelegate next,
+    ILogger<ExceptionHandlingMiddleware> logger,
+    IHostEnvironment environment)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -46,7 +49,9 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
             {
                 Title = "Server error",
                 Status = StatusCodes.Status500InternalServerError,
-                Detail = ex.Message,
+                // Only leak the raw exception message in Development — in every other
+                // environment it can expose internals (SQL, file paths, stack details).
+                Detail = environment.IsDevelopment() ? ex.Message : "An unexpected error occurred.",
                 Instance = context.Request.Path
             };
 

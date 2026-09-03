@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:17-alpine
+    image: pgvector/pgvector:pg17
     container_name: PostgreSQL
     restart: unless-stopped
     environment:
@@ -110,8 +110,10 @@ services:
 
       CloudinarySetting__CloudinaryUrl: ${CLOUDINARY_URL}
 
-      AiSetting__Model: ${AI_MODEL}
+      AiSetting__EmbeddingModel: ${AI_EMBEDDING_MODEL}
       AiSetting__ApiKey: ${AI_API_KEY}
+
+      Cors__AllowedOrigins__0: ${CORS_ALLOWED_ORIGIN}
     ports:
       - "${API_PORT}:5026"
     healthcheck:

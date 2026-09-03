@@ -51,11 +51,18 @@ try
         options.MaxAge = TimeSpan.FromDays(7); // start moderate, raise once verified stable behind real TLS
     });
 
+    // Falls back to the dev origins if Cors:AllowedOrigins isn't configured, so this stays a
+    // no-op for local dev. Production must set it (via CORS_ALLOWED_ORIGINS in compose.prod.yaml)
+    // — the old hardcoded list only had localhost origins, which would silently reject every
+    // real frontend origin in production.
+    var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                          ?? ["http://127.0.0.1:5500", "http://localhost:3000", "http://localhost:3008"];
+
     builder.Services.AddCors(options =>
     {
-        options.AddPolicy("AllowFrontendDev", policy =>
+        options.AddPolicy("AllowFrontend", policy =>
         {
-            policy.WithOrigins("http://127.0.0.1:5500", "http://localhost:3000", "http://localhost:3008")
+            policy.WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -70,7 +77,7 @@ try
         db.Database.Migrate(); // Applies pending migrations automatically
     }
 
-    app.UseCors("AllowFrontendDev");
+    app.UseCors("AllowFrontend");
 
     app.UseRouting();
 
