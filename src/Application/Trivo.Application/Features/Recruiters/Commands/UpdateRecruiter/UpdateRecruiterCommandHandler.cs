@@ -22,7 +22,7 @@ internal sealed class UpdateRecruiterCommandHandler(
         if (request is null)
         {
             logger.LogWarning("Received a null request to update a recruiter.");
-            return ResultT<RecruiterDto>.Failure(Error.Failure("400", "The request cannot be null."));
+            return ResultT<RecruiterDto>.Failure(Error.Validation("400", "The request cannot be null."));
         }
 
         var recruiter = await recruiterRepository.GetByIdAsync(request.RecruiterId, cancellationToken);

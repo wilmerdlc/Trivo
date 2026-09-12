@@ -27,7 +27,7 @@ internal sealed class CreateInterestCategoryCommandHandler(
         {
             logger.LogWarning("The request to create the interest category is null.");
 
-            return ResultT<InterestCategoryDto>.Failure(Error.Failure("400",
+            return ResultT<InterestCategoryDto>.Failure(Error.Validation("400",
                 "Cannot create the interest category. The request is invalid."));
         }
 

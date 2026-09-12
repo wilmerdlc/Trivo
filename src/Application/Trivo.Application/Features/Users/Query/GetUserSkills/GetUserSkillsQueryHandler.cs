@@ -42,7 +42,7 @@ internal sealed class GetUserSkillsQueryHandler(
             logger.LogInformation("User with ID {UserId} has no registered skills.", request.UserId);
 
             return ResultT<IEnumerable<SkillWithIdDto>>.Failure(
-                Error.Failure("404", "The user has no registered skills.")
+                Error.NotFound("404", "The user has no registered skills.")
             );
         }
 

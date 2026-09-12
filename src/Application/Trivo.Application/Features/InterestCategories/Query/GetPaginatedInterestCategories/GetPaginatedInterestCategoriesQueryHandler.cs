@@ -24,7 +24,7 @@ internal sealed class GetPaginatedInterestCategoriesQueryHandler(
         {
             logger.LogWarning("The request to get paginated interest categories is null.");
             return ResultT<PagedResult<InterestCategoryDto>>.Failure(
-                Error.Failure("400", "The request cannot be null."));
+                Error.Validation("400", "The request cannot be null."));
         }
 
         if (!PaginationValidator.TryValidate(request.PageNumber, request.PageSize, logger,

@@ -54,7 +54,7 @@ internal sealed class CreateMatchRejectionCommandHandler(
         {
             logger.LogWarning("The creator role is invalid. Role: {CreatorRole}.", request.CreatedBy);
 
-            return ResultT<string>.Failure(Error.Failure("400", "Invalid creator role."));
+            return ResultT<string>.Failure(Error.Validation("400", "Invalid creator role."));
         }
 
         var (expertStatus, recruiterStatus) = value;

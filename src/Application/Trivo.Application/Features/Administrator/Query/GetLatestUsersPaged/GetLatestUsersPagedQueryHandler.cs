@@ -26,7 +26,7 @@ internal sealed class GetLatestUsersPagedQueryHandler(
             logger.LogWarning("The request to retrieve latest registered users was null.");
 
             return ResultT<PagedResult<UserDto>>.Failure(
-                Error.Failure("400", "Request cannot be null."));
+                Error.Validation("400", "Request cannot be null."));
         }
 
         if (request.PageNumber <= 0 || request.PageSize <= 0)
@@ -37,7 +37,7 @@ internal sealed class GetLatestUsersPagedQueryHandler(
                 request.PageSize);
 
             return ResultT<PagedResult<UserDto>>.Failure(
-                Error.Failure("400", "Page number and page size must be greater than zero."));
+                Error.Validation("400", "Page number and page size must be greater than zero."));
         }
 
         var pagedResult = await cache.GetOrSetAsync(

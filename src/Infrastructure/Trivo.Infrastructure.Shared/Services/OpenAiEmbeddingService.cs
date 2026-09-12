@@ -25,6 +25,8 @@ public sealed class OpenAiEmbeddingService : IEmbeddingService
 
         var result = await _embeddingClient.GenerateEmbeddingAsync(text, cancellationToken: cancellationToken);
 
+        _logger.LogInformation("OpenAI embedding generated successfully.");
+
         return result.Value.ToFloats().ToArray();
     }
 }

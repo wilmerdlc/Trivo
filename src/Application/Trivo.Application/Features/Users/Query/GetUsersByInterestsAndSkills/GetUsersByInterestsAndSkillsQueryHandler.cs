@@ -28,7 +28,7 @@ internal sealed class GetUsersByInterestsAndSkillsQueryHandler(
             );
 
             return ResultT<PagedResult<UserAiRecommendationDto>>.Failure(
-                Error.Failure("400", "Page number and page size must be greater than zero.")
+                Error.Validation("400", "Page number and page size must be greater than zero.")
             );
         }
 

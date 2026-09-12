@@ -42,7 +42,7 @@ internal sealed class GetUserInterestsQueryHandler(
             logger.LogWarning("User with ID {UserId} has no registered interests.", request.UserId);
 
             return ResultT<IEnumerable<InterestWithIdDto>>.Failure(
-                Error.Failure("404", "The user has no registered interests.")
+                Error.NotFound("404", "The user has no registered interests.")
             );
         }
 

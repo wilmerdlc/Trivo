@@ -50,7 +50,7 @@ internal sealed class CreateMatchingCommandHandler(
             logger.LogWarning("Attempted to match a banned user. Recruiter {RecruiterId} (status {RecruiterStatus}), Expert {ExpertId} (status {ExpertStatus}).",
                 recruiter.Id, recruiterUserStatus, expert.Id, expertUserStatus);
 
-            return ResultT<MatchDetailsDto>.Failure(Error.Failure("400", "This match cannot be created — one of the users is banned."));
+            return ResultT<MatchDetailsDto>.Failure(Error.Validation("400", "This match cannot be created — one of the users is banned."));
         }
 
         var existingMatch = await matchingRepository.GetAsync(expert.Id, recruiter.Id, cancellationToken);
@@ -66,7 +66,7 @@ internal sealed class CreateMatchingCommandHandler(
         {
             logger.LogWarning("The creator role is invalid. Role: {CreatorRole}.", request.CreatedBy);
 
-            return ResultT<MatchDetailsDto>.Failure(Error.Failure("400", "Invalid creator role."));
+            return ResultT<MatchDetailsDto>.Failure(Error.Validation("400", "Invalid creator role."));
         }
 
         var (expertStatus, recruiterStatus) = value;

@@ -23,7 +23,7 @@ internal sealed class SearchInterestsByNameQueryHandler(
             logger.LogWarning("The name entered for the interest search is empty or whitespace.");
 
             return ResultT<IEnumerable<InterestWithIdDto>>.Failure(
-                Error.Failure("400", "The interest name cannot be empty."));
+                Error.Validation("400", "The interest name cannot be empty."));
         }
 
         var cachedDtos = await cache.GetOrSetAsync(
@@ -43,7 +43,7 @@ internal sealed class SearchInterestsByNameQueryHandler(
             logger.LogInformation("No interests were found matching the text: '{Name}'.", request.Name);
 
             return ResultT<IEnumerable<InterestWithIdDto>>.Failure(
-                Error.Failure("404", "No interests were found matching the entered name."));
+                Error.NotFound("404", "No interests were found matching the entered name."));
         }
 
         logger.LogInformation("Found {Count} interests matching '{Name}'.", dtoList.Count, request.Name);

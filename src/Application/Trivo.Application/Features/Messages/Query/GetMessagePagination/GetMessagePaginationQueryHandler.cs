@@ -21,7 +21,7 @@ internal sealed class GetMessagePaginationQueryHandler(
         if (request is null)
         {
             logger.LogWarning("The request to get paginated messages was null.");
-            return ResultT<PagedResult<MessageDto>>.Failure(Error.Failure("400", "Request cannot be null."));
+            return ResultT<PagedResult<MessageDto>>.Failure(Error.Validation("400", "Request cannot be null."));
         }
 
         var pagedResult = await messageRepository.GetPagedByChatIdAsync(
@@ -37,7 +37,7 @@ internal sealed class GetMessagePaginationQueryHandler(
             logger.LogWarning("No messages found on page {PageNumber}.", request.PageNumber);
 
             return ResultT<PagedResult<MessageDto>>.Failure(
-                Error.Failure("404", "No messages found."));
+                Error.NotFound("404", "No messages found."));
         }
 
         var result = new PagedResult<MessageDto>(
@@ -51,7 +51,7 @@ internal sealed class GetMessagePaginationQueryHandler(
         if (userIds.Count == 0)
         {
             logger.LogWarning("Chat not found for message pagination notification.");
-            return ResultT<PagedResult<MessageDto>>.Failure(Error.Failure("404", "Chat not found."));
+            return ResultT<PagedResult<MessageDto>>.Failure(Error.NotFound("404", "Chat not found."));
         }
 
         foreach (var userId in userIds)

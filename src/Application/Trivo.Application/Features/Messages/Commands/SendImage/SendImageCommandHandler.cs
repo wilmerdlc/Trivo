@@ -24,7 +24,7 @@ internal sealed class SendImageCommandHandler(
         if (request is null)
         {
             logger.LogWarning("The request cannot be null.");
-            return ResultT<MessageDto>.Failure(Error.Failure("400", "The request cannot be null."));
+            return ResultT<MessageDto>.Failure(Error.Validation("400", "The request cannot be null."));
         }
 
         var chatExists = await chatRepository.ExistsAsync(request.ChatId, cancellationToken);
@@ -32,7 +32,7 @@ internal sealed class SendImageCommandHandler(
         if (!chatExists)
         {
             logger.LogWarning("Chat does not exist: {ChatId}", request.ChatId);
-            return ResultT<MessageDto>.Failure(Error.Failure("404", "The chat does not exist."));
+            return ResultT<MessageDto>.Failure(Error.NotFound("404", "The chat does not exist."));
         }
 
         var senderBelongs = await chatRepository.IsUserInChatAsync(request.ChatId, request.SenderId, cancellationToken);
@@ -41,7 +41,7 @@ internal sealed class SendImageCommandHandler(
         if (!senderBelongs || !receiverBelongs)
         {
             logger.LogWarning("Sender or receiver does not belong to chat {ChatId}", request.ChatId);
-            return ResultT<MessageDto>.Failure(Error.Failure("403", "Sender or receiver does not belong to the chat."));
+            return ResultT<MessageDto>.Failure(Error.Forbidden("403", "Sender or receiver does not belong to the chat."));
         }
 
         var sender = await chatRepository.GetUserByIdAsync(request.SenderId, cancellationToken);
@@ -50,7 +50,7 @@ internal sealed class SendImageCommandHandler(
         if (sender == null || receiver == null)
         {
             logger.LogWarning("Sender or receiver not found.");
-            return ResultT<MessageDto>.Failure(Error.Failure("404", "Sender or receiver not found."));
+            return ResultT<MessageDto>.Failure(Error.NotFound("404", "Sender or receiver not found."));
         }
 
         string url = "";
