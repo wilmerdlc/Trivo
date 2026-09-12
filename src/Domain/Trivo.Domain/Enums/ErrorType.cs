@@ -2,8 +2,17 @@ namespace Trivo.Domain.Enums;
 
 public enum ErrorType
 {
-    Failure,
+    Validation,
     NotFound,
     Conflict,
-    Unauthorized
+    Unauthorized,
+    Forbidden,
+    ExternalService,
+    Timeout,
+    Unavailable,
+    TooManyRequests,
+    Unexpected,
+
+    /// <summary>El status code real viene del StatusCode explícito del Error, no de este valor.</summary>
+    Custom
 }
