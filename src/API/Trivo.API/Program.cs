@@ -96,11 +96,11 @@ try
     if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     {
         app.UseSwagger();
-        app.MapScalarApiReference("swagger", options =>
+        app.MapScalarApiReference("scalar", options =>
         {
             options.WithTitle("Trivo API")
                 .WithTheme(ScalarTheme.Purple)
-                .WithOpenApiRoutePattern("/swagger/{documentName}.json");
+                .WithOpenApiRoutePattern("/swagger/{documentName}/swagger.json");
         });
     }
 
