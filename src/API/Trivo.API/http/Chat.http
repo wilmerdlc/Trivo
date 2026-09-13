@@ -1,0 +1,13 @@
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1/chats
+@token = REPLACE_WITH_ACCESS_TOKEN
+
+### Create a one-to-one chat between two users
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "senderId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "receiverId": "9c858901-8a57-4791-81fe-4c455b099bc9"
+}

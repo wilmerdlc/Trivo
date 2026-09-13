@@ -1,0 +1,23 @@
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1/experts
+@token = REPLACE_WITH_ACCESS_TOKEN
+
+### Create an expert profile for a user
+POST {{apiUrl}}
+Content-Type: application/json
+
+{
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "availableForProjects": true,
+  "hired": false
+}
+
+### Update an expert profile — requires role "Expert"
+PUT {{apiUrl}}/7b2e1a4c-9f3d-4e6a-8b5c-1d2e3f4a5b6c
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "availableForProjects": false,
+  "hired": true
+}

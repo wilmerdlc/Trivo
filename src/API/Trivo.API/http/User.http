@@ -1,0 +1,181 @@
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1/users
+@token = REPLACE_WITH_ACCESS_TOKEN
+
+### Register a new user (multipart — Photo and InterestIds are optional, omit to skip them)
+POST {{apiUrl}}
+Content-Type: multipart/form-data; boundary=TrivoBoundary
+
+--TrivoBoundary
+Content-Disposition: form-data; name="FirstName"
+
+John
+--TrivoBoundary
+Content-Disposition: form-data; name="LastName"
+
+Smith
+--TrivoBoundary
+Content-Disposition: form-data; name="Biography"
+
+Full-stack developer passionate about distributed systems.
+--TrivoBoundary
+Content-Disposition: form-data; name="Email"
+
+john.smith@example.com
+--TrivoBoundary
+Content-Disposition: form-data; name="Password"
+
+Password123!
+--TrivoBoundary
+Content-Disposition: form-data; name="Username"
+
+johnsmith
+--TrivoBoundary
+Content-Disposition: form-data; name="Location"
+
+Santo Domingo, DO
+--TrivoBoundary
+Content-Disposition: form-data; name="Position"
+
+Backend Developer
+--TrivoBoundary
+Content-Disposition: form-data; name="InterestIds"
+
+d4e5f6a7-b8c9-4012-9345-6789abcdef02
+--TrivoBoundary--
+
+### Confirm account with the code sent by email
+POST {{apiUrl}}/confirm-account?userId=3fa85f64-5717-4562-b3fc-2c963f66afa6&code=482913
+
+### Get user profile details
+GET {{apiUrl}}/profile/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}
+
+### Get AI-based recommendations for a user (paginated)
+GET {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/recommendations?pageNumber=1&pageSize=10
+Authorization: Bearer {{token}}
+
+### Login — copy "accessToken" from the response into @token above
+POST {{apiUrl}}/auth
+Content-Type: application/json
+
+{
+  "email": "john.smith@example.com",
+  "password": "Password123!"
+}
+
+### Request a password-recovery code by email
+POST {{apiUrl}}/forgot-password
+Content-Type: application/json
+
+{
+  "email": "john.smith@example.com"
+}
+
+### Reset the password using the recovery code
+POST {{apiUrl}}/modify-password?email=john.smith@example.com
+Content-Type: application/json
+
+{
+  "code": "482913",
+  "newPassword": "NewPassword123!",
+  "confirmPassword": "NewPassword123!"
+}
+
+### Update basic user info (username/email)
+PUT {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/info
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username": "johnsmith22",
+  "email": "john.smith22@example.com"
+}
+
+### Update profile picture (multipart — replace the file path with a real image on disk)
+PUT {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/profile-photo
+Content-Type: multipart/form-data; boundary=TrivoBoundary
+Authorization: Bearer {{token}}
+
+--TrivoBoundary
+Content-Disposition: form-data; name="Image"; filename="avatar.jpg"
+Content-Type: image/jpeg
+
+< ./sample-files/avatar.jpg
+--TrivoBoundary--
+
+### Get profile picture URL
+GET {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/profile-photo
+Authorization: Bearer {{token}}
+
+### Update biography
+PUT {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/bio
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "biography": "Backend developer specialized in .NET and distributed systems, 5+ years of experience."
+}
+
+### Get biography
+GET {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/bio
+Authorization: Bearer {{token}}
+
+### Update interests
+PUT {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/interests
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "interestIds": [
+    "d4e5f6a7-b8c9-4012-9345-6789abcdef02",
+    "e5f6a7b8-c9d0-4123-a456-789abcdef013"
+  ]
+}
+
+### Get interests
+GET {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/interests
+Authorization: Bearer {{token}}
+
+### Update skills
+PUT {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/ability
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "skillIds": [
+    "7b2e1a4c-9f3d-4e6a-8b5c-1d2e3f4a5b6c",
+    "9c858901-8a57-4791-81fe-4c455b099bc9"
+  ]
+}
+
+### Get skills
+GET {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/ability
+Authorization: Bearer {{token}}
+
+### Check if an email is already registered
+GET {{apiUrl}}/verify-email?email=john.smith@example.com
+
+### Filter users by interests and skills (AI recommendation pool, paginated)
+POST {{apiUrl}}/filter-by-interests-and-ability?pageNumber=1&pageSize=10
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "skillIds": ["7b2e1a4c-9f3d-4e6a-8b5c-1d2e3f4a5b6c"],
+  "interestIds": ["d4e5f6a7-b8c9-4012-9345-6789abcdef02"]
+}
+
+### Validate a confirmation/recovery code
+POST {{apiUrl}}/validate-code/482913
+
+### Change password (authenticated — knows the old password)
+POST {{apiUrl}}/3fa85f64-5717-4562-b3fc-2c963f66afa6/change-password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "oldPassword": "Password123!",
+  "newPassword": "NewPassword123!",
+  "confirmPassword": "NewPassword123!"
+}

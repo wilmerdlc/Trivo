@@ -1,0 +1,40 @@
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1/matches
+@token = REPLACE_WITH_ACCESS_TOKEN
+
+### Create a match between a recruiter and an expert
+# createdBy: "Recruiter" | "Expert" | "User" | "Administrator"
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "recruiterId": "e4d5c6b7-a8f9-4012-9345-6789abcdef01",
+  "expertId": "7b2e1a4c-9f3d-4e6a-8b5c-1d2e3f4a5b6c",
+  "createdBy": "Recruiter"
+}
+
+### Update a match's status
+# missingByMatching: "Expert" | "Recruiter" (who still needs to confirm)
+# status: "Rejected" | "Completed"
+PUT {{apiUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "matchingId": "5f6e7d8c-9b0a-4c1d-8e2f-3a4b5c6d7e8f",
+  "userId": "e4d5c6b7-a8f9-4012-9345-6789abcdef01",
+  "missingByMatching": "Expert",
+  "status": "Completed"
+}
+
+### Reject a match
+POST {{apiUrl}}/reject
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "recruiterId": "e4d5c6b7-a8f9-4012-9345-6789abcdef01",
+  "expertId": "7b2e1a4c-9f3d-4e6a-8b5c-1d2e3f4a5b6c",
+  "createdBy": "Recruiter"
+}

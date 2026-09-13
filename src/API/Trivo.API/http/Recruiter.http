@@ -1,0 +1,21 @@
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1/recruiters
+@token = REPLACE_WITH_ACCESS_TOKEN
+
+### Create a recruiter profile for a user
+POST {{apiUrl}}
+Content-Type: application/json
+
+{
+  "companyName": "Acme Corp",
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+}
+
+### Update a recruiter profile — requires role "Recruiter"
+PUT {{apiUrl}}/e4d5c6b7-a8f9-4012-9345-6789abcdef01
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "companyName": "Acme Corporation"
+}

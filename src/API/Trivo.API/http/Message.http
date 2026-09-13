@@ -1,0 +1,63 @@
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1/messages
+@token = REPLACE_WITH_ACCESS_TOKEN
+
+### Send a text message
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "chatId": "a1b2c3d4-e5f6-4789-a012-3456789abcde",
+  "senderId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "receiverId": "9c858901-8a57-4791-81fe-4c455b099bc9",
+  "content": "Hey, are you available for a quick call?"
+}
+
+### Send an image (multipart — replace the file path with a real image on disk)
+POST {{apiUrl}}/image
+Content-Type: multipart/form-data; boundary=TrivoBoundary
+Authorization: Bearer {{token}}
+
+--TrivoBoundary
+Content-Disposition: form-data; name="ChatId"
+
+a1b2c3d4-e5f6-4789-a012-3456789abcde
+--TrivoBoundary
+Content-Disposition: form-data; name="SenderId"
+
+3fa85f64-5717-4562-b3fc-2c963f66afa6
+--TrivoBoundary
+Content-Disposition: form-data; name="ReceiverId"
+
+9c858901-8a57-4791-81fe-4c455b099bc9
+--TrivoBoundary
+Content-Disposition: form-data; name="Image"; filename="photo.jpg"
+Content-Type: image/jpeg
+
+< ./sample-files/photo.jpg
+--TrivoBoundary--
+
+### Send a file (multipart — replace the file path with a real file on disk)
+POST {{apiUrl}}/file
+Content-Type: multipart/form-data; boundary=TrivoBoundary
+Authorization: Bearer {{token}}
+
+--TrivoBoundary
+Content-Disposition: form-data; name="ChatId"
+
+a1b2c3d4-e5f6-4789-a012-3456789abcde
+--TrivoBoundary
+Content-Disposition: form-data; name="SenderId"
+
+3fa85f64-5717-4562-b3fc-2c963f66afa6
+--TrivoBoundary
+Content-Disposition: form-data; name="ReceiverId"
+
+9c858901-8a57-4791-81fe-4c455b099bc9
+--TrivoBoundary
+Content-Disposition: form-data; name="File"; filename="document.pdf"
+Content-Type: application/pdf
+
+< ./sample-files/document.pdf
+--TrivoBoundary--
