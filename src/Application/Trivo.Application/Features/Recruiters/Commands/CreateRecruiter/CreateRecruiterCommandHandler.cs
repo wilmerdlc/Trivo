@@ -20,7 +20,7 @@ internal sealed class CreateRecruiterCommandHandler(
         if (request is null)
         {
             logger.LogWarning("Received a null CreateRecruiterCommand.");
-            return ResultT<RecruiterDto>.Failure(Error.Failure("400", "The request cannot be null."));
+            return ResultT<RecruiterDto>.Failure(Error.Validation("400", "The request cannot be null."));
         }
 
         var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);

@@ -1,0 +1,74 @@
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1/admin
+@token = REPLACE_WITH_ACCESS_TOKEN
+
+### Create administrator (multipart — Photo is optional, omit the part to skip it)
+POST {{apiUrl}}
+Content-Type: multipart/form-data; boundary=TrivoBoundary
+
+--TrivoBoundary
+Content-Disposition: form-data; name="FirstName"
+
+Jane
+--TrivoBoundary
+Content-Disposition: form-data; name="LastName"
+
+Doe
+--TrivoBoundary
+Content-Disposition: form-data; name="Email"
+
+jane.doe.admin@example.com
+--TrivoBoundary
+Content-Disposition: form-data; name="Password"
+
+Password123!
+--TrivoBoundary
+Content-Disposition: form-data; name="Username"
+
+janedoeadmin
+--TrivoBoundary
+Content-Disposition: form-data; name="Biography"
+
+Platform administrator overseeing matchmaking quality and moderation.
+--TrivoBoundary--
+
+### Login as administrator — copy "accessToken" from the response into @token above
+POST {{apiUrl}}/auth
+Content-Type: application/json
+
+{
+  "email": "jane.doe.admin@example.com",
+  "password": "Password123!"
+}
+
+### Completed matches count — requires role "Administrator"
+GET {{apiUrl}}/count/match-complete
+Authorization: Bearer {{token}}
+
+### Active users count
+GET {{apiUrl}}/count/user-active
+Authorization: Bearer {{token}}
+
+### Latest registered users (paginated)
+GET {{apiUrl}}/last-user?pageNumber=1&pageSize=10
+Authorization: Bearer {{token}}
+
+### Last 10 banned users
+GET {{apiUrl}}/banned-users
+Authorization: Bearer {{token}}
+
+### Ban a user
+PUT {{apiUrl}}/users/3fa85f64-5717-4562-b3fc-2c963f66afa6/ban
+Authorization: Bearer {{token}}
+
+### Unban a user
+PUT {{apiUrl}}/users/3fa85f64-5717-4562-b3fc-2c963f66afa6/unban
+Authorization: Bearer {{token}}
+
+### Latest matches (paginated)
+GET {{apiUrl}}/last-match?pageNumber=1&pageSize=10
+Authorization: Bearer {{token}}
+
+### Reported users count
+GET {{apiUrl}}/count/users-report
+Authorization: Bearer {{token}}

@@ -39,7 +39,7 @@ internal sealed class GetLast10BannedUsersQueryHandler(
             logger.LogWarning("No banned users were found.");
 
             return ResultT<IEnumerable<UserDto>>.Failure(
-                Error.Failure("404", "No banned users were found."));
+                Error.NotFound("404", "No banned users were found."));
         }
 
         logger.LogInformation("Retrieved {Count} banned users.", cachedUsers.Count);

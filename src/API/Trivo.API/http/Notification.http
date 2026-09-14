@@ -1,0 +1,21 @@
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1/notifications
+@token = REPLACE_WITH_ACCESS_TOKEN
+
+### Create a notification for a user
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "notificationType": "MatchCreated",
+  "content": "You have a new match waiting for your review."
+}
+
+### Delete a notification
+DELETE {{apiUrl}}/c9d8e7f6-b5a4-4392-8170-6f5e4d3c2b1a/users/3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+### Mark a notification as read
+PUT {{apiUrl}}/c9d8e7f6-b5a4-4392-8170-6f5e4d3c2b1a/users/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{token}}

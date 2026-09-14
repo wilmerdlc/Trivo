@@ -27,7 +27,7 @@ internal sealed class UpdateMatchingCommandHandler(
             logger.LogWarning("An empty MatchingId (Guid.Empty) was received in the request");
 
             return ResultT<MatchDetailsDto>.Failure(
-                Error.Failure("400", "The matching ID is required and cannot be empty"));
+                Error.Validation("400", "The matching ID is required and cannot be empty"));
         }
 
         var match = await matchRepository.GetByIdAsync(request.MatchingId, cancellationToken);

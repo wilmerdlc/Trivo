@@ -29,7 +29,7 @@ docker compose up -d
 dotnet run --project src/API/Trivo.API
 ```
 
-The API is then at `https://localhost:7146`, with the API reference UI at `https://localhost:7146/swagger`.
+The API is then at `https://localhost:7146`, with the API reference UI at `https://localhost:7146/scalar`.
 
 Full steps, for the first time you set this up:
 
@@ -78,7 +78,7 @@ Full steps, for the first time you set this up:
    dotnet run --project src/API/Trivo.API
    ```
 
-   This uses the `https` launch profile — the app is served at `https://localhost:7146` and applies pending EF Core migrations automatically on startup. The API reference UI (Scalar, browsing the same OpenAPI spec Swagger generates) opens at `/swagger`.
+   This uses the `https` launch profile — the app is served at `https://localhost:7146` and applies pending EF Core migrations automatically on startup. The API reference UI (Scalar, browsing the same OpenAPI spec Swagger generates) opens at `/scalar`.
 
    Seq's web UI is available at `http://localhost:<SEQ_PORT_UI>` (whatever you set in `.env`) for browsing structured logs.
 
@@ -107,6 +107,126 @@ Example response when everything is healthy:
 - HTTP **503** when any check is `Degraded` or `Unhealthy` — the response body includes a `description` explaining what failed (e.g. connection refused).
 - Routine requests to `/health` are logged at `Verbose` (filtered out of Seq by default); failures are logged at `Error` so they still show up.
 - In `docker-compose`/`compose.prod.yaml`, this same endpoint drives the `api` service's container healthcheck, and other services can `depends_on: api: condition: service_healthy`.
+
+## API responses — Result Pattern
+
+Handlers never build the HTTP response — they return `Trivo.Application.Utils.Result` / `ResultT<T>`, and
+`Trivo.API.Filters.ResultFilter` (a global `IAsyncActionFilter` registered in `Program.cs`) translates that
+into the actual status code and body. Controllers stay a one-line `return await sender.Send(...)`, with an
+explicit `Task<Result>` / `Task<ResultT<T>>` return type — never `IActionResult`.
+
+See [`src/API/Trivo.API/Trivo.API.http`](src/API/Trivo.API/Trivo.API.http) for runnable examples of every
+case below.
+
+### Success
+
+| Handler returns | Response |
+|---|---|
+| `ResultT<T>.Success(value)` | **200 OK** with `value` as the body |
+| `ResultT<T>.Created(value)` | **201 Created** with `value` as the body |
+| `ResultT<T>.Accepted(value)` | **202 Accepted** with `value` as the body |
+| `Result.Success()` (no value) | **204 No Content** |
+| `Result.Accepted()` (no value) | **202 Accepted**, empty body |
+
+**Every `Create*CommandHandler` uses `ResultT<T>.Success(dto)` → 200 OK, not 201.** This is deliberate: the
+frontend consumes the created resource's DTO straight from the response body, and every other endpoint
+(reads, updates) already returns 200 — keeping creates on 200 too means the client handles one predictable
+status instead of branching on 201 for some POSTs and not others. `Created`/`Accepted` exist in the library
+for future async/job-style endpoints, not for the current create flows.
+
+`ResultFilter` unwraps `ResultT<T>` and writes `T` straight to the body — there's no `{ isSuccess, value }`
+envelope, the body **is** the DTO. Example: `POST /api/v1/ability` (`CreateSkillCommandHandler`, returns
+`ResultT<SkillDto>.Success(...)`):
+
+```json
+// 200 OK
+{
+  "skillId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Advanced C#",
+  "registeredAt": "2026-09-12T14:30:00Z"
+}
+```
+
+Paginated queries (`ResultT<PagedResult<T>>.Success(...)`) are the same rule — the body is the
+`PagedResult<T>` itself, not the raw list. Example: `GET /api/v1/ability/pagination?pageNumber=1&pageSize=10`
+(`GetSkillsPaginationQueryHandler`):
+
+```json
+// 200 OK
+{
+  "items": [
+    { "skillId": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "name": "Advanced C#", "registeredAt": "2026-09-12T14:30:00Z" },
+    { "skillId": "9c858901-8a57-4791-81fe-4c455b099bc9", "name": "SQL", "registeredAt": "2026-08-01T09:15:00Z" }
+  ],
+  "totalItems": 2,
+  "currentPage": 1,
+  "totalPages": 1
+}
+```
+
+`totalPages` is computed server-side (`Math.Ceiling(totalItems / pageSize)`) — clients don't need to derive
+it from `totalItems`/`pageSize` themselves. Every `PagedResult<T>` in the API (`Trivo.Application.Pagination`)
+has this exact shape, regardless of what `T` is.
+
+### Errors
+
+Every business error (`Result.Failure(error)` / `ResultT<T>.Failure(error)`) becomes an
+[RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) `ProblemDetails` body, with the app's own error code in
+`errorCode`:
+
+```json
+{
+  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+  "title": "Not Found",
+  "status": 404,
+  "detail": "The specified user was not found.",
+  "errorCode": "404"
+}
+```
+
+`Error.ErrorType` decides the status code (single source of truth:
+`src/API/Trivo.API/Filters/ProblemDetailsMapper.cs`):
+
+| `ErrorType` | Status |
+|---|---|
+| `Validation` | 400 |
+| `Unauthorized` | 401 |
+| `Forbidden` | 403 |
+| `NotFound` | 404 |
+| `Conflict` | 409 |
+| `TooManyRequests` | 429 |
+| `ExternalService` | 502 |
+| `Unavailable` | 503 |
+| `Timeout` | 504 |
+| `Unexpected` / anything else | 500 |
+| `Custom` | whatever `Error.StatusCode` says — escape hatch for status codes no `ErrorType` covers (402, 422, etc.) |
+
+### Three response shapes still coexist (known gap)
+
+Business errors above are the standardized path, but two other error sources in the API don't go through
+`ResultFilter` and look different on the wire:
+
+1. **FluentValidation failures** — a malformed request caught by `ValidationBehavior` before the handler
+   ever runs — are caught by `ExceptionHandlingMiddleware`. Still `ProblemDetails`, but with a per-field
+   `errors` dictionary instead of `errorCode`:
+   ```json
+   {
+     "type": "ValidationFailure",
+     "title": "Validation errors",
+     "status": 400,
+     "errors": { "Name": ["The skill name is required."] }
+   }
+   ```
+2. **JWT authentication/authorization failures** (missing/expired/invalid token, insufficient role) are
+   handled directly by `JwtBearerEvents` in `Trivo.Infrastructure.Shared/DependencyInjection.cs` and don't
+   use `ProblemDetails` at all — they serialize a `JwtResponse(bool HasError, string? Error)` with
+   `Newtonsoft.Json`, which defaults to **PascalCase** (the rest of the API uses `System.Text.Json`'s
+   camelCase):
+   ```json
+   { "HasError": true, "Error": "An unexpected authentication error occurred" }
+   ```
+
+Unifying these two into the same `ProblemDetails`/`errorCode` shape is a natural next step, not yet done.
 
 ## Building the Docker image
 

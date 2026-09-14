@@ -29,7 +29,7 @@ internal sealed class GetLatestMatchesQueryHandler(
             );
 
             return ResultT<PagedResult<AdminMatchDto>>.Failure(
-                Error.Failure("400", "Invalid pagination parameters.")
+                Error.Validation("400", "Invalid pagination parameters.")
             );
         }
 

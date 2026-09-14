@@ -36,7 +36,7 @@ internal sealed class GetUserRecommendationsQueryHandler(
             logger.LogWarning("No user was found with ID {UserId}.", request.UserId);
 
             return ResultT<PagedResult<UserAiRecommendationDto>>.Failure(
-                Error.Failure("404", "The user was not found.")
+                Error.NotFound("404", "The user was not found.")
             );
         }
 
@@ -54,7 +54,7 @@ internal sealed class GetUserRecommendationsQueryHandler(
             );
 
             return ResultT<PagedResult<UserAiRecommendationDto>>.Failure(
-                Error.Failure("400", "Your profile has no skills or interests registered. Add at least one to receive accurate recommendations.")
+                Error.Validation("400", "Your profile has no skills or interests registered. Add at least one to receive accurate recommendations.")
             );
         }
 
@@ -71,7 +71,7 @@ internal sealed class GetUserRecommendationsQueryHandler(
             );
 
             return ResultT<PagedResult<UserAiRecommendationDto>>.Failure(
-                Error.Failure("400", "Complete your expert or recruiter profile before requesting recommendations.")
+                Error.Validation("400", "Complete your expert or recruiter profile before requesting recommendations.")
             );
         }
 
@@ -135,7 +135,7 @@ internal sealed class GetUserRecommendationsQueryHandler(
             );
 
             return ResultT<PagedResult<UserAiRecommendationDto>>.Failure(
-                Error.Failure("400", "None of your registered skills or interests match anyone available right now. Recommendations will improve as more users join or as you add more skills/interests.")
+                Error.Validation("400", "None of your registered skills or interests match anyone available right now. Recommendations will improve as more users join or as you add more skills/interests.")
             );
         }
 

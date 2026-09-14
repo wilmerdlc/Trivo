@@ -127,14 +127,14 @@ public class CodeService(
         {
             logger.LogWarning("Code with value {Code} does not belong to user with ID {UserId}", code, userId);
 
-            return Result.Failure(Error.Unauthorized("403", "The code does not belong to this user"));
+            return Result.Failure(Error.Forbidden("403", "The code does not belong to this user"));
         }
 
         if (codeEntity.Type != CodeType.AccountConfirmation.ToString())
         {
             logger.LogWarning("Code with value {Code} is not an account-confirmation code", code);
 
-            return Result.Failure(Error.Unauthorized("403", "The code is not valid for this operation"));
+            return Result.Failure(Error.Forbidden("403", "The code is not valid for this operation"));
         }
 
         if (codeEntity.IsUsed is true)
@@ -149,7 +149,7 @@ public class CodeService(
         {
             logger.LogWarning("Code with value {Code} has expired or is not valid", code);
 
-            return Result.Failure(Error.Failure("400", "The code has expired or is not valid"));
+            return Result.Failure(Error.Validation("400", "The code has expired or is not valid"));
         }
 
         await codeRepository.MarkAsUsedAsync(codeEntity.Value!, cancellationToken);
@@ -178,14 +178,14 @@ public class CodeService(
         {
             logger.LogWarning("Code with value {Code} does not belong to user with ID {UserId}", code, userId);
 
-            return Result.Failure(Error.Unauthorized("403", "The code does not belong to this user"));
+            return Result.Failure(Error.Forbidden("403", "The code does not belong to this user"));
         }
 
         if (codeEntity.Type != CodeType.PasswordRecovery.ToString())
         {
             logger.LogWarning("Code with value {Code} is not a password-recovery code", code);
 
-            return Result.Failure(Error.Unauthorized("403", "The code is not valid for this operation"));
+            return Result.Failure(Error.Forbidden("403", "The code is not valid for this operation"));
         }
 
         if (codeEntity.IsUsed is true)
@@ -200,7 +200,7 @@ public class CodeService(
         {
             logger.LogWarning("Code with value {Code} has expired or is not valid", code);
 
-            return Result.Failure(Error.Failure("400", "The code has expired or is not valid"));
+            return Result.Failure(Error.Validation("400", "The code has expired or is not valid"));
         }
 
         await codeRepository.MarkAsUsedAsync(codeEntity.Value!, cancellationToken);
@@ -233,7 +233,7 @@ public class CodeService(
         {
             logger.LogWarning("Attempted to validate an empty or null code.");
 
-            return ResultT<string>.Failure(Error.Failure("400", "A valid code must be provided."));
+            return ResultT<string>.Failure(Error.Validation("400", "A valid code must be provided."));
         }
 
         var isValid = await codeRepository.IsValidAsync(code, cancellationToken);
@@ -242,7 +242,7 @@ public class CodeService(
         {
             logger.LogWarning("Code '{Code}' has expired or is not valid.", code);
 
-            return ResultT<string>.Failure(Error.Failure("400", "The code has expired or is not valid."));
+            return ResultT<string>.Failure(Error.Validation("400", "The code has expired or is not valid."));
         }
 
         logger.LogInformation("Code '{Code}' was validated successfully.", code);

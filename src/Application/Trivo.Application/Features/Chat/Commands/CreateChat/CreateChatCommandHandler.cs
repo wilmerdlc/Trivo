@@ -28,14 +28,14 @@ internal sealed class CreateChatCommandHandler(
 
         if (request.SenderId == request.ReceiverId)
         {
-            return ResultT<ChatDto>.Failure(Error.Failure("400", "Sender and receiver cannot be the same user."));
+            return ResultT<ChatDto>.Failure(Error.Validation("400", "Sender and receiver cannot be the same user."));
         }
 
         var chatExists = await chatRepository.OneToOneChatExistsAsync(request.SenderId, request.ReceiverId, cancellationToken);
         if (chatExists)
         {
             logger.LogWarning("Chat already exists between {SenderId} and {ReceiverId}", request.SenderId, request.ReceiverId);
-            return ResultT<ChatDto>.Failure(Error.Failure("400", "A chat already exists between these users."));
+            return ResultT<ChatDto>.Failure(Error.Conflict("409", "A chat already exists between these users."));
         }
 
         var sender = await userRepository.GetByIdAsync(request.SenderId, cancellationToken);

@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Trivo.Application.Utils;
-using Trivo.Domain.Enums;
 
 namespace Trivo.API.Filters;
 
+/// <summary>
+///
+/// </summary>
 public class ResultFilter(ILogger<ResultFilter> logger) : IAsyncActionFilter
 {
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -21,37 +23,27 @@ public class ResultFilter(ILogger<ResultFilter> logger) : IAsyncActionFilter
             var valueProperty = objectResult.Value!.GetType().GetProperty(nameof(ResultT<object>.Value));
 
             executedContext.Result = valueProperty is not null
-                ? new OkObjectResult(valueProperty.GetValue(objectResult.Value))
-                : new OkResult();
+                ? new ObjectResult(valueProperty.GetValue(objectResult.Value))
+                {
+                    StatusCode = result.SuccessStatusCode ?? StatusCodes.Status200OK
+                }
+                : new StatusCodeResult(result.SuccessStatusCode ?? StatusCodes.Status204NoContent);
 
             return;
         }
 
-        var statusCode = MapToStatusCode(result.Error!.ErrorType);
+        var error = result.Error!;
+        var statusCode = error.StatusCode ?? error.ErrorType.ToDefaultStatusCode();
 
         logger.LogWarning(
             "Operation failed with code {Code} and message: {Message}",
-            result.Error.Code,
-            result.Error.Description
+            error.Code,
+            error.Description
         );
 
-        var errorResponse = new
-        {
-            code = result.Error.Code,
-            description = result.Error.Description
-        };
-
-        executedContext.Result = new ObjectResult(errorResponse)
+        executedContext.Result = new ObjectResult(error.ToProblemDetails(statusCode))
         {
             StatusCode = statusCode
         };
     }
-
-    private static int MapToStatusCode(ErrorType errorType) => errorType switch
-    {
-        ErrorType.NotFound => StatusCodes.Status404NotFound,
-        ErrorType.Conflict => StatusCodes.Status409Conflict,
-        ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
-        _ => StatusCodes.Status400BadRequest
-    };
 }

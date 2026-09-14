@@ -27,7 +27,7 @@ internal sealed class GetMatchByUserQueryHandler(
         {
             logger.LogWarning("The match retrieval request is null.");
 
-            return ResultT<IEnumerable<MatchDto>>.Failure(Error.Failure("400", "The request cannot be null."));
+            return ResultT<IEnumerable<MatchDto>>.Failure(Error.Validation("400", "The request cannot be null."));
         }
 
         var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
@@ -47,7 +47,7 @@ internal sealed class GetMatchByUserQueryHandler(
         {
             logger.LogWarning("The provided role '{Role}' does not have a valid match strategy.", request.Role);
 
-            return ResultT<IEnumerable<MatchDto>>.Failure(Error.Failure("400", "The provided role is not valid for matches."));
+            return ResultT<IEnumerable<MatchDto>>.Failure(Error.Validation("400", "The provided role is not valid for matches."));
         }
 
         var matches = await matchFilter(cancellationToken);
@@ -103,7 +103,7 @@ internal sealed class GetMatchByUserQueryHandler(
         {
             logger.LogWarning("No pending matches were found for user {UserId} with role {Role}.", request.UserId, request.Role);
 
-            return ResultT<IEnumerable<MatchDto>>.Failure(Error.Failure("404", "No matches were found for the user."));
+            return ResultT<IEnumerable<MatchDto>>.Failure(Error.NotFound("404", "No matches were found for the user."));
         }
 
         logger.LogInformation("Successfully retrieved {Count} matches for user {UserId} with role {Role}.",

@@ -1,6 +1,177 @@
-@Trivo.API_HostAddress = http://localhost:5174
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1
 
-GET {{Trivo.API_HostAddress}}/weatherforecast/
+# Fill in after logging in via the "Login" request below (POST {{apiUrl}}/users/auth).
+@token = REPLACE_WITH_ACCESS_TOKEN
+@userId = 00000000-0000-0000-0000-000000000000
+
+# See the "API responses — Result Pattern" section in the repo README for the full
+# explanation of what each response shape below means and why.
+
+### =====================================================================
+### SUCCESS — 200 OK with a value (ResultT<T>.Success)
+### =====================================================================
+
+# Paginated read — always 200 OK + PagedResult<SkillDto> on success.
+GET {{apiUrl}}/ability/pagination?pageNumber=1&pageSize=10
 Accept: application/json
 
+# Expected 200 body — the body IS the PagedResult<T>, not a raw list, and not wrapped in
+# { isSuccess, value }. totalPages is computed server-side, not left for the client to derive:
+# {
+#   "items": [
+#     { "skillId": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "name": "Advanced C#", "registeredAt": "2026-09-12T14:30:00Z" }
+#   ],
+#   "totalItems": 1,
+#   "currentPage": 1,
+#   "totalPages": 1
+# }
+
 ###
+
+# Login — 200 OK + TokenResponseDto { accessToken, refreshToken }. Copy accessToken into @token above.
+POST {{apiUrl}}/users/auth
+Content-Type: application/json
+
+{
+  "email": "someone@example.com",
+  "password": "Password123!"
+}
+
+### =====================================================================
+### SUCCESS — Create*CommandHandler (also 200 OK, not 201 — see README)
+### =====================================================================
+
+# Every Create*CommandHandler returns ResultT<T>.Success(dto), so this is 200 OK + SkillDto,
+# same status as any other read/update. Requires a valid Bearer token.
+POST {{apiUrl}}/ability
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Advanced C#",
+  "userId": "00000000-0000-0000-0000-000000000000"
+}
+
+# Expected 200 body — the body IS the SkillDto, no envelope around it:
+# {
+#   "skillId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+#   "name": "Advanced C#",
+#   "registeredAt": "2026-09-12T14:30:00Z"
+# }
+
+### =====================================================================
+### ERROR — 404 Not Found (Error.NotFound -> ResultFilter -> ProblemDetails)
+### =====================================================================
+
+# UserId that doesn't exist -> CreateSkillCommandHandler returns Error.NotFound.
+POST {{apiUrl}}/ability
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Any name",
+  "userId": "11111111-1111-1111-1111-111111111111"
+}
+
+# Expected 404 body:
+# {
+#   "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+#   "title": "Not Found",
+#   "status": 404,
+#   "detail": "The specified user was not found.",
+#   "errorCode": "404"
+# }
+
+### =====================================================================
+### ERROR — 409 Conflict (Error.Conflict) — duplicate resource
+### =====================================================================
+
+# Same request as above but with a "name" that already exists for some skill ->
+# CreateSkillCommandHandler returns Error.Conflict instead of creating a duplicate.
+POST {{apiUrl}}/ability
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Advanced C#",
+  "userId": "00000000-0000-0000-0000-000000000000"
+}
+
+### =====================================================================
+### ERROR — 400 Validation, flavor 1: FluentValidation (before the handler runs)
+### =====================================================================
+
+# Empty "name" fails CreateSkillValidator in the MediatR pipeline, before CreateSkillCommandHandler
+# ever runs. Caught by ExceptionHandlingMiddleware, NOT by ResultFilter -> different body shape
+# (see "Three response shapes still coexist" in the README).
+POST {{apiUrl}}/ability
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "",
+  "userId": "00000000-0000-0000-0000-000000000000"
+}
+
+# Expected 400 body (note "errors", not "errorCode"):
+# {
+#   "type": "ValidationFailure",
+#   "title": "Validation errors",
+#   "status": 400,
+#   "errors": { "Name": ["The skill name is required."] }
+# }
+
+### =====================================================================
+### ERROR — 400 Validation, flavor 2: business rule (Error.Validation -> ResultFilter)
+### =====================================================================
+
+# Incomplete profile (no skills/interests, or missing Expert/Recruiter role) is a business-state
+# check that FluentValidation can't express (it needs a DB lookup) -> reaches the handler, which
+# returns Error.Validation. Same ProblemDetails shape as the 404 example above (errorCode, not errors).
+GET {{apiUrl}}/users/{{userId}}/recommendations?pageNumber=1&pageSize=10
+Authorization: Bearer {{token}}
+
+### =====================================================================
+### ERROR — 403 Forbidden (Error.Forbidden) — no [Authorize] needed to trigger this one
+### =====================================================================
+
+# Confirming an account with a code that exists but belongs to a different user.
+# ConfirmAccountAsync (CodeService.ConfirmAccountAsync) exercises FIVE different error types
+# depending on the input, all on this one endpoint:
+#   - userId doesn't exist            -> 404 Error.NotFound
+#   - code doesn't exist              -> 404 Error.NotFound
+#   - code belongs to another user    -> 403 Error.Forbidden   (this example)
+#   - code isn't an account-confirm code -> 403 Error.Forbidden
+#   - code was already used           -> 409 Error.Conflict
+#   - code expired/invalid            -> 400 Error.Validation
+#   - all good                        -> 204 No Content (Result.Success(), no value)
+POST {{apiUrl}}/users/confirm-account?userId=00000000-0000-0000-0000-000000000000&code=someone-elses-code
+
+### =====================================================================
+### ERROR — 401 Unauthorized — missing/invalid token on an [Authorize] endpoint
+### =====================================================================
+
+# No Authorization header at all. IMPORTANT: this does NOT go through ResultFilter/ProblemDetails —
+# JwtBearerEvents.OnChallenge (Trivo.Infrastructure.Shared/DependencyInjection.cs) writes the body
+# directly with Newtonsoft.Json, so the shape and casing differ from every other error above.
+POST {{apiUrl}}/ability
+Content-Type: application/json
+
+{
+  "name": "Advanced C#",
+  "userId": "00000000-0000-0000-0000-000000000000"
+}
+
+# Expected 401 body (PascalCase — Newtonsoft default, not the System.Text.Json camelCase used elsewhere):
+# { "HasError": true, "Error": "An unexpected authentication error occurred" }
+
+### =====================================================================
+### SUCCESS — 204 No Content (Result.Success(), no value)
+### =====================================================================
+
+# No controller in this API returns a bare Result today (they all return ResultT<T>), so there's no
+# live endpoint to call here yet. The example above (confirm-account, happy path) is the closest one:
+# ConfirmAccountAsync's underlying Result IS a bare Result, so a correct confirm-account call returns
+# 204 No Content with an empty body, once you have a real, unused, non-expired confirmation code:
+POST {{apiUrl}}/users/confirm-account?userId=00000000-0000-0000-0000-000000000000&code=REPLACE_WITH_REAL_CODE

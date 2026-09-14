@@ -22,7 +22,7 @@ internal sealed class SearchSkillsByNameQueryHandler(
             logger.LogWarning("The skill name provided for the search is empty or whitespace.");
 
             return ResultT<IEnumerable<SkillWithIdDto>>.Failure(
-                Error.Failure("400", "The skill name cannot be empty."));
+                Error.Validation("400", "The skill name cannot be empty."));
         }
 
         var skills = await cache.GetOrSetAsync(

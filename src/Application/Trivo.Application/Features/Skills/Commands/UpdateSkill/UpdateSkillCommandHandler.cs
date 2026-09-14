@@ -27,7 +27,7 @@ internal sealed class UpdateSkillCommandHandler(
             logger.LogWarning("The skill list provided is empty. UserId: {UserId}", request.UserId);
 
             return ResultT<string>.Failure(
-                Error.Failure("400", "At least one skill must be provided to update."));
+                Error.Validation("400", "At least one skill must be provided to update."));
         }
 
         var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);

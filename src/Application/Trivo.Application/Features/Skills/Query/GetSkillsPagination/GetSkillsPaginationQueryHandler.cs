@@ -24,7 +24,7 @@ internal sealed class GetSkillsPaginationQueryHandler(
                 request.PageNumber, request.PageSize);
 
             return ResultT<PagedResult<SkillDto>>.Failure(
-                Error.Failure("400", "Pagination parameters must be greater than zero."));
+                Error.Validation("400", "Pagination parameters must be greater than zero."));
         }
 
         var pagedResult = await cache.GetOrSetAsync(

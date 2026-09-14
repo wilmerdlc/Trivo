@@ -24,7 +24,7 @@ internal sealed class GetInterestsByCategoryIdQueryHandler(
             logger.LogWarning("The request to get interests by category was null.");
 
             return ResultT<PagedResult<InterestByCategoryIdDto>>.Failure(
-                Error.Failure("400", "The request cannot be null."));
+                Error.Validation("400", "The request cannot be null."));
         }
 
         if (request.PageNumber <= 0 || request.PageSize <= 0)
@@ -41,7 +41,7 @@ internal sealed class GetInterestsByCategoryIdQueryHandler(
             logger.LogWarning("No categories were provided to retrieve interests.");
 
             return ResultT<PagedResult<InterestByCategoryIdDto>>.Failure(
-                Error.Failure("400", "At least one category must be provided."));
+                Error.Validation("400", "At least one category must be provided."));
         }
 
         var pagedResponse = await cache.GetOrSetAsync(

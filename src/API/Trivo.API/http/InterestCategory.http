@@ -1,0 +1,15 @@
+@baseUrl = https://localhost:7146
+@apiUrl = {{baseUrl}}/api/v1/category-interests
+@token = REPLACE_WITH_ACCESS_TOKEN
+
+### Create an interest category
+POST {{apiUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Technology"
+}
+
+### Paginated interest categories — no auth required
+GET {{apiUrl}}/pagination?pageNumber=1&pageSize=10

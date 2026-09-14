@@ -29,7 +29,7 @@ public class NotificationService(
                 pageNumber, pageSize);
 
             return ResultT<PagedResult<NotificationDto>>.Failure(
-                Error.Failure("400", "Pagination parameters must be greater than zero"));
+                Error.Validation("400", "Pagination parameters must be greater than zero"));
         }
 
         var user = await userRepository.GetByIdAsync(userId, cancellationToken);
@@ -49,7 +49,7 @@ public class NotificationService(
         if (!notifications.Items!.Any())
         {
             logger.LogWarning("No notifications found for user {UserId}", userId);
-            return ResultT<PagedResult<NotificationDto>>.Failure(Error.Failure("400", "The list is empty"));
+            return ResultT<PagedResult<NotificationDto>>.Failure(Error.Validation("400", "The list is empty"));
         }
 
         var notificationsDto = NotificationMapper.MapToDtoList(notifications.Items!);
@@ -80,7 +80,7 @@ public class NotificationService(
         {
             logger.LogWarning("Attempted to mark notification with empty ID");
             return ResultT<NotificationDto>.Failure(
-                Error.Failure("400", "Notification ID cannot be empty"));
+                Error.Validation("400", "Notification ID cannot be empty"));
         }
 
         var notificationEntity = await notificationRepository.GetByIdAndUserIdAsync(
@@ -135,13 +135,13 @@ public class NotificationService(
         if (userId == Guid.Empty)
         {
             logger.LogWarning("Attempted to create notification with empty UserId");
-            return ResultT<NotificationDto>.Failure(Error.Failure("400", "UserId cannot be empty"));
+            return ResultT<NotificationDto>.Failure(Error.Validation("400", "UserId cannot be empty"));
         }
 
         if (string.IsNullOrEmpty(notificationType))
         {
             logger.LogWarning("Notification type is empty");
-            return ResultT<NotificationDto>.Failure(Error.Failure("400",
+            return ResultT<NotificationDto>.Failure(Error.Validation("400",
                 "Notification type cannot be empty"));
         }
 
@@ -164,7 +164,7 @@ public class NotificationService(
         if (userId == Guid.Empty)
         {
             logger.LogWarning("Attempted to delete notification with empty UserId");
-            return ResultT<NotificationDto>.Failure(Error.Failure("400", "UserId cannot be empty"));
+            return ResultT<NotificationDto>.Failure(Error.Validation("400", "UserId cannot be empty"));
         }
 
         var user = await userRepository.GetByIdAsync(userId, cancellationToken);
@@ -206,7 +206,7 @@ public class NotificationService(
         {
             logger.LogWarning("Attempted to create notification without content for user {UserId}",
                 notificationDto.UserId);
-            return ResultT<NotificationDto>.Failure(Error.Failure("400",
+            return ResultT<NotificationDto>.Failure(Error.Validation("400",
                 "Notification content cannot be empty"));
         }
 

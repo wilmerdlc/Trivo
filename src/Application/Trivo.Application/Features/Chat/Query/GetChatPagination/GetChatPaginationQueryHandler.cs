@@ -21,7 +21,7 @@ internal sealed class GetChatPaginationQueryHandler(
         if (request is null)
         {
             logger.LogWarning("The request to get paginated chats was null.");
-            return ResultT<PagedResult<ChatDto>>.Failure(Error.Failure("400", "Request cannot be null."));
+            return ResultT<PagedResult<ChatDto>>.Failure(Error.Validation("400", "Request cannot be null."));
         }
 
         if (request.PageNumber <= 0 || request.PageSize <= 0)
@@ -29,7 +29,7 @@ internal sealed class GetChatPaginationQueryHandler(
             logger.LogWarning("Invalid pagination parameters. PageNumber={PageNumber}, PageSize={PageSize}", 
                 request.PageNumber, request.PageSize);
             
-            return ResultT<PagedResult<ChatDto>>.Failure(Error.Failure("400", "Pagination parameters must be greater than zero."));
+            return ResultT<PagedResult<ChatDto>>.Failure(Error.Validation("400", "Pagination parameters must be greater than zero."));
         }
 
         var pagedResult = await chatRepository.GetChatsByUserIdPagedAsync(
@@ -47,7 +47,7 @@ internal sealed class GetChatPaginationQueryHandler(
             logger.LogWarning("No chats found on page {PageNumber}.", request.PageNumber);
             
             return ResultT<PagedResult<ChatDto>>.Failure(
-                Error.Failure("404", "No chats found."));
+                Error.NotFound("404", "No chats found."));
         }
         
         var result = new PagedResult<ChatDto>(
