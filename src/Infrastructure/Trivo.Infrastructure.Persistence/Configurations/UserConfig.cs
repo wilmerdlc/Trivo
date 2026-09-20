@@ -40,6 +40,10 @@ public class UserConfig : IEntityTypeConfiguration<User>
             .IsUnique()
             .HasDatabaseName("UQUserEmail");
 
+        builder.Property(u => u.PendingEmail)
+            .HasMaxLength(100)
+            .IsRequired(false);
+
         builder.Property(u => u.PasswordHash)
             .IsRequired()
             .HasMaxLength(255);

@@ -15,6 +15,14 @@ public sealed class User : BaseEntity
 
     public string? Email { get; set; }
 
+    /// <summary>
+    /// The new email address awaiting confirmation, set by a "request email change" operation.
+    /// Copied into <see cref="Email"/> (and cleared) once the user confirms it with the code sent
+    /// to this address — <see cref="Email"/> itself is never changed until then, so a typo or an
+    /// abandoned request can't lock the user out of their account.
+    /// </summary>
+    public string? PendingEmail { get; set; }
+
     public string? PasswordHash { get; set; }
 
     public string? Username { get; set; }
@@ -28,7 +36,7 @@ public sealed class User : BaseEntity
     public string? UserStatus { get; set; }
 
     public string? Position { get; set; }
-    
+
     public Vector? ProfileEmbedding { get; set; }
 
     /// <summary>
