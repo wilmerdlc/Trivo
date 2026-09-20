@@ -1259,4 +1259,72 @@ public static class EmailTemplate
       </body>
       </html>";
     }
+
+    // NOTE: kept intentionally lightweight instead of reusing the ~600-line gradient design of
+    // RegisterUser/PasswordRecovery — these two are lower-traffic transactional notices, and a
+    // third/fourth copy of that much duplicated markup wasn't worth it for this feature. Feel
+    // free to restyle to match the full design system later.
+
+    public static string ConfirmEmailChange(string user, string code)
+    {
+        return $@"<!DOCTYPE html>
+      <html lang=""es"">
+      <head>
+        <meta charset=""UTF-8"">
+        <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+        <title>Confirma tu nuevo email - trivo</title>
+      </head>
+      <body style=""margin:0;padding:20px;background:#f1f5f9;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;"">
+        <div style=""max-width:480px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -10px rgba(0,0,0,0.15);"">
+          <div style=""background:linear-gradient(135deg,#8b5cf6,#6d28d9);padding:28px 24px;color:#ffffff;"">
+            <div style=""font-size:20px;font-weight:700;"">trivo</div>
+            <div style=""margin-top:4px;font-size:16px;"">Hola {user}, confirma tu nuevo email</div>
+          </div>
+          <div style=""padding:28px 24px;"">
+            <p style=""margin:0 0 20px;font-size:14px;line-height:1.6;"">
+              Recibiste este correo porque se solicitó cambiar el email de tu cuenta trivo a esta dirección.
+              Usa el siguiente código en la app para confirmarlo:
+            </p>
+            <div style=""text-align:center;background:#f5f3ff;border-radius:12px;padding:20px;margin-bottom:20px;"">
+              <div style=""font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#7c3aed;"">Código de verificación</div>
+              <div style=""font-size:32px;font-weight:700;letter-spacing:4px;color:#6d28d9;margin-top:8px;"">{code}</div>
+              <div style=""font-size:12px;color:#64748b;margin-top:8px;"">Expira en 10 minutos</div>
+            </div>
+            <p style=""margin:0;font-size:13px;line-height:1.6;color:#64748b;"">
+              Si no solicitaste este cambio, ignora este correo — tu email actual no se modificará sin este código.
+            </p>
+          </div>
+        </div>
+      </body>
+      </html>";
+    }
+
+    public static string EmailChanged(string user, string oldEmail, string newEmail)
+    {
+        return $@"<!DOCTYPE html>
+      <html lang=""es"">
+      <head>
+        <meta charset=""UTF-8"">
+        <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+        <title>Tu email fue cambiado - trivo</title>
+      </head>
+      <body style=""margin:0;padding:20px;background:#f1f5f9;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;"">
+        <div style=""max-width:480px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -10px rgba(0,0,0,0.15);"">
+          <div style=""background:linear-gradient(135deg,#8b5cf6,#6d28d9);padding:28px 24px;color:#ffffff;"">
+            <div style=""font-size:20px;font-weight:700;"">trivo</div>
+            <div style=""margin-top:4px;font-size:16px;"">Hola {user}, tu email fue actualizado</div>
+          </div>
+          <div style=""padding:28px 24px;"">
+            <p style=""margin:0 0 16px;font-size:14px;line-height:1.6;"">
+              El email de tu cuenta trivo cambió de <strong>{oldEmail}</strong> a <strong>{newEmail}</strong>.
+            </p>
+            <div style=""background:#fef2f2;border-left:4px solid #ef4444;border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.6;color:#991b1b;"">
+              🔒 Si tú no hiciste este cambio, tu cuenta pudo verse comprometida. Contacta al equipo de soporte
+              de trivo de inmediato para recuperar el acceso.
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>";
+    }
 }

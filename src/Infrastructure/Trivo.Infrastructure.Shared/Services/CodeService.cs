@@ -211,6 +211,53 @@ public class CodeService(
         return Result.Success();
     }
 
+    public async Task<Result> ValidateEmailChangeCodeAsync(Guid userId, string code, CancellationToken cancellationToken)
+    {
+        var codeEntity = await codeRepository.FindAsync(code, cancellationToken);
+        if (codeEntity is null)
+        {
+            logger.LogWarning("No code was found with the value: {Code}", code);
+
+            return Result.Failure(Error.NotFound("404", "Code not found"));
+        }
+
+        if (codeEntity.UserId != userId)
+        {
+            logger.LogWarning("Code with value {Code} does not belong to user with ID {UserId}", code, userId);
+
+            return Result.Failure(Error.Forbidden("403", "The code does not belong to this user"));
+        }
+
+        if (codeEntity.Type != CodeType.EmailChange.ToString())
+        {
+            logger.LogWarning("Code with value {Code} is not an email-change code", code);
+
+            return Result.Failure(Error.Forbidden("403", "The code is not valid for this operation"));
+        }
+
+        if (codeEntity.IsUsed is true)
+        {
+            logger.LogWarning("Code with value {Code} has already been used", code);
+
+            return Result.Failure(Error.Conflict("409", "This code has already been used"));
+        }
+
+        var isValid = await codeRepository.IsValidAsync(code, cancellationToken);
+        if (!isValid)
+        {
+            logger.LogWarning("Code with value {Code} has expired or is not valid", code);
+
+            return Result.Failure(Error.Validation("400", "The code has expired or is not valid"));
+        }
+
+        await codeRepository.MarkAsUsedAsync(codeEntity.Value!, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        logger.LogInformation("Email-change code verified successfully for user with ID {UserId}", userId);
+
+        return Result.Success();
+    }
+
     public async Task<Result> IsCodeAvailableAsync(string code, CancellationToken cancellationToken)
     {
         var isUnused = await codeRepository.IsUnusedAsync(code, cancellationToken);

@@ -70,4 +70,15 @@ public interface ICodeService
     /// <param name="cancellationToken">Token to cancel the operation.</param>
     /// <returns>A result indicating whether the code is valid.</returns>
     Task<ResultT<string>> ValidateCodeAsync(string code, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Validates an email-change code for the given user (belongs to them, correct type, unused,
+    /// not expired) and marks it as used. Callers must only apply the pending email change after
+    /// this succeeds.
+    /// </summary>
+    /// <param name="userId">ID of the user requesting the email change.</param>
+    /// <param name="code">The code received at the new email address.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>The result of the operation.</returns>
+    Task<Result> ValidateEmailChangeCodeAsync(Guid userId, string code, CancellationToken cancellationToken);
 }
