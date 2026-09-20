@@ -35,7 +35,8 @@ public class CodeRepository(TrivoContext context) : GenericRepository<Code>(cont
     public async Task<bool> IsValidAsync(string code, CancellationToken cancellationToken) =>
         await ValidateAsync(c => c.Value == code &&
                                  c.ExpiresAt > DateTime.UtcNow &&
-                                 (bool)c.IsUsed!, cancellationToken);
+                                 !(bool)c.IsUsed! &&
+                                 !(bool)c.IsRevoked!, cancellationToken);
 
     public async Task MarkAsUsedAsync(string code, CancellationToken cancellationToken)
     {
