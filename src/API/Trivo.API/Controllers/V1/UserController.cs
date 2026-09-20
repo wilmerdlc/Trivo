@@ -7,6 +7,7 @@ using Trivo.Application.Features.Users.Commands.ConfirmAccount;
 using Trivo.Application.Features.Users.Commands.CreateUser;
 using Trivo.Application.Features.Users.Commands.ForgotPassword;
 using Trivo.Application.Features.Users.Commands.LoginUser;
+using Trivo.Application.Features.Users.Commands.ResendConfirmationCode;
 using Trivo.Application.Features.Users.Commands.ResetPassword;
 using Trivo.Application.Features.Users.Commands.UpdateBiography;
 using Trivo.Application.Features.Users.Commands.UpdatePassword;
@@ -95,6 +96,17 @@ public class UserController(
     [HttpPost("forgot-password")]
     public async Task<ResultT<string>> ForgotPasswordAsync(
         [FromBody] ForgotPasswordCommand command,
+        CancellationToken cancellationToken)
+    {
+        return await sender.Send(command, cancellationToken);
+    }
+
+    [HttpPost("resend-confirmation-code")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ResultT<string>> ResendConfirmationCodeAsync(
+        [FromBody] ResendConfirmationCodeCommand command,
         CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
