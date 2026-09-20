@@ -4,15 +4,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Trivo.API.Controllers.V1.Requests;
 using Trivo.Application.Features.Users.Commands.ConfirmAccount;
+using Trivo.Application.Features.Users.Commands.ConfirmEmailChange;
 using Trivo.Application.Features.Users.Commands.CreateUser;
 using Trivo.Application.Features.Users.Commands.ForgotPassword;
 using Trivo.Application.Features.Users.Commands.LoginUser;
+using Trivo.Application.Features.Users.Commands.RequestEmailChange;
 using Trivo.Application.Features.Users.Commands.ResendConfirmationCode;
 using Trivo.Application.Features.Users.Commands.ResetPassword;
 using Trivo.Application.Features.Users.Commands.UpdateBiography;
+using Trivo.Application.Features.Users.Commands.UpdateName;
 using Trivo.Application.Features.Users.Commands.UpdatePassword;
 using Trivo.Application.Features.Users.Commands.UpdateProfilePicture;
 using Trivo.Application.Features.Users.Commands.UpdateUser;
+using Trivo.Application.Features.Users.Commands.UpdateUsername;
 using Trivo.Application.Features.Interests.Commands.UpdateInterest;
 using Trivo.Application.Features.Skills.Commands.UpdateSkill;
 using Trivo.Application.Features.Users.Query.GetUserBiography;
@@ -130,6 +134,64 @@ public class UserController(
         CancellationToken cancellationToken)
     {
         var command = new UpdateUserCommand(userId, request.Username, request.Email);
+        return await sender.Send(command, cancellationToken);
+    }
+
+    [HttpPut("{userId}/name")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ResultT<UpdateNameDto>> UpdateNameAsync(
+        [FromRoute] Guid userId,
+        [FromBody] UpdateNameRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateNameCommand(userId, request.FirstName, request.LastName);
+        return await sender.Send(command, cancellationToken);
+    }
+
+    [HttpPut("{userId}/username")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ResultT<UpdateUsernameDto>> UpdateUsernameAsync(
+        [FromRoute] Guid userId,
+        [FromBody] UpdateUsernameRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateUsernameCommand(userId, request.Username);
+        return await sender.Send(command, cancellationToken);
+    }
+
+    [HttpPost("{userId}/email/request-change")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ResultT<string>> RequestEmailChangeAsync(
+        [FromRoute] Guid userId,
+        [FromBody] RequestEmailChangeRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new RequestEmailChangeCommand(userId, request.NewEmail);
+        return await sender.Send(command, cancellationToken);
+    }
+
+    [HttpPost("{userId}/email/confirm-change")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ResultT<string>> ConfirmEmailChangeAsync(
+        [FromRoute] Guid userId,
+        [FromBody] ConfirmEmailChangeRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new ConfirmEmailChangeCommand(userId, request.Code);
         return await sender.Send(command, cancellationToken);
     }
 
