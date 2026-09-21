@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "src/API/Trivo.API/Controllers/V1/UserController.cs": {
-    "mtime": 1789929386.701009,
-    "seen": 1789929570.4985847,
-    "ast_hash": "ce323b02d928b97981422f1456cfe8cf",
+    "mtime": 1789929658.909114,
+    "seen": 1789934566.7517679,
+    "ast_hash": "74fd6376c0023c10fbff8e60ff926ce8",
     "semantic_hash": ""
   },
   "src/API/Trivo.API/Extensions/ServiceExtensions.cs": {
@@ -2652,9 +2652,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/UpdateName/UpdateNameCommandHandler.cs": {
-    "mtime": 1789929215.395215,
-    "seen": 1789929570.4989111,
-    "ast_hash": "a164da5fad643885ee15f0fe1cbf124d",
+    "mtime": 1789929680.4970565,
+    "seen": 1789934566.7521136,
+    "ast_hash": "aa35507985fb2461ce74b631c5ddef36",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/UpdateName/UpdateNameValidator.cs": {
@@ -2670,9 +2670,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/UpdateUsername/UpdateUsernameCommandHandler.cs": {
-    "mtime": 1789929257.507564,
-    "seen": 1789929570.4989238,
-    "ast_hash": "1a8242fab9c29f42e732f736f393aeaa",
+    "mtime": 1789929697.956675,
+    "seen": 1789934566.7521324,
+    "ast_hash": "7ad94a73f0c21c10def509c5526d2ae0",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/UpdateUsername/UpdateUsernameValidator.cs": {
@@ -2691,6 +2691,36 @@
     "mtime": 1789929515.7894814,
     "seen": 1789929570.4991333,
     "ast_hash": "c0aa68a017da4adeaa92244c6e2d1526",
+    "semantic_hash": ""
+  },
+  "src/API/Trivo.API/Controllers/V1/Requests/UpdateUserInfoRequest.cs": {
+    "mtime": 1789929635.3829138,
+    "seen": 1789934566.7517579,
+    "ast_hash": "e0e0197451dffb2d7167e6ba94fd2a30",
+    "semantic_hash": ""
+  },
+  "src/Application/Trivo.Application/DTOs/Users/UpdateUserDto.cs": {
+    "mtime": 1789929635.3829138,
+    "seen": 1789934566.7518744,
+    "ast_hash": "aa2684fbe328f4a69e21aa0593bff13b",
+    "semantic_hash": ""
+  },
+  "src/Application/Trivo.Application/Features/Users/Commands/UpdateUser/UpdateUserCommand.cs": {
+    "mtime": 1789929635.3829138,
+    "seen": 1789934566.752126,
+    "ast_hash": "b3f88e45f5278f1a7e4a8a765714a0b6",
+    "semantic_hash": ""
+  },
+  "src/Application/Trivo.Application/Features/Users/Commands/UpdateUser/UpdateUserCommandHandler.cs": {
+    "mtime": 1789929635.3829138,
+    "seen": 1789934566.7521276,
+    "ast_hash": "6b6e00e87260068caaa9b1240fd370e9",
+    "semantic_hash": ""
+  },
+  "src/Application/Trivo.Application/Features/Users/Commands/UpdateUser/UpdateUserValidator.cs": {
+    "mtime": 1789929635.3871233,
+    "seen": 1789934566.752129,
+    "ast_hash": "2279ef5745e93248fa63723152863e30",
     "semantic_hash": ""
   }
 }

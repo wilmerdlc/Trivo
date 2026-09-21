@@ -47,8 +47,6 @@ internal sealed class SearchUsersQueryHandler(
             );
         }
 
-        // '%', '_' and '\' are LIKE wildcards/escape characters and are deliberately ignored
-        // rather than searched literally — strip them so they can't act as wildcards.
         var terms = request.Text
             .Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries)
             .Select(t => new string(t.Where(c => c is not ('%' or '_' or '\\')).ToArray()))
@@ -66,8 +64,6 @@ internal sealed class SearchUsersQueryHandler(
 
         var targetRole = role == Roles.Recruiter.ToString() ? Roles.Expert : Roles.Recruiter;
 
-        // Same rule as recommendations: don't surface someone the user already has a match
-        // record with (pending, accepted, or rejected).
         var matchedUserIds = await matchRepository.GetMatchedCounterpartUserIdsAsync(user.Id, cancellationToken);
 
         var (users, total) = await userRepository.SearchByTextAsync(
