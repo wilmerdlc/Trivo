@@ -1,7 +1,9 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Trivo.Application.DTOs.Users;
+using Trivo.Application.Features.Users.Query.GetUserRecommendations;
 using Trivo.Application.Interfaces.SignalR;
 
 namespace Trivo.Infrastructure.Shared.SignalR.Hubs;
@@ -16,12 +18,13 @@ public class UserRecommendationHub(
     {
         var userIdentifier = Context.UserIdentifier;
 
-        logger.LogInformation("🔌 User connected:");
+        logger.LogInformation("🔌 User connected to recommendations hub:");
         logger.LogInformation("- UserIdentifier (SignalR): {UserIdentifier}", userIdentifier);
 
         if (!Guid.TryParse(userIdentifier, out var userId))
         {
             logger.LogError("UserIdentifier is not a valid GUID");
+            await base.OnConnectedAsync();
             return;
         }
 
@@ -36,29 +39,48 @@ public class UserRecommendationHub(
 
         logger.LogInformation("- UserId: {UserId}", userId);
 
-        // var result = await mediator.Send(new GetUserAiRecommendationsQuery(
-        //     userId,
-        //     PageNumber: pageNumber,
-        //     PageSize: pageSize
-        // ));
-        //
-        // if (!result.IsSuccess)
-        // {
-        //     logger.LogWarning("No recommendations found for user {UserId}.", userId);
-        //     await Clients.User(userId.ToString()).ReceiveRecommendationsAsync(new List<UserIARecommendationDto>());
-        //     await base.OnConnectedAsync();
-        //     return;
-        // }
-        //
-        // await Clients.User(userId.ToString())
-        //     .ReceiveRecommendationsAsync(result.Value.Items);
+        var result = await mediator.Send(new GetUserRecommendationsQuery(userId, pageNumber, pageSize));
 
+        if (!result.IsSuccess)
+        {
+            logger.LogWarning("No recommendations found for user {UserId}. Error: {Error}", userId, result.Error);
+            await Clients.Caller.ReceiveRecommendationsAsync([]);
+            await base.OnConnectedAsync();
+            return;
+        }
+
+        await Clients.Caller.ReceiveRecommendationsAsync(result.Value.Items ?? []);
         await base.OnConnectedAsync();
+    }
+
+    public async Task GetRecommendations(int pageNumber = 1, int pageSize = 5)
+    {
+        var userIdentifier = Context.UserIdentifier;
+
+        if (!Guid.TryParse(userIdentifier, out var userId))
+        {
+            logger.LogError("UserIdentifier is not a valid GUID");
+            return;
+        }
+
+        logger.LogInformation("Fetching recommendations for user {UserId} (Page: {PageNumber}, Size: {PageSize})",
+            userId, pageNumber, pageSize);
+
+        var result = await mediator.Send(new GetUserRecommendationsQuery(userId, pageNumber, pageSize));
+
+        if (!result.IsSuccess)
+        {
+            logger.LogWarning("No recommendations found for user {UserId}. Error: {Error}", userId, result.Error);
+            await Clients.Caller.ReceiveRecommendationsAsync([]);
+            return;
+        }
+
+        await Clients.Caller.ReceiveRecommendationsAsync(result.Value.Items ?? []);
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        logger.LogInformation("User disconnected: {UserIdentifier}", Context.UserIdentifier);
+        logger.LogInformation("User disconnected from recommendations hub: {UserIdentifier}", Context.UserIdentifier);
         return base.OnDisconnectedAsync(exception);
     }
 }
