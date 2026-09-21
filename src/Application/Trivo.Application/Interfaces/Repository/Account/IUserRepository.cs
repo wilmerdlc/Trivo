@@ -182,4 +182,26 @@ public interface IUserRepository : IGenericRepository<User>
         Roles targetRole,
         int poolSize,
         CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Free-text search over active users of the given role. Every term must match (case-insensitive
+    /// "contains") at least one of: first name, last name, biography, position, company name
+    /// (recruiters), or the name of one of the user's interests or skills. Paginated in the database.
+    /// </summary>
+    /// <param name="requesterId">User performing the search; excluded from the results.</param>
+    /// <param name="targetRole">Role the results must belong to (Expert or Recruiter).</param>
+    /// <param name="terms">Search terms, already trimmed, de-duplicated and free of LIKE wildcards (%, _, \). Combined with AND.</param>
+    /// <param name="excludedUserIds">Users to leave out (e.g. existing match counterparts).</param>
+    /// <param name="pageNumber">1-based page number.</param>
+    /// <param name="pageSize">Items per page.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>The users on the requested page (with interests, skills, and role profile) and the total match count.</returns>
+    Task<(IReadOnlyList<User> Items, int TotalItems)> SearchByTextAsync(
+        Guid requesterId,
+        Roles targetRole,
+        IReadOnlyList<string> terms,
+        IReadOnlyCollection<Guid> excludedUserIds,
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken);
 }
