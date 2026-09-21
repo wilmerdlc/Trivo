@@ -26,6 +26,7 @@ using Trivo.Application.Features.Users.Query.GetUserProfilePicture;
 using Trivo.Application.Features.Users.Query.GetUserRecommendations;
 using Trivo.Application.Features.Users.Query.GetUserSkills;
 using Trivo.Application.Features.Users.Query.GetUsersByInterestsAndSkills;
+using Trivo.Application.Features.Users.Query.SearchUsers;
 using Trivo.Application.Helpers;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Pagination;
@@ -87,6 +88,21 @@ public class UserController(
         CancellationToken cancellationToken)
     {
         return await sender.Send(new GetUserRecommendationsQuery(userId, pageNumber, pageSize), cancellationToken);
+    }
+
+    [HttpGet("{userId}/recommendations/search")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ResultT<PagedResult<UserAiRecommendationDto>>> SearchUsersAsync(
+        [FromRoute] Guid userId,
+        [FromQuery] string text,
+        [FromQuery] int pageNumber,
+        [FromQuery] int pageSize,
+        CancellationToken cancellationToken)
+    {
+        return await sender.Send(new SearchUsersQuery(userId, text, pageNumber, pageSize), cancellationToken);
     }
 
     [HttpPost("auth")]

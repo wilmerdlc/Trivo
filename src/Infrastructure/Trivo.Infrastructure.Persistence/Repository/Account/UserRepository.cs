@@ -268,4 +268,64 @@ public class UserRepository(TrivoContext context) :
 
         return results.Select(r => (r.User, r.Distance)).ToList();
     }
+
+    public async Task<(IReadOnlyList<User> Items, int TotalItems)> SearchByTextAsync(
+        Guid requesterId,
+        Roles targetRole,
+        IReadOnlyList<string> terms,
+        IReadOnlyCollection<Guid> excludedUserIds,
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken)
+    {
+        var query = Context.Set<User>()
+            .AsNoTracking()
+            .Where(u => u.Id != requesterId &&
+                        u.UserStatus == Domain.Enums.UserStatus.Active.ToString());
+
+        query = targetRole switch
+        {
+            Roles.Expert => query.Where(u => u.Experts != null && u.Experts.Any()),
+            Roles.Recruiter => query.Where(u => u.Recruiters != null && u.Recruiters.Any()),
+            _ => query
+        };
+
+        if (excludedUserIds.Count > 0)
+        {
+            query = query.Where(u => !excludedUserIds.Contains(u.Id));
+        }
+
+        // Each term must hit at least one field (AND across terms, OR across fields), so
+        // "juan react" finds a Juan who has React, not only profiles containing that exact phrase.
+        foreach (var term in terms)
+        {
+            var pattern = $"%{term}%";
+
+            query = query.Where(u =>
+                EF.Functions.ILike(u.FirstName!, pattern) ||
+                EF.Functions.ILike(u.LastName!, pattern) ||
+                EF.Functions.ILike(u.Biography!, pattern) ||
+                EF.Functions.ILike(u.Position!, pattern) ||
+                u.Recruiters!.Any(r => EF.Functions.ILike(r.CompanyName!, pattern)) ||
+                u.UserInterests!.Any(ui => EF.Functions.ILike(ui.Interest!.Name!, pattern)) ||
+                u.UserSkills!.Any(us => EF.Functions.ILike(us.Skill!.Name!, pattern)));
+        }
+
+        var total = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .OrderBy(u => u.FirstName)
+            .ThenBy(u => u.LastName)
+            .ThenBy(u => u.Id)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Include(u => u.UserInterests)!.ThenInclude(ui => ui.Interest)
+            .Include(u => u.UserSkills)!.ThenInclude(uh => uh.Skill)
+            .Include(u => u.Recruiters)
+            .Include(u => u.Experts)
+            .AsSplitQuery()
+            .ToListAsync(cancellationToken);
+
+        return (items, total);
+    }
 }
