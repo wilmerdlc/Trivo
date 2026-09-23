@@ -62,8 +62,8 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ResultT<string>> ConfirmAccountAsync(
-        [FromQuery] Guid userId,
         [FromQuery] string code,
+        [FromQuery] Guid? userId,
         CancellationToken cancellationToken)
     {
         var command = new ConfirmAccountCommand(userId, code);

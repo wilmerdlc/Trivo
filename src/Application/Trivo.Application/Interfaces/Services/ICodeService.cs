@@ -38,11 +38,12 @@ public interface ICodeService
     /// <summary>
     /// Confirms a user's account using a validation code.
     /// </summary>
-    /// <param name="userId">ID of the user who wishes to confirm their account.</param>
+    /// <param name="userId">Optional ID of the user who wishes to confirm their account. When null,
+    /// the user is resolved from the owner of the code.</param>
     /// <param name="code">The code received by the user.</param>
     /// <param name="cancellationToken">Token to cancel the operation.</param>
     /// <returns>The result of the operation.</returns>
-    Task<Result> ConfirmAccountAsync(Guid userId, string code, CancellationToken cancellationToken);
+    Task<Result> ConfirmAccountAsync(Guid? userId, string code, CancellationToken cancellationToken);
 
     /// <summary>
     /// Verifies if a code is available (valid and not expired).

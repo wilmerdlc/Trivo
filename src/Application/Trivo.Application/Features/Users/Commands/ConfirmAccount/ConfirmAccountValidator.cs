@@ -7,7 +7,7 @@ public sealed class ConfirmAccountValidator : AbstractValidator<ConfirmAccountCo
     public ConfirmAccountValidator()
     {
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("The user ID cannot be empty.");
+            .NotEqual(Guid.Empty).When(x => x.UserId.HasValue).WithMessage("The user ID cannot be empty.");
 
         RuleFor(x => x.Code)
             .NotEmpty().WithMessage("The confirmation code is required.")

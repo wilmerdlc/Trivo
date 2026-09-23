@@ -105,16 +105,8 @@ public class CodeService(
         return Result.Success();
     }
 
-    public async Task<Result> ConfirmAccountAsync(Guid userId, string code, CancellationToken cancellationToken)
+    public async Task<Result> ConfirmAccountAsync(Guid? userId, string code, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(userId, cancellationToken);
-        if (user is null)
-        {
-            logger.LogWarning("No user was found with the provided ID: {UserId}", userId);
-
-            return Result.Failure(Error.NotFound("404", "User not found"));
-        }
-
         var codeEntity = await codeRepository.FindAsync(code, cancellationToken);
         if (codeEntity is null)
         {
@@ -123,11 +115,27 @@ public class CodeService(
             return Result.Failure(Error.NotFound("404", "Code not found"));
         }
 
-        if (codeEntity.UserId != user.Id)
+        if (userId.HasValue && codeEntity.UserId != userId.Value)
         {
             logger.LogWarning("Code with value {Code} does not belong to user with ID {UserId}", code, userId);
 
             return Result.Failure(Error.Forbidden("403", "The code does not belong to this user"));
+        }
+
+        var ownerId = userId ?? codeEntity.UserId;
+        if (ownerId is null)
+        {
+            logger.LogWarning("Code with value {Code} is not associated with any user", code);
+
+            return Result.Failure(Error.NotFound("404", "User not found"));
+        }
+
+        var user = await userRepository.GetByIdAsync(ownerId.Value, cancellationToken);
+        if (user is null)
+        {
+            logger.LogWarning("No user was found with the provided ID: {UserId}", ownerId);
+
+            return Result.Failure(Error.NotFound("404", "User not found"));
         }
 
         if (codeEntity.Type != CodeType.AccountConfirmation.ToString())
@@ -159,7 +167,7 @@ public class CodeService(
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("User with ID {UserId} confirmed their account successfully", userId);
+        logger.LogInformation("User with ID {UserId} confirmed their account successfully", user.Id);
 
         return Result.Success();
     }
