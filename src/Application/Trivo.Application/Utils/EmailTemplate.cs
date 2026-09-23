@@ -1327,4 +1327,43 @@ public static class EmailTemplate
       </body>
       </html>";
     }
+
+    public static string AccountSanction(string user, string sanctionType, string reason, DateTime? expiresAt)
+    {
+        var (title, detail) = sanctionType switch
+        {
+            "Warning" => ("Has recibido una advertencia",
+                "Tu cuenta sigue activa, pero una advertencia queda registrada en tu historial."),
+            "TemporarySuspension" => ("Tu cuenta fue suspendida temporalmente",
+                $"No podrás iniciar sesión hasta el {expiresAt:yyyy-MM-dd HH:mm} UTC."),
+            _ => ("Tu cuenta fue bloqueada de forma permanente",
+                "Ya no podrás iniciar sesión con esta cuenta.")
+        };
+
+        return $@"<!DOCTYPE html>
+      <html lang=""es"">
+      <head>
+        <meta charset=""UTF-8"">
+        <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+        <title>Acción sobre tu cuenta - trivo</title>
+      </head>
+      <body style=""margin:0;padding:20px;background:#f1f5f9;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;"">
+        <div style=""max-width:480px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -10px rgba(0,0,0,0.15);"">
+          <div style=""background:linear-gradient(135deg,#8b5cf6,#6d28d9);padding:28px 24px;color:#ffffff;"">
+            <div style=""font-size:20px;font-weight:700;"">trivo</div>
+            <div style=""margin-top:4px;font-size:16px;"">Hola {user}, {title.ToLowerInvariant()}</div>
+          </div>
+          <div style=""padding:28px 24px;"">
+            <p style=""margin:0 0 16px;font-size:14px;line-height:1.6;"">{detail}</p>
+            <div style=""background:#fef2f2;border-left:4px solid #ef4444;border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.6;color:#991b1b;"">
+              <strong>Motivo:</strong> {reason}
+            </div>
+            <p style=""margin:16px 0 0;font-size:13px;line-height:1.6;color:#64748b;"">
+              Si crees que esto es un error, contacta al equipo de soporte de trivo.
+            </p>
+          </div>
+        </div>
+      </body>
+      </html>";
+    }
 }

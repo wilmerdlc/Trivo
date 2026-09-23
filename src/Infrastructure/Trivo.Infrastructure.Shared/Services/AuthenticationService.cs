@@ -20,7 +20,8 @@ public class AuthenticationService(
     IUserRepository userRepository,
     IAdministratorRepository administratorRepository,
     IGetExpertIdService getExpertIdService,
-    IGetRecruiterIdService getRecruiterIdService
+    IGetRecruiterIdService getRecruiterIdService,
+    IAccountAccessService accountAccessService
 ) : IAuthenticationService
 {
     private readonly JwtSetting _configurations = configurations.Value;
@@ -144,6 +145,12 @@ public class AuthenticationService(
             var user = await userRepository.GetByIdAsync(Guid.Parse(userId), cancellationToken);
             if (user is null)
                 return ResultT<TokenResponseDto>.Failure(Error.NotFound("404", "User not found."));
+
+            // Without this, a sanctioned user could keep renewing their session with the refresh
+            // token they got before the sanction, sidestepping the login block.
+            var accessError = await accountAccessService.GetAccessErrorAsync(user, cancellationToken);
+            if (accessError is not null)
+                return ResultT<TokenResponseDto>.Failure(accessError);
 
             var newAccessToken = await GenerateToken(user, cancellationToken);
             var newRefreshToken = GenerateRefreshToken(user);

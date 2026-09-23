@@ -4,5 +4,8 @@ public enum UserStatus
 {
     Banned,
     Active,
-    Inactive
+    Inactive,
+
+    /// <summary>Temporarily blocked by a sanction; lifted automatically once it expires.</summary>
+    Suspended
 }

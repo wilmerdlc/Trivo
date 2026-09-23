@@ -22,6 +22,7 @@ public class TrivoContext(DbContextOptions<TrivoContext> options) : DbContext(op
     public DbSet<Match> Matches => Set<Match>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<Report> Reports => Set<Report>();
+    public DbSet<Sanction> Sanctions => Set<Sanction>();
     public DbSet<Code> Codes => Set<Code>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

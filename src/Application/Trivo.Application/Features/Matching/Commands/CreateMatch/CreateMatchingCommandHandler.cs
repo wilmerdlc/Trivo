@@ -45,12 +45,12 @@ internal sealed class CreateMatchingCommandHandler(
 
         var recruiterUserStatus = await userRepository.GetStatusAsync(recruiter.UserId!.Value, cancellationToken);
         var expertUserStatus = await userRepository.GetStatusAsync(expert.UserId!.Value, cancellationToken);
-        if (recruiterUserStatus == UserStatus.Banned.ToString() || expertUserStatus == UserStatus.Banned.ToString())
+        if (IsRestricted(recruiterUserStatus) || IsRestricted(expertUserStatus))
         {
             logger.LogWarning("Attempted to match a banned user. Recruiter {RecruiterId} (status {RecruiterStatus}), Expert {ExpertId} (status {ExpertStatus}).",
                 recruiter.Id, recruiterUserStatus, expert.Id, expertUserStatus);
 
-            return ResultT<MatchDetailsDto>.Failure(Error.Validation("400", "This match cannot be created — one of the users is banned."));
+            return ResultT<MatchDetailsDto>.Failure(Error.Validation("400", "This match cannot be created — one of the users is banned or suspended."));
         }
 
         var existingMatch = await matchingRepository.GetAsync(expert.Id, recruiter.Id, cancellationToken);
@@ -105,6 +105,9 @@ internal sealed class CreateMatchingCommandHandler(
     }
 
     #region Private Methods
+
+    private static bool IsRestricted(string? userStatus) =>
+        userStatus == UserStatus.Banned.ToString() || userStatus == UserStatus.Suspended.ToString();
 
     private static readonly Dictionary<Roles, (string expertStatus, string recruiterStatus)> StatusByRole =
         new()

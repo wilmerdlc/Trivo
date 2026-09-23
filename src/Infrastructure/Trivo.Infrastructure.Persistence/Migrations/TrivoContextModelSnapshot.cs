@@ -472,8 +472,13 @@ namespace Trivo.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("PKReportId");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FinalReason")
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("MessageId")
-                        .IsRequired()
                         .HasColumnType("uuid")
                         .HasColumnName("FKMessageId");
 
@@ -485,22 +490,105 @@ namespace Trivo.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("ReportType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
                     b.Property<Guid?>("ReportedById")
                         .IsRequired()
                         .HasColumnType("uuid")
                         .HasColumnName("FKReportedById");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ReportedContent")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReportedContentType")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid?>("ReportedUserId")
+                        .IsRequired()
+                        .HasColumnType("uuid")
+                        .HasColumnName("FKReportedUserId");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ReviewedByAdminId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("FKReviewedByAdminId");
 
                     b.HasKey("ReportId")
                         .HasName("PKReportId");
 
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IXReportCreatedAt");
+
                     b.HasIndex("MessageId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ReportStatus")
+                        .HasDatabaseName("IXReportStatus");
+
+                    b.HasIndex("ReportedById");
+
+                    b.HasIndex("ReportedUserId");
+
+                    b.HasIndex("ReviewedByAdminId");
 
                     b.ToTable("Report", (string)null);
+                });
+
+            modelBuilder.Entity("Trivo.Domain.Models.Sanction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("PKSanctionId");
+
+                    b.Property<Guid?>("AdminId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("FKAdminId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("ReportId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("FKReportId");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("uuid")
+                        .HasColumnName("FKUserId");
+
+                    b.HasKey("Id")
+                        .HasName("PKSanctionId");
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("ReportId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId", "ExpiresAt")
+                        .HasDatabaseName("IXSanctionUserExpiresAt");
+
+                    b.ToTable("Sanction", (string)null);
                 });
 
             modelBuilder.Entity("Trivo.Domain.Models.Skill", b =>
@@ -782,14 +870,55 @@ namespace Trivo.Infrastructure.Persistence.Migrations
                     b.HasOne("Trivo.Domain.Models.Message", "Message")
                         .WithMany("Reports")
                         .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Trivo.Domain.Models.User", "Reporter")
+                        .WithMany("ReportsMade")
+                        .HasForeignKey("ReportedById")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Trivo.Domain.Models.User", "User")
-                        .WithMany("Reports")
-                        .HasForeignKey("UserId");
+                    b.HasOne("Trivo.Domain.Models.User", "ReportedUser")
+                        .WithMany("ReportsReceived")
+                        .HasForeignKey("ReportedUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Trivo.Domain.Models.Administrator", "ReviewedByAdmin")
+                        .WithMany()
+                        .HasForeignKey("ReviewedByAdminId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Message");
+
+                    b.Navigation("ReportedUser");
+
+                    b.Navigation("Reporter");
+
+                    b.Navigation("ReviewedByAdmin");
+                });
+
+            modelBuilder.Entity("Trivo.Domain.Models.Sanction", b =>
+                {
+                    b.HasOne("Trivo.Domain.Models.Administrator", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Trivo.Domain.Models.Report", "Report")
+                        .WithOne("Sanction")
+                        .HasForeignKey("Trivo.Domain.Models.Sanction", "ReportId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Trivo.Domain.Models.User", "User")
+                        .WithMany("Sanctions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Report");
 
                     b.Navigation("User");
                 });
@@ -864,6 +993,11 @@ namespace Trivo.Infrastructure.Persistence.Migrations
                     b.Navigation("Matches");
                 });
 
+            modelBuilder.Entity("Trivo.Domain.Models.Report", b =>
+                {
+                    b.Navigation("Sanction");
+                });
+
             modelBuilder.Entity("Trivo.Domain.Models.Skill", b =>
                 {
                     b.Navigation("UserSkills");
@@ -883,7 +1017,11 @@ namespace Trivo.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Recruiters");
 
-                    b.Navigation("Reports");
+                    b.Navigation("ReportsMade");
+
+                    b.Navigation("ReportsReceived");
+
+                    b.Navigation("Sanctions");
 
                     b.Navigation("SentMessages");
 

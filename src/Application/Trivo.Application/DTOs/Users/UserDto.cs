@@ -6,5 +6,6 @@ public sealed record UserDto(
     Guid Id,
     string? FirstName,
     string? LastName,
-    string? ProfilePictureUrl
+    string? ProfilePictureUrl,
+    DateTime? CreatedAt = null
 );

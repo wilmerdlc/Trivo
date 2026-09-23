@@ -71,6 +71,7 @@ public static class DependencyInjection
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddTransient<INotificationRepository, NotificationRepository>();
         services.AddTransient<IReportRepository, ReportRepository>();
+        services.AddScoped<ISanctionRepository, SanctionRepository>();
     }
 
     private static void AddRedis(this IServiceCollection services, IConfiguration configuration)

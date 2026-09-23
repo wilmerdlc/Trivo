@@ -1,16 +1,16 @@
-# Graph Report - Trivo  (2026-09-20)
+# Graph Report - Trivo  (2026-09-22)
 
 ## Corpus Check
-- 453 files · ~82,496 words
+- 493 files · ~91,518 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3178 nodes · 7273 edges · 202 communities (192 shown, 10 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 449 edges (avg confidence: 0.84)
+- 3460 nodes · 8000 edges · 206 communities (201 shown, 5 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 481 edges (avg confidence: 0.84)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `eb525fdd`
+- Built from commit: `881ca2ce`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,122 +21,122 @@
 - InterestCategory
 - Trivo.Application.DTOs.Users
 - Trivo.Domain.Models
-- CreateInterestCategoryCommandHandler.cs
+- GetPaginatedInterestCategoriesQueryHandler.cs
 - Trivo.Infrastructure.Persistence.Configurations
 - .Handle
 - Trivo.Application.Pagination
 - Trivo.Application.Interfaces.SignalR
 - https
-- ResultT
+- UserController
 - AddProfileTextHash
 - Notification
 - Expert
-- BaseEntity
+- Match
 - .AddRepositories
 - ChatDto
-- .Conflict
+- .NotFound
 - BHD.ResultPattern — Guía de arquitectura e implementación
 - MatchDetailsDto
-- User
+- ICommandHandler
 - Dependency Injection Patterns
-- .Handle
-- .Handle
+- UserHelper.cs
+- Recruiter
 - .Handle
 - UserDto
-- Recruiter
+- User
 - Code
 - .Handle
-- PagedResult
+- .Handle
 - AdminController
-- NotificationDto
+- Error
 - ChatRepository
 - UserInterest
-- .AddSkillsToUserAsync
+- UserSkill
 - InterestRepository
 - Entity Framework Core Patterns
-- Error
+- ExceptionHandlingMiddleware
 - NotificationHub
 - Requerimientos Funcionales
 - .AddAiService
 - Trivo.Application.Utils
-- CreateInterestCommand
+- Interest
 - Trivo.API.csproj
-- .NotFound
+- .SaveChangesAsync
 - .Handle
 - IMatchHub
 - Public API Design and Compatibility
 - Skill
-- .Validation
+- MessageDto
 - .GetByCategoriesAsync
-- IMatchRepository
-- UpdateExpertCommandHandler.cs
+- .UpdateUserAsync
+- ExpertController.cs
 - .Handle
 - .CreateSkillAsync
 - AdministratorRepository
 - .GetRolesAsync
 - Trivo.Infrastructure.Shared.csproj
 - Trivo.API.Controllers.V1.Requests
-- ChatUser
+- ResolveReportCommandHandler
 - Database Performance Patterns
 - Documento de Requerimientos de Software
 - TrivoContext
 - ISkillRepository
-- .ValidateEmailAsync
+- ResultT
 - SkillDto
 - Slopwatch: LLM Anti-Cheat for .NET
-- UserAiRecommendationDto
-- ChatHub
-- UserSkill
-- .CreateMatchNotificationAsync
+- IInterestRepository
+- InterestCategoryDto
+- ChatUser
+- AuthenticationService
 - .GetOrSetAsync
 - GoogleGeminiEmbeddingService
 - Módulo de Matchmaking con IA — Implementación
 - Plan de implementación — Embeddings vía API externa para emparejamiento por afinidad
 - Trivo.Application.Abstractions.Messages
-- SkillRepository
+- CreateInterestCommand
 - Nullable Attributes Reference
-- MatchRepository
+- IMatchRepository
 - Modern C# Coding Standards
 - .UpdateRecruiterAsync
 - IAdministratorRepository
 - .Handle
 - Plantillas copy-paste — feature CQRS de Trivo
-- ICloudinaryService
-- IQueryHandler
+- CloudinaryService
+- Trivo.Application.DTOs.Authentication
 - Polyfilling the nullable attributes for older target frameworks
-- IQuery
-- CreateMatchRejectionCommand
-- Match
+- .Handle
+- ReportDetailDto
+- Chat
 - .Handle
 - Trivo.Application.csproj
 - C# Nullable Reference Types
 - OpenAiEmbeddingService
 - NRT Migration Playbook Reference
-- User
+- .MapToExpertDto
 - .Handle
 - Anti-Patterns to Avoid
-- AuthenticationService
+- TokenResponseDto
 - Report
-- Trivo.Application.Features.Users.Commands.UpdateProfilePicture
-- Trivo.Application.Features.Skills.Commands.UpdateSkill
+- AccountAccessService
+- PagedResult
 - ResultFilter
 - Anti-Patterns and Reflection Avoidance
 - .GetUserId
 - Avoid Reflection-Based Metaprogramming
 - Trivo
-- MatchUpdateStatus
+- .CreateInterestCategoryAsync
 - Performance and API Design Patterns
 - Value Objects and Pattern Matching
-- RF9-administrar-aplicacion.md
+- RF9. Administrar aplicación — Documentación de implementación
 - .Handle
-- ForgotPasswordCommand
+- Sanction
 - .Handle
 - ReportDto
-- Chat
+- .SendFileAsync
 - InitialCreate
 - .GetExpertIdAsync
 - .GetRecruiterIdAsync
-- Trivo.Application.Features.Users.Commands.ResetPassword
+- Sanction
 - EmailSetting
 - Trivo.Infrastructure.Persistence.csproj
 - The `field` Keyword (C# 14 / .NET 10) and Nullability
@@ -144,11 +144,11 @@
 - Trivo.Domain.csproj
 - Roles
 - .ToEntity
-- UserMappingExtensions.cs
-- CreateMatchingCommand
+- .ToEntity
+- UpdateMatchingCommand
 - ErrorType
 - NotificationType
-- .AddServices
+- CustomUserIdProvider
 - ExpertStatus
 - Level
 - MatchStatus
@@ -158,77 +158,83 @@
 - PaginationExtensions.cs
 - ChatType
 - MatchFault
-- InterestCategoryDto
-- ReportStatus
+- .Handle
+- ReportListItemDto
 - IGenericRepository
 - Core Nullability Model
 - Arquitectura CQRS de Trivo — mandato para nuevas features
 - Composition and Error Handling
 - Language Patterns
 - AiSetting
-- NotificationNotifier
+- .Validation
 - Known Static-Analysis Limitations and Safe Patterns
 - Conditional postconditions: `NotNullWhen`, `MaybeNullWhen`, `NotNullIfNotNull`
-- .Handle
+- SanctionDto
 - Preconditions: `AllowNull` and `DisallowNull`
 - Performance Patterns
 - CLAUDE.md
 - Trivo.Infrastructure.Persistence.Migrations
-- IInterestRepository
+- ReportMapper
 - UpdateNameCommand
-- .ToDto
-- RecruiterController.cs
+- InterestCategoryRepository
+- IMessageRepository
 - AbstractValidator
 - AddUniqueExpertRecruiterUserId
-- Trivo.Application.DTOs.Matching
+- MessageRepository
 - .BuildModel
 - ControllerBase
 - .UpdateExpertAsync
 - .Validate
-- Trivo.Application.Features.Users.Commands.ResendConfirmationCode
-- MatchDto
-- ConfirmAccountCommand
-- ICommandHandler
+- .RefreshTokenAsync
+- .Handle
+- .Handle
+- IExpertRepository
 - InterestWithIdDto
-- ICommand
+- ConfirmAccountCommand
 - .ValidateAsync
 - .Handle
-- Interest
-- .CreateInterestCategoryAsync
-- InterestCategoryRepository
+- .Handle
+- .Handle
+- GetActiveUsersCountQueryHandler
 - Administrator
 - .BuildTargetModel
 - .BuildTargetModel
-- GetUsersByInterestsAndSkillsQuery
-- MessageRepository
-- MatchHub
-- GetActiveUsersCountQueryHandler
-- GetReportedUsersCountQueryHandler
-- .Handle
+- IQueryHandler
+- GetRecruitersPagedQuery
 - IInterestCategoryRepository
-- .GetByChatIdAsync
-- INotificationHub
-- UserRecommendationHub
+- IQuery
+- UpdateExpertCommand
+- IReportRepository
 - .Handle
+- CreateUserCommand
+- .UpdateUserInterestsAsync
+- .UploadImageAsync
+- .RefreshTokenAsync
 - CacheProfiles
-- Trivo.Application.Features.Users.Commands.UpdateBiography
-- Trivo.Application.Features.Users.Commands.RequestEmailChange
-- MissingByMatching
-- UpdateUsernameValidator
+- ResolveReportCommand
+- ReportRepository
+- SanctionConfig
+- .Handle
+- AddReportSanctions
+- JwtSetting
+- .BuildTargetModel
+- ReportType
 
 ## God Nodes (most connected - your core abstractions)
-1. `ResultT` - 150 edges
-2. `Trivo.Application.Abstractions.Messages` - 122 edges
-3. `Trivo.Application.Utils` - 93 edges
-4. `Trivo.Domain.Models` - 93 edges
-5. `PagedResult` - 74 edges
-6. `Trivo.Application.Interfaces.Services` - 73 edges
-7. `IUserRepository` - 65 edges
-8. `TrivoContext` - 61 edges
-9. `Trivo.Application.Interfaces.Repository.Account` - 60 edges
-10. `Trivo.Application.Pagination` - 60 edges
+1. `ResultT` - 166 edges
+2. `Trivo.Application.Abstractions.Messages` - 136 edges
+3. `PagedResult` - 102 edges
+4. `Trivo.Application.Utils` - 102 edges
+5. `Trivo.Domain.Models` - 100 edges
+6. `Trivo.Application.Pagination` - 79 edges
+7. `Trivo.Application.Interfaces.Services` - 75 edges
+8. `IUserRepository` - 66 edges
+9. `Trivo.Application.Interfaces.Repository.Account` - 64 edges
+10. `TrivoContext` - 64 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `AuthController` --references--> `IAuthenticationService`  [EXTRACTED]
+  src/API/Trivo.API/Controllers/V1/AuthController.cs → src/Application/Trivo.Application/Interfaces/Services/IAuthenticationService.cs
 - `UserController` --references--> `ICodeService`  [EXTRACTED]
   src/API/Trivo.API/Controllers/V1/UserController.cs → src/Application/Trivo.Application/Interfaces/Services/ICodeService.cs
 - `UserController` --references--> `IEmailValidationService`  [EXTRACTED]
@@ -237,68 +243,66 @@
   src/Application/Trivo.Application/Abstractions/Messages/ICommand.cs → src/Application/Trivo.Application/Utils/Result.cs
 - `ICommand` --references--> `ResultT`  [EXTRACTED]
   src/Application/Trivo.Application/Abstractions/Messages/ICommand.cs → src/Application/Trivo.Application/Utils/Result.cs
-- `CreateAdminCommand` --implements--> `ICommand`  [EXTRACTED]
-  src/Application/Trivo.Application/Features/Administrator/Commands/CreateAdministrator/CreateAdminCommand.cs → src/Application/Trivo.Application/Abstractions/Messages/ICommand.cs
 
 ## Import Cycles
 - None detected.
 
-## Communities (202 total, 10 thin omitted)
+## Communities (206 total, 5 thin omitted)
 
 ### Community 0 - "UserRepository"
-Cohesion: 0.21
-Nodes (11): CancellationToken, Distance, Expert, Guid, IEnumerable, List, Recruiter, Task (+3 more)
+Cohesion: 0.17
+Nodes (15): CancellationToken, Distance, Expert, Guid, IEnumerable, IReadOnlyCollection, IReadOnlyList, Items (+7 more)
 
 ### Community 1 - "IUserRepository"
-Cohesion: 0.23
-Nodes (9): CancellationToken, Distance, Guid, IEnumerable, List, Task, User, Vector (+1 more)
+Cohesion: 0.18
+Nodes (13): CancellationToken, Distance, Guid, IEnumerable, IReadOnlyCollection, IReadOnlyList, Items, List (+5 more)
 
 ### Community 2 - "Message"
 Cohesion: 0.10
-Nodes (19): DateTime, Guid, ICollection, Message, Chat, ChatId, Content, CreatedAt (+11 more)
+Nodes (18): DateTime, Guid, ICollection, Message, Chat, ChatId, Content, CreatedAt (+10 more)
 
 ### Community 3 - "InterestCategory"
 Cohesion: 0.15
 Nodes (11): IEnumerable, List, InterestCategoryMapper, DateTime, Guid, ICollection, InterestCategory, CategoryId (+3 more)
 
 ### Community 4 - "Trivo.Application.DTOs.Users"
-Cohesion: 0.08
-Nodes (15): Trivo.API.Controllers.V1, Trivo.Application.Features.Users.Commands.CreateUser, Trivo.Application.Features.Interests.Commands.CreateInterest, Trivo.Application.Features.Users.Query.GetUserDetails, Trivo.Application.Features.Skills, Trivo.Application.Features.Users.Query.GetUserInterests, Trivo.Application.DTOs.Users, Trivo.Application.DTOs.Skills (+7 more)
+Cohesion: 0.06
+Nodes (20): Trivo.Application.Features.Skills.Query.GetSkillsPagination, Trivo.Application.Features.Users.Commands.UpdatePassword, Trivo.Application.Features.Users.Commands.CreateUser, Trivo.Application.Features.Users.Query.SearchUsers, Trivo.Application.Features.Users.Commands.UpdateBiography, Trivo.Application.Features.Users.Query.GetUserDetails, Trivo.Application.Features.Skills, Trivo.Application.Features.Users.Commands.UpdateUser (+12 more)
 
 ### Community 5 - "Trivo.Domain.Models"
-Cohesion: 0.15
-Nodes (8): Trivo.Domain.Common, Trivo.Infrastructure.Persistence.Context, Trivo.Infrastructure.Persistence.Repository.Account, Trivo.Infrastructure.Persistence.Services, Trivo.Infrastructure.Persistence.Repository, Trivo.Domain.Models, Trivo.Application.Interfaces.Repository, Trivo.Infrastructure.Persistence.Base
+Cohesion: 0.10
+Nodes (11): Trivo.Domain.Common, Trivo.Infrastructure.Persistence.Context, Trivo.Infrastructure.Persistence.Repository.Account, Trivo.Application.Interfaces.Repository.Base, Trivo.Infrastructure.Persistence.Services, Trivo.Infrastructure.Persistence.Repository, Trivo.Domain.Models, Trivo.Application.Interfaces.Repository (+3 more)
 
-### Community 6 - "CreateInterestCategoryCommandHandler.cs"
+### Community 6 - "GetPaginatedInterestCategoriesQueryHandler.cs"
 Cohesion: 0.27
 Nodes (4): Trivo.Application.DTOs.InterestCategories, Trivo.Application.Features.InterestCategories.Commands.CreateInterestCategory, Trivo.Application.Features.InterestCategories.Query.GetPaginatedInterestCategories, Trivo.Application.Features.InterestCategories
 
 ### Community 7 - "Trivo.Infrastructure.Persistence.Configurations"
-Cohesion: 0.09
-Nodes (14): Trivo.Infrastructure.Persistence.Configurations, IEntityTypeConfiguration, EntityTypeBuilder, AdministratorConfig, EntityTypeBuilder, CodeConfig, EntityTypeBuilder, InterestCategoryConfig (+6 more)
+Cohesion: 0.08
+Nodes (17): Trivo.Infrastructure.Persistence.Configurations, IEntityTypeConfiguration, EntityTypeBuilder, AdministratorConfig, EntityTypeBuilder, InterestCategoryConfig, EntityTypeBuilder, InterestConfig (+9 more)
 
 ### Community 8 - ".Handle"
-Cohesion: 0.19
-Nodes (13): Candidates, HasOverlap, Guid, GetUserRecommendationsQuery, CancellationToken, Distance, Guid, ILogger (+5 more)
+Cohesion: 0.09
+Nodes (24): Candidates, HasOverlap, INotificationHandler, CancellationToken, ILogger, Task, UserProfileChangedEventHandler, Guid (+16 more)
 
 ### Community 9 - "Trivo.Application.Pagination"
 Cohesion: 0.07
-Nodes (11): Trivo.Application.Features.Skills.Query.GetSkillsPagination, Trivo.Application.Features.Users.Query.SearchUsers, Trivo.Application.Interfaces.Repository.Base, Trivo.Application.Features.Administrator.Query.GetLatestUsersPaged, Trivo.Application.Features.Users, Trivo.Application.Features.Interests.Query.GetInterestsByCategoryId, Trivo.Application.Features.Matching, Trivo.Application.Pagination (+3 more)
+Nodes (12): Trivo.Application.Features.Messages.Query.GetMessagePagination, Trivo.Application.Features.Administrator.Query.GetLatestUsersPaged, Trivo.Application.Features.Users, Trivo.Application.Features.Administrator.Query.GetSanctionsHistory, Trivo.Application.Features.Interests.Query.GetInterestsByCategoryId, Trivo.Application.Features.Matching, Trivo.Application.Features.Reports, Trivo.Application.Pagination (+4 more)
 
 ### Community 10 - "Trivo.Application.Interfaces.SignalR"
-Cohesion: 0.09
-Nodes (11): Trivo.Application.Features.Messages.Commands.SendImage, Trivo.Application.Features.Messages.Query.GetMessagePagination, Trivo.Application.Features.Chat.Query.GetChatPagination, Trivo.Application.Features.Chat, Trivo.Application.Interfaces.SignalR, Trivo.Application.Features.Chat.Commands.CreateChat, Trivo.Infrastructure.Shared.SignalR, Trivo.Application.Features.Messages.Commands.SendMessage (+3 more)
+Cohesion: 0.06
+Nodes (15): Trivo.Application.Features.Messages.Commands.SendImage, Trivo.Application.Features.Chat.Query.GetChatPagination, Trivo.Application.Features.Chat, Trivo.API.Controllers.V1, Trivo.Application.DTOs.Notifications, Trivo.Application.Features.Notifications, Trivo.Application.Interfaces.SignalR, Trivo.Application.Features.Chat.Commands.CreateChat (+7 more)
 
 ### Community 11 - "https"
 Cohesion: 0.10
 Nodes (21): ASPNETCORE_ENVIRONMENT, applicationUrl, commandName, dotnetRunMessages, environmentVariables, launchBrowser, launchUrl, commandName (+13 more)
 
-### Community 12 - "ResultT"
-Cohesion: 0.20
-Nodes (13): Authorize, CancellationToken, Guid, HttpGet, HttpPost, HttpPut, IEnumerable, ISender (+5 more)
+### Community 12 - "UserController"
+Cohesion: 0.26
+Nodes (10): Authorize, CancellationToken, Guid, HttpGet, HttpPost, IEnumerable, ISender, ProducesResponseType (+2 more)
 
 ### Community 13 - "AddProfileTextHash"
-Cohesion: 0.20
+Cohesion: 0.22
 Nodes (6): MigrationBuilder, DateTime, Guid, ModelBuilder, Vector, AddProfileTextHash
 
 ### Community 14 - "Notification"
@@ -309,19 +313,19 @@ Nodes (21): CancellationToken, Guid, Task, INotificationRepository, DateTime, Gu
 Cohesion: 0.10
 Nodes (25): Guid, ExpertMapper, CancellationToken, Guid, IEnumerable, IReadOnlyList, List, Task (+17 more)
 
-### Community 16 - "BaseEntity"
-Cohesion: 0.13
-Nodes (13): DateTime, Guid, BaseEntity, CreatedAt, Id, UpdatedAt, Guid, ICollection (+5 more)
+### Community 16 - "Match"
+Cohesion: 0.09
+Nodes (21): DateTime, Guid, BaseEntity, CreatedAt, Id, UpdatedAt, Guid, Match (+13 more)
 
 ### Community 17 - ".AddRepositories"
-Cohesion: 0.20
-Nodes (12): IReportRepository, IGetExpertIdService, IGetRecruiterIdService, IUserRoleService, IConfiguration, IConnectionMultiplexer, IServiceCollection, DependencyInjection (+4 more)
+Cohesion: 0.22
+Nodes (10): IGetExpertIdService, IGetRecruiterIdService, IUserRoleService, IConfiguration, IConnectionMultiplexer, IServiceCollection, DependencyInjection, GetExpertIdService (+2 more)
 
 ### Community 18 - "ChatDto"
-Cohesion: 0.10
-Nodes (27): DateTime, Guid, List, ChatDto, Guid, CreateChatCommand, UserId, CancellationToken (+19 more)
+Cohesion: 0.06
+Nodes (35): Authorize, CancellationToken, HttpPost, ISender, Task, ChatController, DateTime, Guid (+27 more)
 
-### Community 19 - ".Conflict"
+### Community 19 - ".NotFound"
 Cohesion: 0.10
 Nodes (25): DateTime, Guid, CodeDto, CancellationToken, Guid, Task, ICodeRepository, CancellationToken (+17 more)
 
@@ -330,115 +334,111 @@ Cohesion: 0.06
 Nodes (31): 1. Arquitectura general, 2.1. Estructura de carpetas, 2.2. `BHD.ResultPattern.csproj`, 2.3. `Result.cs`, 2.4. `Error.cs`, 2. Núcleo: `BHD.ResultPattern` (sin dependencias), 3.1. Estructura de carpetas, 3.2. `BHD.ResultPattern.AspNetCore.csproj` (+23 more)
 
 ### Community 21 - "MatchDetailsDto"
-Cohesion: 0.11
-Nodes (20): DateTime, Guid, MatchDetailsDto, Guid, UpdateMatchingCommand, CancellationToken, Guid, ILogger (+12 more)
+Cohesion: 0.17
+Nodes (14): DateTime, Guid, MatchDetailsDto, Guid, Task, Guid, IEnumerable, Task (+6 more)
 
-### Community 22 - "User"
+### Community 22 - "ICommandHandler"
 Cohesion: 0.07
-Nodes (28): ICollection, Vector, User, Biography, ChatUsers, Codes, Email, Experts (+20 more)
+Nodes (48): ICommandHandler, ILogger, CreateAdminCommandHandler, ILogger, UnbanUserCommandHandler, ILogger, UpdateExpertCommandHandler, ILogger (+40 more)
 
 ### Community 23 - "Dependency Injection Patterns"
 Cohesion: 0.05
 Nodes (38): Advanced DI Patterns, Akka.DependencyInjection Reference, Akka.Hosting.TestKit, Akka.NET Actor Scope Management, Common Patterns, Conditional Registration, Contents, Factory-Based Registration (+30 more)
 
-### Community 24 - ".Handle"
-Cohesion: 0.11
-Nodes (15): INotification, INotificationHandler, CancellationToken, Task, Guid, UserProfileChangedEvent, CancellationToken, ILogger (+7 more)
-
-### Community 25 - ".Handle"
-Cohesion: 0.40
-Nodes (5): ResetPasswordCommand, CancellationToken, ILogger, Task, ResetPasswordCommandHandler
+### Community 25 - "Recruiter"
+Cohesion: 0.15
+Nodes (19): Guid, RecruiterMapper, ILogger, GetUserDetailsQueryHandler, CancellationToken, Guid, IEnumerable, IReadOnlyList (+11 more)
 
 ### Community 26 - ".Handle"
-Cohesion: 0.12
-Nodes (13): Guid, IEnumerable, CacheKeys, List, ExpertDetailsDto, List, RecruiterDetailsDto, List (+5 more)
+Cohesion: 0.08
+Nodes (23): Guid, IEnumerable, CacheKeys, Guid, SkillWithIdDto, List, ExpertDetailsDto, List (+15 more)
 
 ### Community 27 - "UserDto"
-Cohesion: 0.09
-Nodes (23): Guid, UserDto, IEnumerable, GetLast10BannedUsersQuery, CancellationToken, IEnumerable, ILogger, Task (+15 more)
-
-### Community 28 - "Recruiter"
 Cohesion: 0.14
-Nodes (18): Guid, RecruiterMapper, CancellationToken, Guid, IEnumerable, IReadOnlyList, List, Task (+10 more)
+Nodes (16): DateTime, Guid, UserDto, IEnumerable, GetLast10BannedUsersQuery, CancellationToken, IEnumerable, ILogger (+8 more)
+
+### Community 28 - "User"
+Cohesion: 0.07
+Nodes (30): ICollection, Vector, User, Biography, ChatUsers, Codes, Email, Experts (+22 more)
 
 ### Community 29 - "Code"
-Cohesion: 0.14
-Nodes (17): DateTime, Guid, Code, CodeId, CreatedAt, ExpiresAt, IsRevoked, IsUsed (+9 more)
+Cohesion: 0.11
+Nodes (19): DateTime, Guid, Code, CodeId, CreatedAt, ExpiresAt, IsRevoked, IsUsed (+11 more)
 
 ### Community 30 - ".Handle"
-Cohesion: 0.08
-Nodes (22): EmailResponseDto, CancellationToken, ILogger, Task, ConfirmEmailChangeCommandHandler, CancellationToken, ILogger, Task (+14 more)
+Cohesion: 0.07
+Nodes (21): Trivo.Application.Features.Users.Commands.ForgotPassword, Trivo.Application.Features.Users.Commands.ResendConfirmationCode, EmailResponseDto, CancellationToken, Task, ForgotPasswordCommand, CancellationToken, Task (+13 more)
 
-### Community 31 - "PagedResult"
-Cohesion: 0.11
-Nodes (17): DateTime, Guid, AdminMatchDto, ExpertMatchDto, RecruiterMatchDto, GetLatestMatchesQuery, CancellationToken, ILogger (+9 more)
+### Community 31 - ".Handle"
+Cohesion: 0.15
+Nodes (11): DateTime, Guid, AdminMatchDto, ExpertMatchDto, RecruiterMatchDto, GetLatestMatchesQuery, CancellationToken, ILogger (+3 more)
 
 ### Community 32 - "AdminController"
-Cohesion: 0.30
-Nodes (11): Authorize, CancellationToken, Guid, HttpGet, HttpPost, HttpPut, IEnumerable, ISender (+3 more)
+Cohesion: 0.27
+Nodes (12): Authorize, CancellationToken, Guid, HttpGet, HttpPost, HttpPut, IEnumerable, ISender (+4 more)
 
-### Community 33 - "NotificationDto"
-Cohesion: 0.17
-Nodes (13): Guid, CreateNotificationDto, DateTime, Guid, NotificationDto, IEnumerable, List, NotificationMapper (+5 more)
+### Community 33 - "Error"
+Cohesion: 0.12
+Nodes (9): IReadOnlyDictionary, PaginationError, ErrorType, Error, Code, Description, ErrorType, Extensions (+1 more)
 
 ### Community 34 - "ChatRepository"
 Cohesion: 0.31
 Nodes (8): CancellationToken, Chat, Guid, IEnumerable, IReadOnlyList, Task, User, ChatRepository
 
 ### Community 35 - "UserInterest"
-Cohesion: 0.13
-Nodes (18): CancellationToken, Guid, List, Task, IUserInterestRepository, Guid, UserInterest, Interest (+10 more)
+Cohesion: 0.11
+Nodes (19): CancellationToken, Task, CancellationToken, Guid, List, Task, Guid, UserInterest (+11 more)
 
-### Community 36 - ".AddSkillsToUserAsync"
-Cohesion: 0.21
-Nodes (10): CancellationToken, Guid, List, Task, IUserSkillRepository, CancellationToken, Guid, List (+2 more)
+### Community 36 - "UserSkill"
+Cohesion: 0.13
+Nodes (16): CancellationToken, Guid, List, Task, IUserSkillRepository, Guid, UserSkill, Skill (+8 more)
 
 ### Community 37 - "InterestRepository"
-Cohesion: 0.26
+Cohesion: 0.31
 Nodes (7): CancellationToken, Guid, IEnumerable, Interest, List, Task, InterestRepository
 
 ### Community 38 - "Entity Framework Core Patterns"
 Cohesion: 0.05
 Nodes (38): 1. Forgetting to Update When NoTracking, 2. N+1 Query Problem, 3. Tracking Conflicts with Multiple DbContext Instances, 4. Not Using Async Consistently, 5. Querying Inside Loops, Actors / Long-Lived Objects (Factory Pattern), AppHost Configuration, Applying Migrations (+30 more)
 
-### Community 39 - "Error"
-Cohesion: 0.05
-Nodes (25): Trivo.API.Middlewares, Trivo.API.Extensions, IApplicationBuilder, IEndpointRouteBuilder, IHostEnvironment, ProblemDetails, RequestDelegate, IConfiguration (+17 more)
+### Community 39 - "ExceptionHandlingMiddleware"
+Cohesion: 0.08
+Nodes (18): Trivo.API.Middlewares, Trivo.API.Extensions, IApplicationBuilder, IEndpointRouteBuilder, IHostEnvironment, ProblemDetails, RequestDelegate, IConfiguration (+10 more)
 
 ### Community 40 - "NotificationHub"
-Cohesion: 0.31
-Nodes (5): Exception, Guid, ILogger, Task, NotificationHub
+Cohesion: 0.06
+Nodes (32): HttpDelete, Hub, Authorize, CancellationToken, Guid, HttpPost, HttpPut, Task (+24 more)
 
 ### Community 41 - "Requerimientos Funcionales"
 Cohesion: 0.12
 Nodes (15): 4.3.1 Análisis Preliminar y Determinación de Requerimientos, 4.3.2 Análisis y Modelado de los Requerimientos del Proyecto, 4.3 Descripción del Modelo de Desarrollo, Requerimientos Funcionales, Requerimientos Funcionales (Sección Adicional), Requerimientos No Funcionales, RF1. Registro, RF2. Inicio de sesión (+7 more)
 
 ### Community 42 - ".AddAiService"
-Cohesion: 0.26
-Nodes (6): JwtResponse, CloudinarySetting, CloudinaryUrl, IConfiguration, IServiceCollection, DependencyInjection
+Cohesion: 0.39
+Nodes (4): JwtResponse, IConfiguration, IServiceCollection, DependencyInjection
 
 ### Community 43 - "Trivo.Application.Utils"
-Cohesion: 0.08
-Nodes (17): Trivo.API.Filters, Trivo.Application.DTOs.Notifications, Trivo.Application.DTOs.Email, Trivo.Application.Features.Users.Commands.LoginUser, Trivo.Infrastructure.Shared.Services, Trivo.Domain.Configurations, Trivo.Application.Features.Notifications, Trivo.Application.Utils (+9 more)
+Cohesion: 0.12
+Nodes (8): Trivo.Application.Interfaces.UnitOfWork, Trivo.Application.DTOs.Email, Trivo.Application.Utils, Trivo.Application.Caching, Trivo.Application.Features.Users.Events, Trivo.Application.Interfaces.Repository.Account, Trivo.Application.Services, Trivo.Application.Interfaces.Services
 
-### Community 44 - "CreateInterestCommand"
+### Community 44 - "Interest"
 Cohesion: 0.15
-Nodes (9): Guid, InterestDetailsDto, Guid, CreateInterestCommand, CreateInterestValidator, Guid, IEnumerable, Interest (+1 more)
+Nodes (13): Guid, IEnumerable, Interest, InterestMapper, Guid, ICollection, Interest, Category (+5 more)
 
 ### Community 45 - "Trivo.API.csproj"
 Cohesion: 0.11
 Nodes (17): Asp.Versioning.Mvc (8.1.0), AspNetCore.HealthChecks.Redis (9.0.0), Microsoft.AspNetCore.OpenApi (8.0.10), Microsoft.AspNetCore.SignalR.Core (1.2.0), Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore (8.0.10), Scalar.AspNetCore (2.17.1), Serilog.Enrichers.Environment (3.0.1), Serilog.Enrichers.Thread (4.0.0) (+9 more)
 
-### Community 46 - ".NotFound"
-Cohesion: 0.09
-Nodes (23): CancellationToken, Task, CancellationToken, Task, CancellationToken, Task, CancellationToken, Task (+15 more)
+### Community 46 - ".SaveChangesAsync"
+Cohesion: 0.06
+Nodes (29): INotification, CancellationToken, Task, CancellationToken, Task, CancellationToken, Task, CancellationToken (+21 more)
 
 ### Community 47 - ".Handle"
-Cohesion: 0.21
-Nodes (9): Trivo.Application.Features.Users.Commands.UpdateUser, UpdateUserDto, Guid, UpdateUserCommand, CancellationToken, ILogger, Task, UpdateUserCommandHandler (+1 more)
+Cohesion: 0.24
+Nodes (8): UpdateUserDto, Guid, UpdateUserCommand, CancellationToken, ILogger, Task, UpdateUserCommandHandler, UpdateUserValidator
 
 ### Community 48 - "IMatchHub"
-Cohesion: 0.36
+Cohesion: 0.43
 Nodes (4): Guid, IEnumerable, Task, IMatchHub
 
 ### Community 49 - "Public API Design and Compatibility"
@@ -449,21 +449,21 @@ Nodes (31): Anti-Patterns, API Approval Testing, API Change Guidelines, Benefits
 Cohesion: 0.17
 Nodes (10): DateTime, Guid, ICollection, Skill, Name, RegisteredAt, SkillId, UserSkills (+2 more)
 
-### Community 51 - ".Validation"
-Cohesion: 0.08
-Nodes (36): DateTime, Guid, MessageDto, Guid, IFormFile, SendFileCommand, UserId, CancellationToken (+28 more)
+### Community 51 - "MessageDto"
+Cohesion: 0.06
+Nodes (47): DateTime, Guid, MessageDto, Guid, CreateChatCommand, UserId, CancellationToken, ILogger (+39 more)
 
 ### Community 52 - ".GetByCategoriesAsync"
 Cohesion: 0.23
 Nodes (11): Authorize, CancellationToken, Guid, HttpGet, HttpPost, IEnumerable, ISender, List (+3 more)
 
-### Community 53 - "IMatchRepository"
-Cohesion: 0.32
-Nodes (9): AcceptedIds, CancellationToken, Guid, IEnumerable, IReadOnlyList, Match, RejectedIds, Task (+1 more)
+### Community 53 - ".UpdateUserAsync"
+Cohesion: 0.13
+Nodes (8): UpdateBiographyRequest, IFormFile, UpdateProfilePictureRequest, UpdateUserInfoRequest, Guid, List, UpdateUserSkillsRequest, HttpPut
 
-### Community 54 - "UpdateExpertCommandHandler.cs"
-Cohesion: 0.24
-Nodes (5): Trivo.Application.DTOs.Expert, Trivo.Application.Features.Experts.Commands.CreateExpert, Trivo.Application.Features.Experts, Trivo.Application.Helpers, Trivo.Application.Features.Experts.Commands.UpdateExpert
+### Community 54 - "ExpertController.cs"
+Cohesion: 0.10
+Nodes (13): Trivo.API.Filters, Trivo.Application.Features.Recruiters.Commands.UpdateRecruiter, Trivo.Application.DTOs.Expert, Trivo.Application.Features.Experts.Commands.CreateExpert, Trivo.Application.Features.Recruiters, Trivo.Application.Features.Experts, Trivo.Application.Helpers, Trivo.Infrastructure.Shared (+5 more)
 
 ### Community 55 - ".Handle"
 Cohesion: 0.19
@@ -474,8 +474,8 @@ Cohesion: 0.24
 Nodes (9): Authorize, CancellationToken, HttpGet, HttpPost, IEnumerable, ISender, ProducesResponseType, Task (+1 more)
 
 ### Community 57 - "AdministratorRepository"
-Cohesion: 0.23
-Nodes (8): Administrator, CancellationToken, Guid, IEnumerable, Match, Task, User, AdministratorRepository
+Cohesion: 0.21
+Nodes (9): CancellationToken, Expert, Guid, IEnumerable, Match, Recruiter, Task, User (+1 more)
 
 ### Community 58 - ".GetRolesAsync"
 Cohesion: 0.14
@@ -486,12 +486,12 @@ Cohesion: 0.15
 Nodes (12): CloudinaryDotNet (1.27.0), MailKit (4.17.0), Microsoft.AspNetCore.Authentication.JwtBearer (8.0.10), Microsoft.AspNetCore.SignalR (1.2.0), Microsoft.Extensions.Options (10.0.3), Microsoft.Extensions.Options.ConfigurationExtensions (8.0.0), Microsoft.IdentityModel.Tokens (8.10.0), MimeKit (4.17.0) (+4 more)
 
 ### Community 60 - "Trivo.API.Controllers.V1.Requests"
-Cohesion: 0.06
-Nodes (20): Trivo.API.Controllers.V1.Requests, ChangePasswordRequest, ConfirmEmailChangeRequest, Guid, List, FilterUsersByInterestsAndSkillsRequest, RequestEmailChangeRequest, UpdateBiographyRequest (+12 more)
+Cohesion: 0.10
+Nodes (11): Trivo.API.Controllers.V1.Requests, ChangePasswordRequest, ConfirmEmailChangeRequest, Guid, List, FilterUsersByInterestsAndSkillsRequest, RequestEmailChangeRequest, ResolveReportRequest (+3 more)
 
-### Community 61 - "ChatUser"
-Cohesion: 0.15
-Nodes (11): DateTime, Guid, ChatUser, Chat, ChatId, ChatName, JoinedAt, LeftAt (+3 more)
+### Community 61 - "ResolveReportCommandHandler"
+Cohesion: 0.20
+Nodes (12): DateTime, Guid, ReportResolutionDto, CancellationToken, DateTime, Guid, ILogger, Sanction (+4 more)
 
 ### Community 62 - "Database Performance Patterns"
 Cohesion: 0.07
@@ -503,15 +503,15 @@ Nodes (11): 1. Búsqueda y Filtros, 2. Gestión de Usuarios, 3. Sistema de Repor
 
 ### Community 64 - "TrivoContext"
 Cohesion: 0.08
-Nodes (23): DbContext, DbContextOptions, DbSet, CancellationToken, ModelBuilder, Task, TrivoContext, Administrators (+15 more)
+Nodes (24): DbContext, DbContextOptions, DbSet, CancellationToken, ModelBuilder, Task, TrivoContext, Administrators (+16 more)
 
 ### Community 65 - "ISkillRepository"
-Cohesion: 0.26
-Nodes (8): ILogger, GetSkillsPaginationQueryHandler, CancellationToken, Guid, IEnumerable, List, Task, ISkillRepository
+Cohesion: 0.16
+Nodes (14): ILogger, GetSkillsPaginationQueryHandler, CancellationToken, Guid, IEnumerable, List, Task, ISkillRepository (+6 more)
 
-### Community 66 - ".ValidateEmailAsync"
-Cohesion: 0.25
-Nodes (7): CancellationToken, Task, IEmailValidationService, CancellationToken, ILogger, Task, EmailValidationService
+### Community 66 - "ResultT"
+Cohesion: 0.13
+Nodes (11): IServiceCollection, DependencyInjection, CancellationToken, Task, IEmailValidationService, CancellationToken, ILogger, Task (+3 more)
 
 ### Community 67 - "SkillDto"
 Cohesion: 0.17
@@ -521,25 +521,25 @@ Nodes (9): DateTime, Guid, SkillDto, Guid, CreateSkillCommand, CreateSkillValida
 Cohesion: 0.09
 Nodes (22): After Every Code Change, As a Global Tool, As a Local Tool (Recommended), Azure Pipelines, CI/CD Integration, Claude Code Hook Integration, Common Slop Patterns, Configuration (+14 more)
 
-### Community 69 - "UserAiRecommendationDto"
-Cohesion: 0.17
-Nodes (15): Guid, List, UserAiRecommendationDto, Guid, IEnumerable, Task, IAiNotifier, IEnumerable (+7 more)
+### Community 69 - "IInterestRepository"
+Cohesion: 0.34
+Nodes (6): CancellationToken, Guid, IEnumerable, List, Task, IInterestRepository
 
-### Community 70 - "ChatHub"
+### Community 70 - "InterestCategoryDto"
+Cohesion: 0.18
+Nodes (10): Guid, InterestCategoryDto, GetPaginatedInterestCategoriesQuery, CancellationToken, ILogger, Task, GetPaginatedInterestCategoriesQueryHandler, GetPaginatedInterestCategoriesValidator (+2 more)
+
+### Community 71 - "ChatUser"
 Cohesion: 0.15
-Nodes (10): Guid, IEnumerable, Task, IChatHub, Exception, Guid, ILogger, IMediator (+2 more)
+Nodes (11): DateTime, Guid, ChatUser, Chat, ChatId, ChatName, JoinedAt, LeftAt (+3 more)
 
-### Community 71 - "UserSkill"
-Cohesion: 0.29
-Nodes (6): Guid, UserSkill, Skill, SkillId, User, UserId
-
-### Community 72 - ".CreateMatchNotificationAsync"
-Cohesion: 0.16
-Nodes (14): HttpDelete, Authorize, CancellationToken, Guid, HttpPost, HttpPut, Task, NotificationController (+6 more)
+### Community 72 - "AuthenticationService"
+Cohesion: 0.26
+Nodes (6): Administrator, CancellationToken, IOptions, Task, User, AuthenticationService
 
 ### Community 73 - ".GetOrSetAsync"
 Cohesion: 0.13
-Nodes (16): IDatabase, IReadOnlyList, CacheEntryOptions, AbsoluteExpiration, Tags, CancellationToken, Func, Task (+8 more)
+Nodes (16): IDatabase, IReadOnlyList, TimeSpan, CacheEntryOptions, AbsoluteExpiration, Tags, CancellationToken, Func (+8 more)
 
 ### Community 74 - "GoogleGeminiEmbeddingService"
 Cohesion: 0.16
@@ -554,20 +554,20 @@ Cohesion: 0.14
 Nodes (13): 0. Decisión de proveedor y por qué la interfaz debe ser agnóstica, 10. Pruebas, 1. Infraestructura de base de datos (bloqueante, va primero), 2. Dominio (`Trivo.Domain`), 3. Application (`Trivo.Application`), 4. Infrastructure.Shared — implementación del proveedor, 5. Infrastructure.Persistence — columna, mapping e índice, 6. Cuándo se genera/regenera el embedding (+5 more)
 
 ### Community 77 - "Trivo.Application.Abstractions.Messages"
-Cohesion: 0.06
-Nodes (22): Trivo.Application.Abstractions.Messages, Trivo.Application.Features.Users.Commands.UpdatePassword, Trivo.Application.Features.Administrator.Query.GetCompletedMatchesCount, Trivo.Application.Interfaces.UnitOfWork, Trivo.Application.Features.Administrator.Query.GetLatestMatches, Trivo.Application.Features.Interests.Commands.UpdateInterest, Trivo.Application.Features.Administrator.Query.GetReportedUsersCount, Trivo.Application.Features.Administrator.Query.GetActiveUsersCount (+14 more)
+Cohesion: 0.08
+Nodes (19): Trivo.Application.Abstractions.Messages, Trivo.Application.Features.Administrator.Query.GetCompletedMatchesCount, Trivo.Application.Features.Reports.Query.GetLatestReports, Trivo.Application.Features.Administrator.Query.GetExpertsPaged, Trivo.Application.Features.Reports.Query.GetReportsPaged, Trivo.Application.Features.Administrator.Query.GetLatestMatches, Trivo.Application.Features.Reports.Commands.CreateReport, Trivo.Application.Features.Administrator.Query.GetReportedUsersCount (+11 more)
 
-### Community 78 - "SkillRepository"
-Cohesion: 0.29
-Nodes (6): CancellationToken, Guid, IEnumerable, List, Task, SkillRepository
+### Community 78 - "CreateInterestCommand"
+Cohesion: 0.18
+Nodes (7): Trivo.Application.Features.Interests.Commands.CreateInterest, Trivo.Application.Features.Interests, Guid, InterestDetailsDto, Guid, CreateInterestCommand, CreateInterestValidator
 
 ### Community 79 - "Nullable Attributes Reference"
 Cohesion: 0.17
 Nodes (12): Attribute Catalog, `[DoesNotReturn]`, `[DoesNotReturnIf(bool)]`, Helper methods: `MemberNotNull` and `MemberNotNullWhen`, `[MaybeNull]`, `[MemberNotNull]`, `[MemberNotNullWhen(bool)]`, `[NotNull]` (+4 more)
 
-### Community 80 - "MatchRepository"
-Cohesion: 0.34
-Nodes (9): AcceptedIds, CancellationToken, Guid, IEnumerable, IReadOnlyList, Match, RejectedIds, Task (+1 more)
+### Community 80 - "IMatchRepository"
+Cohesion: 0.15
+Nodes (21): AcceptedIds, CancellationToken, Guid, IEnumerable, IReadOnlyList, Match, RejectedIds, Task (+13 more)
 
 ### Community 81 - "Modern C# Coding Standards"
 Cohesion: 0.17
@@ -578,8 +578,8 @@ Cohesion: 0.19
 Nodes (10): Authorize, CancellationToken, Guid, HttpPost, HttpPut, ISender, ProducesResponseType, Task (+2 more)
 
 ### Community 83 - "IAdministratorRepository"
-Cohesion: 0.26
-Nodes (5): CancellationToken, Guid, IEnumerable, Task, IAdministratorRepository
+Cohesion: 0.25
+Nodes (6): CancellationToken, Guid, IEnumerable, Task, IAdministratorRepository, User
 
 ### Community 84 - ".Handle"
 Cohesion: 0.21
@@ -589,29 +589,29 @@ Nodes (8): Guid, InterestDto, GetInterestsPaginationQuery, CancellationToken, IL
 Cohesion: 0.18
 Nodes (10): 1. DTO, 2. Command (con respuesta) — ejemplo real: `CreateInterestCommand`, 3. Validator (co-ubicado con el Command), 4. Handler — orquesta repos + UnitOfWork, nunca lanza excepciones de negocio, 5. Query con paginación + cache — ejemplo real: `GetInterestsPaginationQuery`, 6. Mapper — extensiones estáticas, una clase por feature, 7. Repositorio — patrón MANDATORIO para entidades nuevas (extiende `IGenericRepository<T>`), 8. DI — registrar el repo nuevo (+2 more)
 
-### Community 86 - "ICloudinaryService"
-Cohesion: 0.21
-Nodes (10): CancellationToken, Stream, Task, ICloudinaryService, CancellationToken, IOptions, Stream, Task (+2 more)
+### Community 86 - "CloudinaryService"
+Cohesion: 0.24
+Nodes (8): CloudinarySetting, CloudinaryUrl, CancellationToken, IOptions, Stream, Task, CloudinaryService, Cloudinary
 
-### Community 87 - "IQueryHandler"
-Cohesion: 0.10
-Nodes (21): Trivo.Application.Features.Skills.Query.SearchSkillsByName, IRequestHandler, IQueryHandler, Guid, SkillWithIdDto, IEnumerable, SearchSkillsByNameQuery, CancellationToken (+13 more)
+### Community 87 - "Trivo.Application.DTOs.Authentication"
+Cohesion: 0.29
+Nodes (4): Trivo.Application.Features.Users.Commands.LoginUser, Trivo.Infrastructure.Shared.Services, Trivo.Domain.Configurations, Trivo.Application.DTOs.Authentication
 
 ### Community 88 - "Polyfilling the nullable attributes for older target frameworks"
 Cohesion: 0.20
 Nodes (10): Candidate packages (evaluate, do not default to one), Decision rules, File-level `#nullable` directives, Incremental Adoption Strategy, Is a polyfill needed at all?, Options and tradeoffs, Polyfilling the nullable attributes for older target frameworks, Project-level (+2 more)
 
-### Community 89 - "IQuery"
+### Community 89 - ".Handle"
+Cohesion: 0.31
+Nodes (7): UserBiographyDto, Guid, GetUserBiographyQuery, CancellationToken, ILogger, Task, GetUserBiographyQueryHandler
+
+### Community 90 - "ReportDetailDto"
 Cohesion: 0.14
-Nodes (15): IRequest, IQuery, CompletedMatchesCountDto, UserBiographyDto, GetCompletedMatchesCountQuery, CancellationToken, ILogger, Task (+7 more)
+Nodes (11): DateTime, Guid, ReportDetailDto, DateTime, Guid, ReportUserDetailDto, Guid, GetReportByIdQuery (+3 more)
 
-### Community 90 - "CreateMatchRejectionCommand"
-Cohesion: 0.29
-Nodes (6): Guid, CreateMatchRejectionCommand, CreatedBy, ExpertId, RecruiterId, CreateMatchRejectionValidator
-
-### Community 91 - "Match"
-Cohesion: 0.18
-Nodes (10): Guid, Match, Expert, ExpertId, ExpertStatus, MatchStatus, RecruiterId, RecruiterStatus (+2 more)
+### Community 91 - "Chat"
+Cohesion: 0.20
+Nodes (8): ICollection, Chat, ChatType, ChatUsers, IsActive, Messages, EntityTypeBuilder, ChatConfig
 
 ### Community 92 - ".Handle"
 Cohesion: 0.13
@@ -633,28 +633,36 @@ Nodes (5): EmbeddingClient, CancellationToken, ILogger, Task, OpenAiEmbeddingSer
 Cohesion: 0.22
 Nodes (6): Full Generation Checklist, Gradual annotation of a library, Legacy and Unannotated API Interop, NRT Migration Playbook Reference, Trust annotated libraries, Wrapping unannotated or legacy APIs
 
-### Community 97 - "User"
-Cohesion: 0.24
-Nodes (7): User, ICollection, List, User, UserMapper, UserHelper, User
+### Community 97 - ".MapToExpertDto"
+Cohesion: 0.30
+Nodes (5): User, ICollection, List, User, UserMapper
 
 ### Community 98 - ".Handle"
-Cohesion: 0.14
+Cohesion: 0.15
 Nodes (11): Trivo.Application.Features.Administrator.Commands.CreateAdministrator, DateTime, Guid, AdminDto, Administrator, AdminMapper, IFormFile, CreateAdminCommand (+3 more)
 
 ### Community 99 - "Anti-Patterns to Avoid"
 Cohesion: 0.25
 Nodes (8): Anti-Patterns to Avoid, Don't: Block on async code, Don't: Create deep inheritance hierarchies, Don't: Forget CancellationToken in async methods, Don't: Return List<T> when you mean IReadOnlyList<T>, Don't: Use byte[] when ReadOnlySpan<byte> works, Don't: Use classes for value objects, Don't: Use mutable DTOs
 
-### Community 100 - "AuthenticationService"
-Cohesion: 0.06
-Nodes (37): CancellationToken, HttpPost, ProducesResponseType, SwaggerOperation, Task, AuthController, RefreshTokenRequest, RefreshToken (+29 more)
+### Community 100 - "TokenResponseDto"
+Cohesion: 0.16
+Nodes (12): TokenResponseDto, AccessToken, RefreshToken, LoginUserCommand, CancellationToken, ILogger, Task, LoginUserCommandHandler (+4 more)
 
 ### Community 101 - "Report"
-Cohesion: 0.15
-Nodes (11): Guid, Report, Message, MessageId, Note, ReportedById, ReportId, ReportStatus (+3 more)
+Cohesion: 0.08
+Nodes (22): DateTime, Guid, Report, CreatedAt, FinalReason, Message, MessageId, Note (+14 more)
+
+### Community 102 - "AccountAccessService"
+Cohesion: 0.16
+Nodes (11): CancellationToken, DateTime, ILogger, Task, TimeSpan, User, AccountAccessService, SanctionType (+3 more)
+
+### Community 103 - "PagedResult"
+Cohesion: 0.11
+Nodes (21): DateTime, Guid, AdminExpertDto, GetBannedUsersPagedQuery, CancellationToken, ILogger, Task, GetBannedUsersPagedQueryHandler (+13 more)
 
 ### Community 104 - "ResultFilter"
-Cohesion: 0.29
+Cohesion: 0.25
 Nodes (6): ActionExecutingContext, ActionExecutionDelegate, IAsyncActionFilter, ILogger, Task, ResultFilter
 
 ### Community 105 - "Anti-Patterns and Reflection Avoidance"
@@ -673,9 +681,9 @@ Nodes (7): Avoid Reflection-Based Metaprogramming, Banned Libraries, Benefits of
 Cohesion: 0.14
 Nodes (13): API responses — Result Pattern, Building the Docker image, Errors, Health checks, Logging, Prerequisites, Project structure, Running locally (+5 more)
 
-### Community 109 - "MatchUpdateStatus"
-Cohesion: 0.50
-Nodes (3): MatchUpdateStatus, Completed, Rejected
+### Community 109 - ".CreateInterestCategoryAsync"
+Cohesion: 0.24
+Nodes (8): Authorize, CancellationToken, HttpGet, HttpPost, ISender, ProducesResponseType, Task, InterestCategoryController
 
 ### Community 110 - "Performance and API Design Patterns"
 Cohesion: 0.29
@@ -685,28 +693,32 @@ Nodes (6): Accept Abstractions, Return Appropriately Specific, API Design Princi
 Cohesion: 0.29
 Nodes (7): Constraint-Enforcing Value Objects, Contents, No Implicit Conversions, Pattern Matching (C# 8-12), TypeConverter Support for Configuration Binding, Value Objects and Pattern Matching, Value Objects as readonly record struct
 
-### Community 113 - ".Handle"
-Cohesion: 0.20
-Nodes (8): Guid, InterestByCategoryIdDto, Guid, IEnumerable, GetInterestsByCategoryIdQuery, CancellationToken, Task, GetInterestsByCategoryIdValidator
+### Community 112 - "RF9. Administrar aplicación — Documentación de implementación"
+Cohesion: 0.10
+Nodes (19): RF9. Administrar aplicación, 1. Resumen, 2.1 Enums, 2.2 Entidad `Report` (rediseñada), 2.3 Entidad `Sanction` (nueva), 2.4 Migración de base de datos, 2. Modelo de dominio nuevo, 3.1 Crear un reporte (`CreateReportCommandHandler`) (+11 more)
 
-### Community 114 - "ForgotPasswordCommand"
-Cohesion: 0.50
-Nodes (3): Trivo.Application.Features.Users.Commands.ForgotPassword, ForgotPasswordCommand, ForgotPasswordValidator
+### Community 113 - ".Handle"
+Cohesion: 0.19
+Nodes (10): Guid, InterestByCategoryIdDto, Guid, IEnumerable, GetInterestsByCategoryIdQuery, CancellationToken, ILogger, Task (+2 more)
+
+### Community 114 - "Sanction"
+Cohesion: 0.15
+Nodes (13): DateTime, Guid, Sanction, Admin, AdminId, ExpiresAt, Reason, Report (+5 more)
 
 ### Community 115 - ".Handle"
 Cohesion: 0.31
 Nodes (7): UserProfilePictureDto, Guid, GetUserProfilePictureQuery, CancellationToken, ILogger, Task, GetUserProfilePictureQueryHandler
 
 ### Community 116 - "ReportDto"
-Cohesion: 0.17
-Nodes (10): Trivo.Application.Features.Reports, Trivo.Application.DTOs.Reports, DateTime, Guid, MessageReportDto, Guid, ReportDto, Guid (+2 more)
-
-### Community 117 - "Chat"
 Cohesion: 0.20
-Nodes (8): ICollection, Chat, ChatType, ChatUsers, IsActive, Messages, EntityTypeBuilder, ChatConfig
+Nodes (8): DateTime, Guid, MessageReportDto, DateTime, Guid, ReportDto, Guid, UserReportDto
+
+### Community 117 - ".SendFileAsync"
+Cohesion: 0.44
+Nodes (6): Authorize, CancellationToken, HttpPost, ISender, Task, MessageController
 
 ### Community 118 - "InitialCreate"
-Cohesion: 0.22
+Cohesion: 0.25
 Nodes (6): Migration, DateTime, Guid, MigrationBuilder, Vector, InitialCreate
 
 ### Community 119 - ".GetExpertIdAsync"
@@ -717,9 +729,13 @@ Nodes (6): CancellationToken, Guid, Task, CancellationToken, Guid, Task
 Cohesion: 0.25
 Nodes (6): CancellationToken, Guid, Task, CancellationToken, Guid, Task
 
+### Community 121 - "Sanction"
+Cohesion: 0.29
+Nodes (11): CancellationToken, DateTime, Guid, Task, ISanctionRepository, Sanction, CancellationToken, DateTime (+3 more)
+
 ### Community 122 - "EmailSetting"
-Cohesion: 0.18
-Nodes (10): EmailSetting, DisplayName, EmailFrom, SmtpHost, SmtpPassword, SmtpPort, SmtpUser, IOptions (+2 more)
+Cohesion: 0.25
+Nodes (7): EmailSetting, DisplayName, EmailFrom, SmtpHost, SmtpPassword, SmtpPort, SmtpUser
 
 ### Community 123 - "Trivo.Infrastructure.Persistence.csproj"
 Cohesion: 0.22
@@ -738,20 +754,20 @@ Cohesion: 0.29
 Nodes (3): Pgvector (0.3.0), net8.0, Microsoft.NET.Sdk
 
 ### Community 127 - "Roles"
-Cohesion: 0.12
-Nodes (13): IReadOnlyCollection, IReadOnlyList, Items, TotalItems, Roles, Administrator, Expert, Recruiter (+5 more)
+Cohesion: 0.33
+Nodes (5): Roles, Administrator, Expert, Recruiter, User
 
 ### Community 128 - ".ToEntity"
 Cohesion: 0.33
 Nodes (4): Trivo.Application.Features.Administrator.Commands.CreateAdministrator.Mappings, Administrator, CreateAdminCommand, AdminMappingExtensions
 
-### Community 129 - "UserMappingExtensions.cs"
-Cohesion: 0.33
-Nodes (4): Trivo.Application.Features.Users.Commands.CreateUser.Mappings, CreateUserCommand, User, UserMappingExtensions
+### Community 129 - ".ToEntity"
+Cohesion: 0.50
+Nodes (3): CreateUserCommand, User, UserMappingExtensions
 
-### Community 130 - "CreateMatchingCommand"
-Cohesion: 0.22
-Nodes (10): Authorize, CancellationToken, HttpPost, HttpPut, ISender, Task, MatchController, Guid (+2 more)
+### Community 130 - "UpdateMatchingCommand"
+Cohesion: 0.14
+Nodes (14): Trivo.Application.Features.Matching.Commands.UpdateMatch, Authorize, CancellationToken, HttpPost, HttpPut, ISender, Task, MatchController (+6 more)
 
 ### Community 131 - "ErrorType"
 Cohesion: 0.15
@@ -761,9 +777,9 @@ Nodes (12): ErrorType, Conflict, Custom, ExternalService, Forbidden, NotFound, T
 Cohesion: 0.33
 Nodes (5): NotificationType, Alert, Match, Message, Reminder
 
-### Community 133 - ".AddServices"
-Cohesion: 0.29
-Nodes (4): HubConnectionContext, IUserIdProvider, IUserIdProvider, CustomUserIdProvider
+### Community 133 - "CustomUserIdProvider"
+Cohesion: 0.40
+Nodes (3): HubConnectionContext, IUserIdProvider, CustomUserIdProvider
 
 ### Community 134 - "ExpertStatus"
 Cohesion: 0.40
@@ -786,8 +802,8 @@ Cohesion: 0.40
 Nodes (4): RecruiterStatus, Completed, Pending, Rejected
 
 ### Community 139 - "UserStatus"
-Cohesion: 0.40
-Nodes (4): UserStatus, Active, Banned, Inactive
+Cohesion: 0.33
+Nodes (5): UserStatus, Active, Banned, Inactive, Suspended
 
 ### Community 141 - "ChatType"
 Cohesion: 0.50
@@ -797,16 +813,16 @@ Nodes (3): ChatType, Group, Private
 Cohesion: 0.50
 Nodes (3): MatchFault, Expert, Recruiter
 
-### Community 143 - "InterestCategoryDto"
-Cohesion: 0.18
-Nodes (10): Guid, InterestCategoryDto, GetPaginatedInterestCategoriesQuery, CancellationToken, ILogger, Task, GetPaginatedInterestCategoriesQueryHandler, GetPaginatedInterestCategoriesValidator (+2 more)
+### Community 143 - ".Handle"
+Cohesion: 0.24
+Nodes (7): AdminLoginCommand, CancellationToken, ILogger, Task, AdminLoginCommandHandler, AdminLoginCommandValidator, IAuthenticationService
 
-### Community 144 - "ReportStatus"
-Cohesion: 0.50
-Nodes (3): ReportStatus, Pending, Resolved
+### Community 144 - "ReportListItemDto"
+Cohesion: 0.10
+Nodes (21): DateTime, Guid, ReportListItemDto, IEnumerable, GetLatestReportsQuery, CancellationToken, IEnumerable, ILogger (+13 more)
 
 ### Community 145 - "IGenericRepository"
-Cohesion: 0.32
+Cohesion: 0.28
 Nodes (6): CancellationToken, Expression, Func, Guid, Task, IGenericRepository
 
 ### Community 146 - "Core Nullability Model"
@@ -829,9 +845,9 @@ Nodes (5): Language Patterns, Nullable Reference Types (C# 8+), Pattern Matching
 Cohesion: 0.40
 Nodes (4): AiSetting, ApiKey, EmbeddingModel, Provider
 
-### Community 151 - "NotificationNotifier"
-Cohesion: 0.23
-Nodes (9): Guid, IEnumerable, Task, INotificationNotifier, Guid, IEnumerable, IHubContext, Task (+1 more)
+### Community 151 - ".Validation"
+Cohesion: 0.12
+Nodes (23): Guid, CreateNotificationDto, DateTime, Guid, NotificationDto, IEnumerable, List, NotificationMapper (+15 more)
 
 ### Community 152 - "Known Static-Analysis Limitations and Safe Patterns"
 Cohesion: 0.50
@@ -841,9 +857,9 @@ Nodes (4): Arrays and default values, Known Static-Analysis Limitations and Safe
 Cohesion: 0.50
 Nodes (4): Conditional postconditions: `NotNullWhen`, `MaybeNullWhen`, `NotNullIfNotNull`, `[MaybeNullWhen(bool)]`, `[NotNullIfNotNull(string)]`, `[NotNullWhen(bool)]`
 
-### Community 154 - ".Handle"
-Cohesion: 0.14
-Nodes (11): Trivo.Application.Features.Reports.Commands.CreateReport, Authorize, CancellationToken, HttpPost, ProducesResponseType, Task, Guid, CreateReportCommand (+3 more)
+### Community 154 - "SanctionDto"
+Cohesion: 0.21
+Nodes (10): DateTime, Guid, SanctionDto, Guid, GetSanctionsHistoryQuery, CancellationToken, ILogger, Task (+2 more)
 
 ### Community 155 - "Preconditions: `AllowNull` and `DisallowNull`"
 Cohesion: 0.67
@@ -857,41 +873,41 @@ Nodes (3): Async/Await Best Practices, Performance Patterns, Span<T> and Memory<
 Cohesion: 0.28
 Nodes (3): Trivo.Infrastructure.Persistence.Migrations, MigrationBuilder, AddPendingEmailToUser
 
-### Community 159 - "IInterestRepository"
-Cohesion: 0.28
-Nodes (8): ILogger, GetInterestsByCategoryIdQueryHandler, CancellationToken, Guid, IEnumerable, List, Task, IInterestRepository
+### Community 159 - "ReportMapper"
+Cohesion: 0.32
+Nodes (4): DateTime, Message, User, ReportMapper
 
 ### Community 160 - "UpdateNameCommand"
 Cohesion: 0.21
 Nodes (9): Trivo.Application.Features.Users.Commands.UpdateName, UpdateNameDto, Guid, UpdateNameCommand, CancellationToken, ILogger, Task, UpdateNameCommandHandler (+1 more)
 
-### Community 161 - ".ToDto"
-Cohesion: 0.25
-Nodes (6): Guid, UserChatDto, Chat, Guid, User, ChatMapper
+### Community 161 - "InterestCategoryRepository"
+Cohesion: 0.38
+Nodes (4): CancellationToken, Guid, Task, InterestCategoryRepository
 
-### Community 162 - "RecruiterController.cs"
-Cohesion: 0.19
-Nodes (6): Trivo.Application.Features.Recruiters.Commands.UpdateRecruiter, Trivo.Application.Features.Recruiters, Trivo.Application.DTOs.Recruiter, Trivo.Application.Features.Recruiters.Commands.CreateRecruiter, CreateRecruiterValidator, UpdateRecruiterValidator
+### Community 162 - "IMessageRepository"
+Cohesion: 0.47
+Nodes (5): CancellationToken, Guid, List, Task, IMessageRepository
 
 ### Community 163 - "AbstractValidator"
-Cohesion: 0.08
-Nodes (14): AbstractValidator, BanUserValidator, UnbanUserCommandValidator, CreateChatValidator, CreateExpertValidator, UpdateExpertValidator, CreateInterestCategoryCommandValidator, SendFileValidator (+6 more)
+Cohesion: 0.03
+Nodes (64): AbstractValidator, Trivo.Application.Features.Interests.Commands.UpdateInterest, Trivo.Application.Features.Users.Commands.UpdateProfilePicture, Trivo.Application.Features.Skills.Commands.UpdateSkill, Trivo.Application.Features.Matching.Commands.CreateMatchRejection, ReportType, IBaseCommand, ICommand (+56 more)
 
 ### Community 164 - "AddUniqueExpertRecruiterUserId"
-Cohesion: 0.25
+Cohesion: 0.20
 Nodes (6): MigrationBuilder, DateTime, Guid, ModelBuilder, Vector, AddUniqueExpertRecruiterUserId
 
-### Community 165 - "Trivo.Application.DTOs.Matching"
-Cohesion: 0.22
-Nodes (4): Trivo.Application.Features.Matching.Commands.UpdateMatch, Trivo.Application.Features.Matching.Commands.CreateMatch, Trivo.Application.Features.Matching.Query.GetMatchByUser, Trivo.Application.DTOs.Matching
+### Community 165 - "MessageRepository"
+Cohesion: 0.47
+Nodes (5): CancellationToken, Guid, List, Task, MessageRepository
 
 ### Community 166 - ".BuildModel"
 Cohesion: 0.25
 Nodes (6): ModelSnapshot, DateTime, Guid, ModelBuilder, Vector, TrivoContextModelSnapshot
 
 ### Community 167 - "ControllerBase"
-Cohesion: 0.15
-Nodes (15): ControllerBase, Authorize, CancellationToken, HttpPost, ISender, Task, ChatController, Authorize (+7 more)
+Cohesion: 0.20
+Nodes (9): ControllerBase, AuthController, Authorize, CancellationToken, HttpPost, ISender, ProducesResponseType, Task (+1 more)
 
 ### Community 168 - ".UpdateExpertAsync"
 Cohesion: 0.18
@@ -901,49 +917,53 @@ Nodes (10): Authorize, CancellationToken, Guid, HttpPost, HttpPut, ISender, Prod
 Cohesion: 0.15
 Nodes (10): CancellationToken, Expression, Func, Task, IValidation, CancellationToken, Expression, Func (+2 more)
 
-### Community 171 - "MatchDto"
+### Community 170 - ".RefreshTokenAsync"
+Cohesion: 0.22
+Nodes (7): CancellationToken, HttpPost, ProducesResponseType, SwaggerOperation, Task, RefreshTokenRequest, RefreshToken
+
+### Community 171 - ".Handle"
+Cohesion: 0.09
+Nodes (21): Trivo.Application.Features.Matching.Commands.CreateMatch, Guid, List, ExpertAiRecommendationDto, DateTime, Guid, MatchDto, Guid (+13 more)
+
+### Community 172 - ".Handle"
 Cohesion: 0.24
-Nodes (10): Guid, List, ExpertAiRecommendationDto, DateTime, Guid, MatchDto, Guid, List (+2 more)
+Nodes (7): Trivo.Application.Features.Users.Commands.ResetPassword, ResetPasswordCommand, CancellationToken, ILogger, Task, ResetPasswordCommandHandler, ResetPasswordValidator
 
-### Community 172 - "ConfirmAccountCommand"
-Cohesion: 0.25
-Nodes (7): Guid, ConfirmAccountCommand, CancellationToken, ILogger, Task, ConfirmAccountCommandHandler, ConfirmAccountValidator
-
-### Community 173 - "ICommandHandler"
-Cohesion: 0.04
-Nodes (73): ICommandHandler, Guid, ExpertDto, Guid, RecruiterDto, ILogger, BanUserCommandHandler, ILogger (+65 more)
+### Community 173 - "IExpertRepository"
+Cohesion: 0.09
+Nodes (22): Guid, ExpertDto, Guid, RecruiterDto, Guid, CreateExpertCommand, CancellationToken, ILogger (+14 more)
 
 ### Community 174 - "InterestWithIdDto"
 Cohesion: 0.13
 Nodes (17): Guid, InterestWithIdDto, IEnumerable, SearchInterestsByNameQuery, CancellationToken, IEnumerable, ILogger, Task (+9 more)
 
-### Community 175 - "ICommand"
-Cohesion: 0.07
-Nodes (34): IBaseCommand, ICommand, Guid, IUserOwnedRequest, UserId, Guid, BanUserCommand, Guid (+26 more)
+### Community 175 - "ConfirmAccountCommand"
+Cohesion: 0.25
+Nodes (7): Guid, ConfirmAccountCommand, CancellationToken, ILogger, Task, ConfirmAccountCommandHandler, ConfirmAccountValidator
 
 ### Community 176 - ".ValidateAsync"
 Cohesion: 0.32
 Nodes (6): CancellationToken, Expression, Func, Guid, Task, GenericRepository
 
 ### Community 177 - ".Handle"
-Cohesion: 0.31
-Nodes (7): UpdateUsernameDto, Guid, UpdateUsernameCommand, CancellationToken, ILogger, Task, UpdateUsernameCommandHandler
+Cohesion: 0.21
+Nodes (9): Trivo.Application.Features.Users.Commands.UpdateUsername, UpdateUsernameDto, Guid, UpdateUsernameCommand, CancellationToken, ILogger, Task, UpdateUsernameCommandHandler (+1 more)
 
-### Community 178 - "Interest"
-Cohesion: 0.20
-Nodes (9): Guid, ICollection, Interest, Category, CategoryId, CreatedBy, Name, User (+1 more)
+### Community 178 - ".Handle"
+Cohesion: 0.29
+Nodes (7): Guid, UpdatePasswordCommand, CancellationToken, ILogger, Task, UpdatePasswordCommandHandler, UpdatePasswordValidator
 
-### Community 179 - ".CreateInterestCategoryAsync"
-Cohesion: 0.24
-Nodes (8): Authorize, CancellationToken, HttpGet, HttpPost, ISender, ProducesResponseType, Task, InterestCategoryController
+### Community 179 - ".Handle"
+Cohesion: 0.19
+Nodes (9): Trivo.Application.Features.Skills.Query.SearchSkillsByName, IEnumerable, SearchSkillsByNameQuery, CancellationToken, IEnumerable, ILogger, Task, SearchSkillsByNameQueryHandler (+1 more)
 
-### Community 180 - "InterestCategoryRepository"
-Cohesion: 0.38
-Nodes (4): CancellationToken, Guid, Task, InterestCategoryRepository
+### Community 180 - "GetActiveUsersCountQueryHandler"
+Cohesion: 0.36
+Nodes (6): ActiveUsersCountDto, GetActiveUsersCountQuery, CancellationToken, ILogger, Task, GetActiveUsersCountQueryHandler
 
 ### Community 181 - "Administrator"
-Cohesion: 0.20
-Nodes (10): Administrator, Biography, Email, FirstName, IsActive, LastName, LinkedIn, PasswordHash (+2 more)
+Cohesion: 0.14
+Nodes (11): Administrator, Biography, Email, FirstName, IsActive, LastName, LinkedIn, PasswordHash (+3 more)
 
 ### Community 182 - ".BuildTargetModel"
 Cohesion: 0.40
@@ -953,77 +973,97 @@ Nodes (4): DateTime, Guid, ModelBuilder, Vector
 Cohesion: 0.40
 Nodes (4): DateTime, Guid, ModelBuilder, Vector
 
-### Community 184 - "GetUsersByInterestsAndSkillsQuery"
-Cohesion: 0.25
-Nodes (8): Guid, List, GetUsersByInterestsAndSkillsQuery, CancellationToken, ILogger, Task, GetUsersByInterestsAndSkillsQueryHandler, GetUsersByInterestsAndSkillsValidator
+### Community 184 - "IQueryHandler"
+Cohesion: 0.08
+Nodes (31): IRequestHandler, IQueryHandler, Guid, List, UserAiRecommendationDto, Guid, List, GetUsersByInterestsAndSkillsQuery (+23 more)
 
-### Community 185 - "MessageRepository"
-Cohesion: 0.47
-Nodes (5): CancellationToken, Guid, List, Task, MessageRepository
+### Community 185 - "GetRecruitersPagedQuery"
+Cohesion: 0.24
+Nodes (9): DateTime, Guid, AdminRecruiterDto, GetRecruitersPagedQuery, CancellationToken, ILogger, Task, GetRecruitersPagedQueryHandler (+1 more)
 
-### Community 186 - "MatchHub"
-Cohesion: 0.29
-Nodes (6): Hub, Exception, ILogger, IMediator, Task, MatchHub
-
-### Community 187 - "GetActiveUsersCountQueryHandler"
-Cohesion: 0.36
-Nodes (6): ActiveUsersCountDto, GetActiveUsersCountQuery, CancellationToken, ILogger, Task, GetActiveUsersCountQueryHandler
-
-### Community 188 - "GetReportedUsersCountQueryHandler"
-Cohesion: 0.36
-Nodes (6): ReportedUsersCountDto, GetReportedUsersCountQuery, CancellationToken, ILogger, Task, GetReportedUsersCountQueryHandler
-
-### Community 189 - ".Handle"
-Cohesion: 0.29
-Nodes (7): Guid, SearchUsersQuery, CancellationToken, ILogger, Task, SearchUsersQueryHandler, SearchUsersValidator
-
-### Community 190 - "IInterestCategoryRepository"
+### Community 186 - "IInterestCategoryRepository"
 Cohesion: 0.46
 Nodes (4): CancellationToken, Guid, Task, IInterestCategoryRepository
 
-### Community 191 - ".GetByChatIdAsync"
-Cohesion: 0.46
-Nodes (4): CancellationToken, Guid, List, Task
+### Community 187 - "IQuery"
+Cohesion: 0.27
+Nodes (8): IRequest, IQuery, ReportedUsersCountDto, GetReportedUsersCountQuery, CancellationToken, ILogger, Task, GetReportedUsersCountQueryHandler
 
-### Community 194 - "INotificationHub"
-Cohesion: 0.39
-Nodes (4): Guid, IEnumerable, Task, INotificationHub
+### Community 188 - "UpdateExpertCommand"
+Cohesion: 0.40
+Nodes (4): Trivo.Application.Features.Experts.Commands.UpdateExpert, Guid, UpdateExpertCommand, UpdateExpertValidator
 
-### Community 195 - "UserRecommendationHub"
-Cohesion: 0.29
-Nodes (5): Exception, ILogger, IMediator, Task, UserRecommendationHub
+### Community 189 - "IReportRepository"
+Cohesion: 0.31
+Nodes (7): ILogger, GetReportByIdQueryHandler, CancellationToken, Guid, IReadOnlyList, Task, IReportRepository
 
-### Community 196 - ".Handle"
+### Community 190 - ".Handle"
 Cohesion: 0.33
 Nodes (4): GetSkillsPaginationQuery, CancellationToken, Task, GetSkillsPaginationValidator
+
+### Community 191 - "CreateUserCommand"
+Cohesion: 0.33
+Nodes (5): Guid, IFormFile, List, CreateUserCommand, CreateUserValidator
+
+### Community 194 - ".UpdateUserInterestsAsync"
+Cohesion: 0.40
+Nodes (3): Guid, List, UpdateUserInterestsRequest
+
+### Community 195 - ".UploadImageAsync"
+Cohesion: 0.60
+Nodes (3): CancellationToken, Stream, Task
 
 ### Community 197 - "CacheProfiles"
 Cohesion: 0.40
 Nodes (4): CacheProfiles, Cold, Hot, Warm
 
-### Community 200 - "MissingByMatching"
+### Community 198 - "ResolveReportCommand"
+Cohesion: 0.24
+Nodes (6): Guid, ResolveReportCommand, ResolveReportValidator, ReportDecision, Approved, Rejected
+
+### Community 199 - "ReportRepository"
+Cohesion: 0.42
+Nodes (5): CancellationToken, Guid, IReadOnlyList, Task, ReportRepository
+
+### Community 202 - ".Handle"
+Cohesion: 0.36
+Nodes (6): CompletedMatchesCountDto, GetCompletedMatchesCountQuery, CancellationToken, ILogger, Task, GetCompletedMatchesCountQueryHandler
+
+### Community 204 - "AddReportSanctions"
+Cohesion: 0.32
+Nodes (4): DateTime, Guid, MigrationBuilder, AddReportSanctions
+
+### Community 206 - "JwtSetting"
+Cohesion: 0.33
+Nodes (5): JwtSetting, Audience, DurationInMinutes, Issuer, Key
+
+### Community 208 - ".BuildTargetModel"
+Cohesion: 0.40
+Nodes (4): DateTime, Guid, ModelBuilder, Vector
+
+### Community 209 - "ReportType"
 Cohesion: 0.50
-Nodes (3): MissingByMatching, Expert, Recruiter
+Nodes (3): ReportType, Message, Profile
 
 ## Knowledge Gaps
-- **602 isolated node(s):** `$schema`, `windowsAuthentication`, `anonymousAuthentication`, `applicationUrl`, `sslPort` (+597 more)
+- **650 isolated node(s):** `$schema`, `windowsAuthentication`, `anonymousAuthentication`, `applicationUrl`, `sslPort` (+645 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ResultT` connect `ResultT` to `CreateMatchingCommand`, `.Handle`, `InterestCategoryDto`, `ChatDto`, `.Conflict`, `MatchDetailsDto`, `.Handle`, `.Handle`, `.Handle`, `UserDto`, `.Handle`, `.Handle`, `PagedResult`, `AdminController`, `UpdateNameCommand`, `NotificationDto`, `ControllerBase`, `.UpdateExpertAsync`, `Error`, `ConfirmAccountCommand`, `ICommandHandler`, `.NotFound`, `ICommand`, `InterestWithIdDto`, `.Handle`, `.Handle`, `.CreateInterestCategoryAsync`, `.GetByCategoriesAsync`, `.Validation`, `.Handle`, `.CreateSkillAsync`, `GetUsersByInterestsAndSkillsQuery`, `GetActiveUsersCountQueryHandler`, `GetReportedUsersCountQueryHandler`, `.Handle`, `.ValidateEmailAsync`, `.Handle`, `.CreateMatchNotificationAsync`, `.UpdateRecruiterAsync`, `.Handle`, `IQueryHandler`, `IQuery`, `.Handle`, `AuthenticationService`, `.Handle`, `.Handle`?**
-  _High betweenness centrality (0.136) - this node is a cross-community bridge._
-- **Why does `Trivo.Domain.Models` connect `Trivo.Domain.Models` to `Message`, `InterestCategory`, `Trivo.Application.DTOs.Users`, `CreateInterestCategoryCommandHandler.cs`, `Trivo.Infrastructure.Persistence.Configurations`, `Trivo.Application.Pagination`, `Trivo.Application.Interfaces.SignalR`, `Notification`, `Expert`, `BaseEntity`, `Code`, `RecruiterController.cs`, `UserInterest`, `Trivo.Application.DTOs.Matching`, `Trivo.Application.Utils`, `Skill`, `UpdateExpertCommandHandler.cs`, `ChatUser`, `UserSkill`, `Trivo.Application.Abstractions.Messages`, `Match`, `Report`, `ReportDto`, `Chat`?**
-  _High betweenness centrality (0.055) - this node is a cross-community bridge._
-- **Why does `TrivoContext` connect `TrivoContext` to `UserRepository`, `Message`, `InterestCategory`, `Notification`, `Expert`, `.AddRepositories`, `Recruiter`, `Code`, `ChatRepository`, `UserInterest`, `.AddSkillsToUserAsync`, `InterestRepository`, `Error`, `.Validate`, `ICommandHandler`, `.ValidateAsync`, `Interest`, `Skill`, `InterestCategoryRepository`, `Administrator`, `AdministratorRepository`, `MessageRepository`, `ChatUser`, `UserSkill`, `Trivo.Application.Abstractions.Messages`, `SkillRepository`, `MatchRepository`, `Match`, `User`, `Report`, `Chat`?**
-  _High betweenness centrality (0.051) - this node is a cross-community bridge._
+- **Why does `ResultT` connect `ResultT` to `UpdateMatchingCommand`, `.Handle`, `UserController`, `.Handle`, `ReportListItemDto`, `ChatDto`, `.NotFound`, `ICommandHandler`, `.Validation`, `SanctionDto`, `UserDto`, `.Handle`, `.Handle`, `.Handle`, `AdminController`, `UpdateNameCommand`, `Error`, `AbstractValidator`, `UserInterest`, `ControllerBase`, `.UpdateExpertAsync`, `NotificationHub`, `.RefreshTokenAsync`, `.Handle`, `.Handle`, `IExpertRepository`, `.SaveChangesAsync`, `InterestWithIdDto`, `ConfirmAccountCommand`, `.Handle`, `.Handle`, `MessageDto`, `.GetByCategoriesAsync`, `.UpdateUserAsync`, `GetActiveUsersCountQueryHandler`, `.Handle`, `.CreateSkillAsync`, `IQueryHandler`, `GetRecruitersPagedQuery`, `IQuery`, `.Handle`, `ResolveReportCommandHandler`, `.Handle`, `.UpdateUserInterestsAsync`, `.RefreshTokenAsync`, `InterestCategoryDto`, `AuthenticationService`, `.Handle`, `.UpdateRecruiterAsync`, `.Handle`, `.Handle`, `ReportDetailDto`, `.Handle`, `TokenResponseDto`, `PagedResult`, `.CreateInterestCategoryAsync`, `.Handle`, `.Handle`, `.SendFileAsync`, `.Handle`?**
+  _High betweenness centrality (0.159) - this node is a cross-community bridge._
+- **Why does `TrivoContext` connect `TrivoContext` to `UserRepository`, `Message`, `InterestCategory`, `Trivo.Domain.Models`, `Notification`, `Expert`, `Match`, `.AddRepositories`, `ICommandHandler`, `Recruiter`, `Code`, `InterestCategoryRepository`, `ChatRepository`, `UserInterest`, `UserSkill`, `InterestRepository`, `MessageRepository`, `ExceptionHandlingMiddleware`, `.Validate`, `Interest`, `.ValidateAsync`, `Skill`, `Administrator`, `AdministratorRepository`, `ISkillRepository`, `ChatUser`, `ReportRepository`, `IMatchRepository`, `IAdministratorRepository`, `Chat`, `Report`, `Sanction`?**
+  _High betweenness centrality (0.064) - this node is a cross-community bridge._
+- **Why does `Trivo.Domain.Models` connect `Trivo.Domain.Models` to `Message`, `InterestCategory`, `Trivo.Application.DTOs.Users`, `GetPaginatedInterestCategoriesQueryHandler.cs`, `Trivo.Infrastructure.Persistence.Configurations`, `.Handle`, `Trivo.Application.Pagination`, `Trivo.Application.Interfaces.SignalR`, `Notification`, `Expert`, `Match`, `UserHelper.cs`, `Code`, `UserInterest`, `UserSkill`, `Trivo.Application.Utils`, `Skill`, `Administrator`, `ExpertController.cs`, `ChatUser`, `SanctionConfig`, `Trivo.Application.Abstractions.Messages`, `CreateInterestCommand`, `Trivo.Application.DTOs.Authentication`, `Chat`, `Report`?**
+  _High betweenness centrality (0.064) - this node is a cross-community bridge._
 - **What connects `$schema`, `windowsAuthentication`, `anonymousAuthentication` to the rest of the system?**
-  _602 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _650 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Message` be split into smaller, more focused modules?**
-  _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1 - nodes in this community are weakly interconnected._
 - **Should `Trivo.Application.DTOs.Users` be split into smaller, more focused modules?**
-  _Cohesion score 0.080338266384778 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05660377358490566 - nodes in this community are weakly interconnected._
 - **Should `Trivo.Domain.Models` be split into smaller, more focused modules?**
-  _Cohesion score 0.1484480431848853 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09661016949152543 - nodes in this community are weakly interconnected._

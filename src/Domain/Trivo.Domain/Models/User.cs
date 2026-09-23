@@ -66,5 +66,11 @@ public sealed class User : BaseEntity
 
     public ICollection<Recruiter>? Recruiters { get; set; }
 
-    public ICollection<Report>? Reports { get; set; }
+    /// <summary>Reports this user filed against others.</summary>
+    public ICollection<Report>? ReportsMade { get; set; }
+
+    /// <summary>Reports filed against this user.</summary>
+    public ICollection<Report>? ReportsReceived { get; set; }
+
+    public ICollection<Sanction>? Sanctions { get; set; }
 }

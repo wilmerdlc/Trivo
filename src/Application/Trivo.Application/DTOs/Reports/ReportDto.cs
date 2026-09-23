@@ -6,7 +6,10 @@ public sealed record ReportDto(
     Guid? MessageId,
     string? Note,
     string? ReportStatus,
-    MessageReportDto Message,
+    MessageReportDto? Message,
     UserReportDto ReportedByUser,
-    UserReportDto? ReportedUser
+    UserReportDto? ReportedUser,
+    string? ReportType = null,
+    Guid? ReportedUserId = null,
+    DateTime? CreatedAt = null
 );

@@ -7,6 +7,7 @@ using Trivo.Domain.Enums;
 using Trivo.Domain.Models;
 
 using Trivo.Application.DTOs.Chat;
+using Trivo.Application.Interfaces.UnitOfWork;
 
 namespace Trivo.Application.Features.Messages.Commands.SendMessage;
 
@@ -14,7 +15,8 @@ internal sealed class SendMessageCommandHandler(
     ILogger<SendMessageCommandHandler> logger,
     IMessageRepository messageRepository,
     IChatRepository chatRepository,
-    IRealTimeNotifier notifier
+    IRealTimeNotifier notifier,
+    IUnitOfWork unitOfWork
 ) : ICommandHandler<SendMessageCommand, MessageDto>
 {
     public async Task<ResultT<MessageDto>> Handle(SendMessageCommand request, CancellationToken cancellationToken)
@@ -81,6 +83,8 @@ internal sealed class SendMessageCommandHandler(
         await notifier.NotifyPrivateMessageAsync(dto, dto.ReceiverId);
 
         logger.LogInformation("Message sent from {SenderId} to {ReceiverId}", request.SenderId, request.ReceiverId);
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return ResultT<MessageDto>.Success(dto);
     }
