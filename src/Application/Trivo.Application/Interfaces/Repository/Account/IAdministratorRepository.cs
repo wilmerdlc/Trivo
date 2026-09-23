@@ -6,14 +6,7 @@ namespace Trivo.Application.Interfaces.Repository.Account;
 
 public interface IAdministratorRepository : IGenericRepository<Administrator>
 {
-    Task BanAsync(Guid userId, CancellationToken cancellationToken);
-
     Task UnbanAsync(Guid userId, CancellationToken cancellationToken);
-
-    Task<PagedResult<Report>> GetPagedLatestReportsAsync(
-        int pageNumber,
-        int pageSize,
-        CancellationToken cancellationToken);
 
     Task<IEnumerable<User>> GetLast10BannedUsersAsync(CancellationToken cancellationToken);
 
@@ -44,4 +37,28 @@ public interface IAdministratorRepository : IGenericRepository<Administrator>
     Task<int> GetCountActiveUsersAsync(CancellationToken cancellationToken);
 
     Task<int> GetReportedCountAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Gets a page of banned users, most recently registered first.
+    /// </summary>
+    Task<PagedResult<User>> GetPagedBannedUsersAsync(
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Gets a page of registered recruiters (with their user), newest first.
+    /// </summary>
+    Task<PagedResult<Recruiter>> GetPagedRecruitersAsync(
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Gets a page of registered experts (with their user), newest first.
+    /// </summary>
+    Task<PagedResult<Expert>> GetPagedExpertsAsync(
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken);
 }

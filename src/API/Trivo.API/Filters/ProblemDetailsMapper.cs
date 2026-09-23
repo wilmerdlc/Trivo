@@ -61,7 +61,7 @@ internal static class ProblemDetailsMapper
     {
         var (type, title) = statusCode.ToProblemTypeAndTitle();
 
-        return new ProblemDetails
+        var problem = new ProblemDetails
         {
             Type = type,
             Title = title,
@@ -69,5 +69,15 @@ internal static class ProblemDetailsMapper
             Detail = error.Description,
             Extensions = { ["errorCode"] = error.Code },
         };
+
+        if (error.Extensions is not null)
+        {
+            foreach (var (key, value) in error.Extensions)
+            {
+                problem.Extensions[key] = value;
+            }
+        }
+
+        return problem;
     }
 }

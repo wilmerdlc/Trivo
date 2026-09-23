@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
 using Trivo.Application.Caching;
+using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Interfaces.UnitOfWork;
@@ -12,6 +13,7 @@ internal sealed class UnbanUserCommandHandler(
     ILogger<UnbanUserCommandHandler> logger,
     IAdministratorRepository adminRepository,
     IUserRepository userRepository,
+    ISanctionRepository sanctionRepository,
     ICacheService cache,
     IUnitOfWork unitOfWork
 ) : ICommandHandler<UnbanUserCommand, string>
@@ -30,6 +32,10 @@ internal sealed class UnbanUserCommandHandler(
         }
 
         await adminRepository.UnbanAsync(request.UserId, cancellationToken);
+
+        // Close any sanction still on record, so the login check doesn't keep blocking a user an
+        // administrator just reinstated.
+        await sanctionRepository.RevokeActiveAsync(request.UserId, DateTime.UtcNow, cancellationToken);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

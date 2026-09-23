@@ -3,7 +3,6 @@ using Trivo.Application.Abstractions.Messages;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Interfaces.Services;
 using Trivo.Application.Utils;
-using Trivo.Domain.Enums;
 
 using Trivo.Application.DTOs.Authentication;
 
@@ -11,6 +10,7 @@ namespace Trivo.Application.Features.Users.Commands.LoginUser;
 
 internal sealed class LoginUserCommandHandler(
     IAuthenticationService authenticationService,
+    IAccountAccessService accountAccessService,
     IUserRepository userRepository,
     ILogger<LoginUserCommandHandler> logger
 ) : ICommandHandler<LoginUserCommand, TokenResponseDto>
@@ -25,15 +25,6 @@ internal sealed class LoginUserCommandHandler(
 
             return ResultT<TokenResponseDto>.Failure(
                 Error.NotFound("404", "User not found.")
-            );
-        }
-
-        if (user.UserStatus == nameof(UserStatus.Banned))
-        {
-            logger.LogWarning("User with email '{Email}' is banned and cannot log in.", user.Email);
-
-            return ResultT<TokenResponseDto>.Failure(
-                Error.Conflict("409", "The user has been banned and cannot log in.")
             );
         }
 
@@ -53,6 +44,16 @@ internal sealed class LoginUserCommandHandler(
             return ResultT<TokenResponseDto>.Failure(
                 Error.Conflict("409", "Invalid password.")
             );
+        }
+
+        // Checked only after the password is verified: the sanction reason is private to the
+        // account owner, so it must not be readable by anyone who merely knows the email.
+        var accessError = await accountAccessService.GetAccessErrorAsync(user, cancellationToken);
+        if (accessError is not null)
+        {
+            logger.LogWarning("Login blocked for user '{UserId}': {Code}.", user.Id, accessError.Code);
+
+            return ResultT<TokenResponseDto>.Failure(accessError);
         }
 
         var accessToken = await authenticationService.GenerateToken(user, cancellationToken);

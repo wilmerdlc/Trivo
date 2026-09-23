@@ -22,6 +22,7 @@ public static class DependencyInjection
 
         services.AddScoped<IEmailValidationService, EmailValidationService>();
         services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<IAccountAccessService, AccountAccessService>();
 
 				services.AddHttpContextAccessor();
     }

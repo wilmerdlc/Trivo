@@ -51,6 +51,19 @@ public class Error
     public int? StatusCode { get; }
 
     /// <summary>
+    /// Optional structured data that travels with the error (e.g. the remaining time of a
+    /// suspension). The API layer copies it into the ProblemDetails extensions, so clients get it
+    /// as fields instead of having to parse <see cref="Description"/>.
+    /// </summary>
+    public IReadOnlyDictionary<string, object?>? Extensions { get; private init; }
+
+    /// <summary>
+    /// Returns a copy of this error carrying the given structured data.
+    /// </summary>
+    public Error WithExtensions(IReadOnlyDictionary<string, object?> extensions) =>
+        new(Code, Description, ErrorType, StatusCode) { Extensions = extensions };
+
+    /// <summary>
     /// Creates a validation error (input failed validation rules).
     /// </summary>
     public static Error Validation(string code, string description) =>

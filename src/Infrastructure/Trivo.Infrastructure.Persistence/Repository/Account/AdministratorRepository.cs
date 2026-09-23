@@ -12,18 +12,6 @@ public class AdministratorRepository(TrivoContext context) :
     GenericRepository<Administrator>(context),
     IAdministratorRepository
 {
-    public async Task BanAsync(Guid userId, CancellationToken cancellationToken)
-    {
-        var user = await Context.Set<User>()
-            .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
-
-        if (user != null)
-        {
-            user.UserStatus = UserStatus.Banned.ToString();
-            Context.Set<User>().Update(user);
-        }
-    }
-
     public async Task UnbanAsync(Guid userId, CancellationToken cancellationToken)
     {
         var user = await Context.Set<User>()
@@ -40,8 +28,7 @@ public class AdministratorRepository(TrivoContext context) :
     {
         return await Context.Set<Report>()
             .AsNoTracking()
-            .Where(r => r.User != null)
-            .Select(r => r.User!.Id)
+            .Select(r => r.ReportedUserId)
             .Distinct()
             .CountAsync(cancellationToken);
     }
@@ -68,30 +55,6 @@ public class AdministratorRepository(TrivoContext context) :
         admin.PasswordHash = newPassword;
         Context.Set<Administrator>().Update(admin);
         await Task.CompletedTask;
-    }
-
-    public async Task<PagedResult<Report>> GetPagedLatestReportsAsync(
-        int pageNumber,
-        int pageSize,
-        CancellationToken cancellationToken)
-    {
-        var query = Context.Set<Report>()
-            .AsNoTracking()
-            .Where(x => x.ReportStatus == ReportStatus.Pending.ToString())
-            .Include(x => x.Message)
-            .ThenInclude(m => m!.Sender)
-            .Include(x => x.Message)
-            .ThenInclude(m => m!.Receiver)
-            .AsSplitQuery();
-
-        var total = await query.CountAsync(cancellationToken);
-
-        var items = await query
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-
-        return new PagedResult<Report>(items, total, pageNumber, pageSize);
     }
 
     public async Task<PagedResult<User>> GetPagedLatestUsersAsync(
@@ -160,5 +123,67 @@ public class AdministratorRepository(TrivoContext context) :
             .AsNoTracking()
             .Where(x => x.UserStatus == UserStatus.Active.ToString())
             .CountAsync(cancellationToken);
+    }
+
+    public async Task<PagedResult<User>> GetPagedBannedUsersAsync(
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken)
+    {
+        var query = Context.Set<User>()
+            .AsNoTracking()
+            .Where(x => x.UserStatus == UserStatus.Banned.ToString())
+            .OrderByDescending(x => x.CreatedAt);
+
+        var total = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return new PagedResult<User>(items, total, pageNumber, pageSize);
+    }
+
+    public async Task<PagedResult<Recruiter>> GetPagedRecruitersAsync(
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken)
+    {
+        var query = Context.Set<Recruiter>()
+            .AsNoTracking()
+            .Include(r => r.User)
+            .OrderByDescending(r => r.CreatedAt)
+            .ThenBy(r => r.Id);
+
+        var total = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return new PagedResult<Recruiter>(items, total, pageNumber, pageSize);
+    }
+
+    public async Task<PagedResult<Expert>> GetPagedExpertsAsync(
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken)
+    {
+        var query = Context.Set<Expert>()
+            .AsNoTracking()
+            .Include(e => e.User)
+            .OrderByDescending(e => e.CreatedAt)
+            .ThenBy(e => e.Id);
+
+        var total = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return new PagedResult<Expert>(items, total, pageNumber, pageSize);
     }
 }
