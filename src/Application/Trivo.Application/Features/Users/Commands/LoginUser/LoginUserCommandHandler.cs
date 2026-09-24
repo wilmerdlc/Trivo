@@ -15,16 +15,24 @@ internal sealed class LoginUserCommandHandler(
     ILogger<LoginUserCommandHandler> logger
 ) : ICommandHandler<LoginUserCommand, TokenResponseDto>
 {
+    private static readonly string DummyPasswordHash =
+        BCrypt.Net.BCrypt.HashPassword("dummy-password-for-timing-equalization");
+
     public async Task<ResultT<TokenResponseDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByEmailAsync(request.Email, cancellationToken);
 
-        if (user is null)
+        var isPasswordValid = BCrypt.Net.BCrypt.Verify(
+            request.Password,
+            user?.PasswordHash ?? DummyPasswordHash
+        );
+
+        if (user is null || !isPasswordValid)
         {
-            logger.LogWarning("Login failed: no user found with email '{Email}'.", request.Email);
+            logger.LogWarning("Login failed: invalid credentials for email '{Email}'.", request.Email);
 
             return ResultT<TokenResponseDto>.Failure(
-                Error.NotFound("404", "User not found.")
+                Error.NotFound("400", "Email or password is incorrect")
             );
         }
 
@@ -34,15 +42,6 @@ internal sealed class LoginUserCommandHandler(
 
             return ResultT<TokenResponseDto>.Failure(
                 Error.Conflict("409", "The account has not been confirmed.")
-            );
-        }
-
-        if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-        {
-            logger.LogWarning("Login failed: invalid password for user with ID '{UserId}'.", user.Id);
-
-            return ResultT<TokenResponseDto>.Failure(
-                Error.Conflict("409", "Invalid password.")
             );
         }
 
