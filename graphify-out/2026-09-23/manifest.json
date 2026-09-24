@@ -6,8 +6,8 @@
     "semantic_hash": ""
   },
   "src/API/Trivo.API/Controllers/V1/AdminController.cs": {
-    "mtime": 1790130498.3656693,
-    "seen": 1790131019.541257,
+    "mtime": 1790204277.7053263,
+    "seen": 1790204741.289302,
     "ast_hash": "c361ad032e07d76bcb8c0c55743839a1",
     "semantic_hash": ""
   },
@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "src/API/Trivo.API/Controllers/V1/UserController.cs": {
-    "mtime": 1789949974.3953855,
-    "seen": 1789951349.7471461,
-    "ast_hash": "23acd184dd0767c84fbfdaad5bab350f",
+    "mtime": 1790204670.6712248,
+    "seen": 1790204741.2894387,
+    "ast_hash": "d2beb9bf6a2739bb45a665b83f7563f9",
     "semantic_hash": ""
   },
   "src/API/Trivo.API/Extensions/ServiceExtensions.cs": {
@@ -168,9 +168,9 @@
     "semantic_hash": ""
   },
   "src/API/Trivo.API/Trivo.API.csproj": {
-    "mtime": 1787624877.7922142,
-    "seen": 1788029075.4252534,
-    "ast_hash": "527e4d24d27695a2bb2b12bf91372b5b",
+    "mtime": 1790204277.7133949,
+    "seen": 1790204741.289473,
+    "ast_hash": "5a0d01b1dca7ded8839f5a4d6b7a612e",
     "semantic_hash": ""
   },
   "src/API/Trivo.API/appsettings.Production.json": {
@@ -384,8 +384,8 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Reports/ReportDto.cs": {
-    "mtime": 1789950589.4474266,
-    "seen": 1789951349.7473586,
+    "mtime": 1790204277.717429,
+    "seen": 1790204741.2896335,
     "ast_hash": "245f657fe75e45af75272aff4f96d997",
     "semantic_hash": ""
   },
@@ -444,8 +444,8 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Users/UserDto.cs": {
-    "mtime": 1789950589.5202844,
-    "seen": 1789951349.747426,
+    "mtime": 1790204277.7214632,
+    "seen": 1790204741.2897956,
     "ast_hash": "a2612fa9bb185d6b160e5ade4275cdeb",
     "semantic_hash": ""
   },
@@ -456,8 +456,8 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DependencyInjection.cs": {
-    "mtime": 1789950690.8565361,
-    "seen": 1789951349.7474358,
+    "mtime": 1790204277.7254975,
+    "seen": 1790204741.2898028,
     "ast_hash": "3193d65f80b0a156d4d76ca15e90e156",
     "semantic_hash": ""
   },
@@ -522,8 +522,8 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Commands/UnbanUser/UnbanUserCommandHandler.cs": {
-    "mtime": 1789950707.6433754,
-    "seen": 1789951349.7474883,
+    "mtime": 1790204277.7254975,
+    "seen": 1790204741.289843,
     "ast_hash": "80820511ea0779b02f7ce959904affe9",
     "semantic_hash": ""
   },
@@ -810,8 +810,8 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Matching/Commands/CreateMatch/CreateMatchingCommandHandler.cs": {
-    "mtime": 1789950707.6424387,
-    "seen": 1789951349.7477288,
+    "mtime": 1790204277.7537367,
+    "seen": 1790204741.2900958,
     "ast_hash": "b049f2400fb2845c7a6f79d4995452d0",
     "semantic_hash": ""
   },
@@ -918,9 +918,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Messages/Commands/SendMessage/SendMessageCommandHandler.cs": {
-    "mtime": 1789515996.8415797,
-    "seen": 1789923996.8281825,
-    "ast_hash": "c82dba95a8071b667e127367402e4236",
+    "mtime": 1790204277.7537367,
+    "seen": 1790204741.290147,
+    "ast_hash": "87bdb3e389528c4f33a28103eaf2d048",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Messages/Commands/SendMessage/SendMessageValidator.cs": {
@@ -996,26 +996,26 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Commands/CreateReport/CreateReportCommand.cs": {
-    "mtime": 1789952844.9366863,
-    "seen": 1790131019.542317,
+    "mtime": 1790204277.757771,
+    "seen": 1790204741.2901807,
     "ast_hash": "f14dbe547daf0eb3a1ad1783f928384c",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Commands/CreateReport/CreateReportCommandHandler.cs": {
-    "mtime": 1789951653.6441023,
-    "seen": 1790131019.5423243,
+    "mtime": 1790204277.757771,
+    "seen": 1790204741.290183,
     "ast_hash": "c8d28aa9920194c72ba07200a7a88715",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Commands/CreateReport/CreateReportValidator.cs": {
-    "mtime": 1789950631.0794418,
-    "seen": 1789951349.7478116,
+    "mtime": 1790204277.757771,
+    "seen": 1790204741.290186,
     "ast_hash": "756264cda251740f9ee0bcb9fe131c69",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/ReportMapper.cs": {
-    "mtime": 1789950589.599427,
-    "seen": 1789951349.7478385,
+    "mtime": 1790204277.7860105,
+    "seen": 1790204741.2902153,
     "ast_hash": "cc84771787f11416c252795493de5335",
     "semantic_hash": ""
   },
@@ -1092,21 +1092,21 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/ConfirmAccount/ConfirmAccountCommand.cs": {
-    "mtime": 1785616704.0038395,
-    "seen": 1788029075.4254992,
-    "ast_hash": "163621862e020a418198f1d0dbddfc50",
+    "mtime": 1790204670.669612,
+    "seen": 1790204741.2902498,
+    "ast_hash": "5b7a062c7ec73cae40cc2f9af10c7470",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/ConfirmAccount/ConfirmAccountCommandHandler.cs": {
-    "mtime": 1785616704.0077355,
-    "seen": 1788029075.4255004,
-    "ast_hash": "84aca458ad6421305122573d007e4502",
+    "mtime": 1790204680.4944594,
+    "seen": 1790204741.2902517,
+    "ast_hash": "1f7598d26157b6b03a2d4571d3c2990e",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/ConfirmAccount/ConfirmAccountValidator.cs": {
-    "mtime": 1785616704.0077355,
-    "seen": 1788029075.425502,
-    "ast_hash": "eab1a014f34c7ea1f5bad84c53884083",
+    "mtime": 1790204670.6708043,
+    "seen": 1790204741.290254,
+    "ast_hash": "93db02c88041f68924f66394a42e6d7e",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/CreateUser/CreateUserCommand.cs": {
@@ -1158,8 +1158,8 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs": {
-    "mtime": 1789950690.863224,
-    "seen": 1789951349.7479072,
+    "mtime": 1790204277.7860105,
+    "seen": 1790204741.2902837,
     "ast_hash": "9933d3bacace8af5efea8335a99d35fc",
     "semantic_hash": ""
   },
@@ -1326,8 +1326,8 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/UserMapper.cs": {
-    "mtime": 1789950589.5801778,
-    "seen": 1789951349.74803,
+    "mtime": 1790204277.7860105,
+    "seen": 1790204741.2904096,
     "ast_hash": "8d840c45b0a42f9a4266956b5250f9f7",
     "semantic_hash": ""
   },
@@ -1344,8 +1344,8 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Interfaces/Repository/Account/IAdministratorRepository.cs": {
-    "mtime": 1790130653.0370119,
-    "seen": 1790131019.5431716,
+    "mtime": 1790204277.7900445,
+    "seen": 1790204741.2904189,
     "ast_hash": "46e4597708c19dd6370bf60ffed38bb4",
     "semantic_hash": ""
   },
@@ -1416,8 +1416,8 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Interfaces/Repository/IReportRepository.cs": {
-    "mtime": 1789950547.6234536,
-    "seen": 1789951349.7480679,
+    "mtime": 1790204277.7900445,
+    "seen": 1790204741.2904475,
     "ast_hash": "0ad05a8c96e128ba1ebc40f0b89a17dd",
     "semantic_hash": ""
   },
@@ -1452,9 +1452,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Interfaces/Services/ICodeService.cs": {
-    "mtime": 1789939924.6008968,
-    "seen": 1789948842.6765335,
-    "ast_hash": "68fe7e8fd61faefc7dabb02b743edcec",
+    "mtime": 1790204670.6668913,
+    "seen": 1790204741.2904696,
+    "ast_hash": "98f4cdd9919bcb71941426b271cf8b57",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Interfaces/Services/IEmailService.cs": {
@@ -1590,14 +1590,14 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Utils/EmailTemplate.cs": {
-    "mtime": 1789950857.703455,
-    "seen": 1789951349.748162,
+    "mtime": 1790204277.798113,
+    "seen": 1790204741.2905297,
     "ast_hash": "46668a4022ad9650007977ec1a8df0f7",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Utils/Error.cs": {
-    "mtime": 1789950499.4223855,
-    "seen": 1789951349.7481658,
+    "mtime": 1790204277.798113,
+    "seen": 1790204741.290532,
     "ast_hash": "d68ec6164ed5ccb6cd130daeb54117b4",
     "semantic_hash": ""
   },
@@ -1728,8 +1728,8 @@
     "semantic_hash": ""
   },
   "src/Domain/Trivo.Domain/Enums/ReportStatus.cs": {
-    "mtime": 1789950453.5635006,
-    "seen": 1789951349.74825,
+    "mtime": 1790204277.8021474,
+    "seen": 1790204741.290589,
     "ast_hash": "d76c5685c40253bab1184f4005888544",
     "semantic_hash": ""
   },
@@ -1740,8 +1740,8 @@
     "semantic_hash": ""
   },
   "src/Domain/Trivo.Domain/Enums/UserStatus.cs": {
-    "mtime": 1789950453.5875008,
-    "seen": 1789951349.748286,
+    "mtime": 1790204277.8061814,
+    "seen": 1790204741.2905982,
     "ast_hash": "bec3df9afdbdead231cbf6a20ae0a09e",
     "semantic_hash": ""
   },
@@ -1812,8 +1812,8 @@
     "semantic_hash": ""
   },
   "src/Domain/Trivo.Domain/Models/Report.cs": {
-    "mtime": 1789950453.595501,
-    "seen": 1789951349.7483215,
+    "mtime": 1790204277.8061814,
+    "seen": 1790204741.2906334,
     "ast_hash": "78a153e23b97304532a8ed51f739ebd2",
     "semantic_hash": ""
   },
@@ -1824,8 +1824,8 @@
     "semantic_hash": ""
   },
   "src/Domain/Trivo.Domain/Models/User.cs": {
-    "mtime": 1789950453.679918,
-    "seen": 1789951349.7483344,
+    "mtime": 1790204277.8102157,
+    "seen": 1790204741.2906456,
     "ast_hash": "861da28399ef0ef23e48b45198054034",
     "semantic_hash": ""
   },
@@ -1926,8 +1926,8 @@
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Configurations/ReportConfig.cs": {
-    "mtime": 1789950482.6795142,
-    "seen": 1789951349.7483919,
+    "mtime": 1790204277.8102157,
+    "seen": 1790204741.290773,
     "ast_hash": "7b6e623b86fb7e5317e88517f55fa2d5",
     "semantic_hash": ""
   },
@@ -1944,20 +1944,20 @@
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Context/TrivoContext.cs": {
-    "mtime": 1789950482.7475135,
-    "seen": 1789951349.748407,
+    "mtime": 1790204277.81425,
+    "seen": 1790204741.2907896,
     "ast_hash": "01f8cb94f944ea682aec630782e48768",
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/DependencyInjection.cs": {
-    "mtime": 1789950547.8106768,
-    "seen": 1789951349.748409,
+    "mtime": 1790204277.81425,
+    "seen": 1790204741.2907922,
     "ast_hash": "86cab305ef1a63719cf4025e810d64d0",
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Repository/Account/AdministratorRepository.cs": {
-    "mtime": 1790130625.810162,
-    "seen": 1790131019.5437238,
+    "mtime": 1790204277.8223183,
+    "seen": 1790204741.2908227,
     "ast_hash": "ed95d25c5e2f047c00c859baf3d10818",
     "semantic_hash": ""
   },
@@ -1980,8 +1980,8 @@
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Repository/Account/ReportRepository.cs": {
-    "mtime": 1789950547.7884712,
-    "seen": 1789951349.7484503,
+    "mtime": 1790204277.8223183,
+    "seen": 1790204741.2908335,
     "ast_hash": "aed1e5baee4755262a9c8ad78995a850",
     "semantic_hash": ""
   },
@@ -2076,8 +2076,8 @@
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Shared/Services/AuthenticationService.cs": {
-    "mtime": 1789950690.8633802,
-    "seen": 1789951349.7484953,
+    "mtime": 1790204277.8223183,
+    "seen": 1790204741.290879,
     "ast_hash": "ced878e922b9e7f815b11217bff222ad",
     "semantic_hash": ""
   },
@@ -2088,9 +2088,9 @@
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Shared/Services/CodeService.cs": {
-    "mtime": 1789939924.6072218,
-    "seen": 1789948842.6766994,
-    "ast_hash": "4db531affc1c49fe0e0964ed0438615a",
+    "mtime": 1790204670.6632512,
+    "seen": 1790204741.290884,
+    "ast_hash": "842fea89e2f85c8b4d7bd1b396063007",
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Shared/Services/EmailService.cs": {
@@ -2130,9 +2130,9 @@
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Shared/SignalR/Hubs/UserRecommendationHub.cs": {
-    "mtime": 1781982514.0332556,
-    "seen": 1788029075.4257562,
-    "ast_hash": "02ed388f69ca69c4d6c197bca336d83a",
+    "mtime": 1790204277.8263526,
+    "seen": 1790204741.2909076,
+    "ast_hash": "559425c21f56585bfa43daa8526cb24a",
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Shared/SignalR/MatchNotifier.cs": {
@@ -2358,8 +2358,8 @@
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Migrations/TrivoContextModelSnapshot.cs": {
-    "mtime": 1789951075.2953217,
-    "seen": 1789951349.7484381,
+    "mtime": 1790204277.818284,
+    "seen": 1790204741.2908204,
     "ast_hash": "fa5b7331c635c2f8d0f4e28d3b2c367e",
     "semantic_hash": ""
   },
@@ -2496,8 +2496,8 @@
     "semantic_hash": ""
   },
   "src/API/Trivo.API/Filters/ProblemDetailsMapper.cs": {
-    "mtime": 1789950499.428016,
-    "seen": 1789951349.7471554,
+    "mtime": 1790204277.7133949,
+    "seen": 1790204741.289452,
     "ast_hash": "c9a6ee101a328fc6455c39472f9bc908",
     "semantic_hash": ""
   },
@@ -2724,261 +2724,267 @@
     "semantic_hash": ""
   },
   "src/API/Trivo.API/Controllers/V1/Requests/ResolveReportRequest.cs": {
-    "mtime": 1789951000.219249,
-    "seen": 1789951349.747086,
+    "mtime": 1790204277.7093606,
+    "seen": 1790204741.2894006,
     "ast_hash": "d5579af85af3d0a47e6c099c9174ea74",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Administrator/AdminExpertDto.cs": {
-    "mtime": 1789950589.5074267,
-    "seen": 1789951349.747245,
+    "mtime": 1790204277.7133949,
+    "seen": 1790204741.2895293,
     "ast_hash": "a2e4a457e66ce28dbbd1fb58b3a26e5b",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Administrator/AdminRecruiterDto.cs": {
-    "mtime": 1789950589.4954267,
-    "seen": 1789951349.747253,
+    "mtime": 1790204277.7133949,
+    "seen": 1790204741.2895367,
     "ast_hash": "c69234bc0cc1266fef6f79f658346ce5",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Reports/ReportDetailDto.cs": {
-    "mtime": 1789950589.4794266,
-    "seen": 1789951349.747355,
+    "mtime": 1790204277.717429,
+    "seen": 1790204741.289631,
     "ast_hash": "90eff5c32433c023ea754855e030d218",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Reports/ReportListItemDto.cs": {
-    "mtime": 1789950589.4634266,
-    "seen": 1789951349.7473614,
+    "mtime": 1790204277.717429,
+    "seen": 1790204741.289636,
     "ast_hash": "172375c4857486ece28da8b964a9ece7",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Reports/ReportResolutionDto.cs": {
-    "mtime": 1789950589.4884915,
-    "seen": 1789951349.7473655,
+    "mtime": 1790204277.7214632,
+    "seen": 1790204741.289638,
     "ast_hash": "a574a1dd49904de740d5079ab7530e1d",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Reports/ReportUserDetailDto.cs": {
-    "mtime": 1789950589.4714267,
-    "seen": 1789951349.7473693,
+    "mtime": 1790204277.7214632,
+    "seen": 1790204741.289641,
     "ast_hash": "47342d1e91aae0a563a81bca4cb82460",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Reports/SanctionDto.cs": {
-    "mtime": 1789950631.0594418,
-    "seen": 1789951349.7473724,
+    "mtime": 1790204277.7214632,
+    "seen": 1790204741.2896435,
     "ast_hash": "fddecfa598d62c5b83e7b2b24413077d",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetBannedUsersPaged/GetBannedUsersPagedQuery.cs": {
-    "mtime": 1789950920.1352863,
-    "seen": 1789951349.747502,
+    "mtime": 1790204277.7295315,
+    "seen": 1790204741.2898576,
     "ast_hash": "cb959418a84814a1bea5ee788571db9f",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetBannedUsersPaged/GetBannedUsersPagedQueryHandler.cs": {
-    "mtime": 1789950920.1432865,
-    "seen": 1789951349.7475057,
+    "mtime": 1790204277.7295315,
+    "seen": 1790204741.289862,
     "ast_hash": "909915dbd205c89d907ea5b0fdef89c9",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetBannedUsersPaged/GetBannedUsersPagedValidator.cs": {
-    "mtime": 1789950920.1392865,
-    "seen": 1789951349.7475088,
+    "mtime": 1790204277.7295315,
+    "seen": 1790204741.289866,
     "ast_hash": "fa952e3fe17231358c7a3b5c00eb49c1",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetExpertsPaged/GetExpertsPagedQuery.cs": {
-    "mtime": 1789950920.1592865,
-    "seen": 1789951349.74752,
+    "mtime": 1790204277.7335658,
+    "seen": 1790204741.2898777,
     "ast_hash": "a3631d91b21632b81c6dd520dec3940a",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetExpertsPaged/GetExpertsPagedQueryHandler.cs": {
-    "mtime": 1789950920.1712863,
-    "seen": 1789951349.7475235,
+    "mtime": 1790204277.7385914,
+    "seen": 1790204741.2898812,
     "ast_hash": "23a00061e4276ac9dcbbaa96f03cbc16",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetExpertsPaged/GetExpertsPagedValidator.cs": {
-    "mtime": 1789950920.1632864,
-    "seen": 1789951349.7475271,
+    "mtime": 1790204277.7416341,
+    "seen": 1790204741.289884,
     "ast_hash": "b6df6e314e4d016f4cb381505cb39142",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetRecruitersPaged/GetRecruitersPagedQuery.cs": {
-    "mtime": 1789950920.1472864,
-    "seen": 1789951349.7475626,
+    "mtime": 1790204277.7456684,
+    "seen": 1790204741.2899218,
     "ast_hash": "2bdf0318a91cb38efa7eb8a23b19400c",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetRecruitersPaged/GetRecruitersPagedQueryHandler.cs": {
-    "mtime": 1789950920.1552866,
-    "seen": 1789951349.747567,
+    "mtime": 1790204277.7456684,
+    "seen": 1790204741.289926,
     "ast_hash": "89cc671adfa91172f062277c0b0ed5b3",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetRecruitersPaged/GetRecruitersPagedValidator.cs": {
-    "mtime": 1789950920.1512864,
-    "seen": 1789951349.7475708,
+    "mtime": 1790204277.7456684,
+    "seen": 1790204741.2899299,
     "ast_hash": "89a1beafeb6fcf810a917eba1cb835d3",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetSanctionsHistory/GetSanctionsHistoryQuery.cs": {
-    "mtime": 1789950920.1752865,
-    "seen": 1789951349.7475817,
+    "mtime": 1790204277.7497027,
+    "seen": 1790204741.289941,
     "ast_hash": "dce250633e7b2927ba053c3ecbb72357",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetSanctionsHistory/GetSanctionsHistoryQueryHandler.cs": {
-    "mtime": 1789950920.1872864,
-    "seen": 1789951349.7475855,
+    "mtime": 1790204277.7531211,
+    "seen": 1790204741.2899446,
     "ast_hash": "907ae7fa5632a97f7fbce1dd6458054c",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Administrator/Query/GetSanctionsHistory/GetSanctionsHistoryValidator.cs": {
-    "mtime": 1789950920.1840036,
-    "seen": 1789951349.747589,
+    "mtime": 1790204277.7531211,
+    "seen": 1790204741.2899482,
     "ast_hash": "209cc898d3c1d2575f275bbe86cfb0c1",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Commands/ResolveReport/ResolveReportCommand.cs": {
-    "mtime": 1789951680.5996492,
-    "seen": 1790131019.5423334,
+    "mtime": 1790204277.7618053,
+    "seen": 1790204741.290189,
     "ast_hash": "635e323714d9d3036fc00cc9d949f5e8",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Commands/ResolveReport/ResolveReportCommandHandler.cs": {
-    "mtime": 1789952227.9648592,
-    "seen": 1790131019.542338,
+    "mtime": 1790204277.7653227,
+    "seen": 1790204741.2901914,
     "ast_hash": "a3ac4d6e03d138f7c5e27ac6baaf3af6",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Commands/ResolveReport/ResolveReportValidator.cs": {
-    "mtime": 1789950857.5485387,
-    "seen": 1789951349.7478175,
+    "mtime": 1790204277.7658393,
+    "seen": 1790204741.2901943,
     "ast_hash": "230944504070e4f95f07f84ba910b60b",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Query/GetLatestReports/GetLatestReportsQuery.cs": {
-    "mtime": 1789950920.1003797,
-    "seen": 1789951349.7478194,
+    "mtime": 1790204277.7712216,
+    "seen": 1790204741.2901967,
     "ast_hash": "2deaf67365cda06ca4be0d3b670228b6",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Query/GetLatestReports/GetLatestReportsQueryHandler.cs": {
-    "mtime": 1789950920.1032865,
-    "seen": 1789951349.7478216,
+    "mtime": 1790204277.7726195,
+    "seen": 1790204741.2901988,
     "ast_hash": "76b015381d9dd0210e8c7259a7335d28",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Query/GetReportById/GetReportByIdQuery.cs": {
-    "mtime": 1789950920.1072865,
-    "seen": 1789951349.747824,
+    "mtime": 1790204277.773908,
+    "seen": 1790204741.2902014,
     "ast_hash": "64bb5ca938b9e1b5d8e77df7a8b41311",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Query/GetReportById/GetReportByIdQueryHandler.cs": {
-    "mtime": 1789950920.1207716,
-    "seen": 1789951349.7478263,
+    "mtime": 1790204277.773908,
+    "seen": 1790204741.2902036,
     "ast_hash": "15e831313fbe33cbff1c9f4d06ffe014",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Query/GetReportById/GetReportByIdValidator.cs": {
-    "mtime": 1789950920.1158974,
-    "seen": 1789951349.7478287,
+    "mtime": 1790204277.773908,
+    "seen": 1790204741.2902062,
     "ast_hash": "e0093ef8c3216e7691ad1963c799e9a1",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Query/GetReportsPaged/GetReportsPagedQuery.cs": {
-    "mtime": 1789950920.0792863,
-    "seen": 1789951349.7478316,
+    "mtime": 1790204277.7819762,
+    "seen": 1790204741.290209,
     "ast_hash": "49b4f5dc9edab9597fe236a629a036b4",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Query/GetReportsPaged/GetReportsPagedQueryHandler.cs": {
-    "mtime": 1789950920.0912864,
-    "seen": 1789951349.7478333,
+    "mtime": 1790204277.7819762,
+    "seen": 1790204741.2902114,
     "ast_hash": "c354dff0f0f21c60596edf9eaecbb795",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Reports/Query/GetReportsPaged/GetReportsPagedValidator.cs": {
-    "mtime": 1789950920.0872865,
-    "seen": 1789951349.7478354,
+    "mtime": 1790204277.7819762,
+    "seen": 1790204741.290213,
     "ast_hash": "c08580130e5b3842cf66aaeaaf1f0ee8",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Interfaces/Repository/ISanctionRepository.cs": {
-    "mtime": 1789950547.6354537,
-    "seen": 1789951349.74807,
+    "mtime": 1790204277.7900445,
+    "seen": 1790204741.2904499,
     "ast_hash": "f483e06e3e5891fb227f46d2de4814ab",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Interfaces/Services/IAccountAccessService.cs": {
-    "mtime": 1789950690.703381,
-    "seen": 1789951349.748079,
+    "mtime": 1790204277.7940788,
+    "seen": 1790204741.2904599,
     "ast_hash": "265f31e5b25cd3eff160f15ddee8a801",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Services/AccountAccessService.cs": {
-    "mtime": 1789952756.2669184,
-    "seen": 1790131019.5433607,
+    "mtime": 1790204277.7940788,
+    "seen": 1790204741.290518,
     "ast_hash": "b8622ae5048073699a3b0c1cf082375c",
     "semantic_hash": ""
   },
   "src/Domain/Trivo.Domain/Enums/ReportDecision.cs": {
-    "mtime": 1789950453.5755007,
-    "seen": 1789951349.7482476,
+    "mtime": 1790204277.798113,
+    "seen": 1790204741.2905872,
     "ast_hash": "7ec31799aefc0b9126c71dbd86a01b00",
     "semantic_hash": ""
   },
   "src/Domain/Trivo.Domain/Enums/ReportType.cs": {
-    "mtime": 1789950453.5715008,
-    "seen": 1789951349.7482522,
+    "mtime": 1790204277.8021474,
+    "seen": 1790204741.2905915,
     "ast_hash": "beb9807a157652dee378d92d7e2e5d49",
     "semantic_hash": ""
   },
   "src/Domain/Trivo.Domain/Enums/SanctionType.cs": {
-    "mtime": 1789950453.5842066,
-    "seen": 1789951349.7482567,
+    "mtime": 1790204277.8021474,
+    "seen": 1790204741.2905958,
     "ast_hash": "ba93597f51af3cf883cc24fe778c3205",
     "semantic_hash": ""
   },
   "src/Domain/Trivo.Domain/Models/Sanction.cs": {
-    "mtime": 1789950453.608606,
-    "seen": 1789951349.7483249,
+    "mtime": 1790204277.8061814,
+    "seen": 1790204741.2906387,
     "ast_hash": "7a089632516bc938fb51d96f85dd1bb9",
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Configurations/SanctionConfig.cs": {
-    "mtime": 1789950482.695514,
-    "seen": 1789951349.7483947,
+    "mtime": 1790204277.81425,
+    "seen": 1790204741.2907758,
     "ast_hash": "2bb373e2081fe0ee9c99a1961952cf45",
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Migrations/20260921003755_AddReportSanctions.Designer.cs": {
-    "mtime": 1789951075.2913218,
-    "seen": 1789951349.7484334,
+    "mtime": 1790204277.818284,
+    "seen": 1790204741.290815,
     "ast_hash": "f165fc43a7fb067684a62bd0b849505e",
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Migrations/20260921003755_AddReportSanctions.cs": {
-    "mtime": 1789951124.496148,
-    "seen": 1789951349.7484355,
+    "mtime": 1790204277.818284,
+    "seen": 1790204741.2908175,
     "ast_hash": "178b9e37b3fd23c38b7c417d2640217c",
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Repository/SanctionRepository.cs": {
-    "mtime": 1789950547.795454,
-    "seen": 1789951349.7484698,
+    "mtime": 1790204277.8223183,
+    "seen": 1790204741.2908537,
     "ast_hash": "9247b0b1944a1f1ad1f75c6f997e286a",
     "semantic_hash": ""
   },
   "docs/rf/RF9-implementacion.md": {
-    "mtime": 1790130953.2927032,
-    "seen": 1790131019.5440204,
+    "mtime": 1790204277.564129,
+    "seen": 1790204741.2910743,
     "ast_hash": "d63fcf3f63dc72dbf03a0f85bc085043",
+    "semantic_hash": ""
+  },
+  "PR-REPORTS-SANCTIONS.md": {
+    "mtime": 1790201112.556146,
+    "seen": 1790204741.291046,
+    "ast_hash": "59ebced1cfb64dcbff17d7ba86a685a5",
     "semantic_hash": ""
   }
 }

@@ -16183,7 +16183,7 @@
       },
       "norm_label": ".handle()",
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L18"
+      "source_location": "L23"
     },
     {
       "id": "src_application_trivo_application_interfaces_services_iaccountaccessservice_trivo_application_interfaces_services_iaccountaccessservice_getaccesserrorasync",
@@ -53858,7 +53858,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L27",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
@@ -53870,7 +53870,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L36",
+      "source_location": "L46",
       "weight": 1.0
     },
     {
@@ -53882,7 +53882,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L68",
+      "source_location": "L69",
       "weight": 1.0
     },
     {
@@ -79361,7 +79361,7 @@
         "ref_token": "ResultT"
       },
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L18",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -104335,7 +104335,7 @@
         "ref_token": "CancellationToken"
       },
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L18",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -115900,7 +115900,7 @@
         "ref_token": "LoginUserCommand"
       },
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L18",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -120466,7 +120466,7 @@
         "ref_token": "Task"
       },
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L18",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -148785,7 +148785,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L18",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -155860,7 +155860,7 @@
       "confidence_score": 0.8,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L20",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -155872,7 +155872,7 @@
       "confidence_score": 0.8,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L31",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -155884,7 +155884,7 @@
       "confidence_score": 0.8,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L51",
+      "source_location": "L52",
       "weight": 1.0
     },
     {
@@ -155896,7 +155896,7 @@
       "confidence_score": 0.8,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L59",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
@@ -155908,7 +155908,7 @@
       "confidence_score": 0.8,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs",
-      "source_location": "L60",
+      "source_location": "L61",
       "weight": 1.0
     },
     {
@@ -159945,5 +159945,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0b37f8d81b1ff4bdc37729119e3c2d3ab84fff55"
+  "built_at_commit": "c82d86ff6c65a786c7e5dd3c2447e3ce8c26bd8c"
 }
