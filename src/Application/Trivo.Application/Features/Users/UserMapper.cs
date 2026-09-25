@@ -11,10 +11,11 @@ public static class UserMapper
     public static UserDto MapToUserDto(Domain.Models.User user)
     {
         return new UserDto(
-            Id: user.Id,
+            UserId: user.Id,
             FirstName: user.FirstName,
             LastName: user.LastName,
-            ProfilePictureUrl: user.ProfilePicture,
+            Email: user.Email,
+            ProfilePicture: user.ProfilePicture,
             CreatedAt: user.CreatedAt
         );
     }

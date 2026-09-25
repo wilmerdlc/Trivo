@@ -1,11 +1,10 @@
-using Trivo.Application.DTOs.Users;
-
 namespace Trivo.Application.DTOs.Users;
 
 public sealed record UserDto(
-    Guid Id,
+    Guid UserId,
     string? FirstName,
     string? LastName,
-    string? ProfilePictureUrl,
+    string? Email,
+    string? ProfilePicture,
     DateTime? CreatedAt = null
 );
