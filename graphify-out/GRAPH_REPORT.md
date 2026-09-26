@@ -1,7 +1,7 @@
 # Graph Report - Trivo  (2026-09-23)
 
 ## Corpus Check
-- 494 files · ~93,387 words
+- 494 files · ~93,416 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0b37f8d8`
+- Built from commit: `c82d86ff`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
