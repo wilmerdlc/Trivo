@@ -444,9 +444,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Users/UserDto.cs": {
-    "mtime": 1790433700.1142492,
-    "seen": 1790433757.3984401,
-    "ast_hash": "e05ee4d62f580645082cebf520517398",
+    "mtime": 1790204277.7214632,
+    "seen": 1790204741.2897956,
+    "ast_hash": "a2612fa9bb185d6b160e5ade4275cdeb",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/DTOs/Users/UserProfilePictureDto.cs": {
@@ -1158,9 +1158,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserCommandHandler.cs": {
-    "mtime": 1790212543.528341,
-    "seen": 1790433757.3987322,
-    "ast_hash": "74065ecf2a5796f1943652b5c9cb29f6",
+    "mtime": 1790212508.7015495,
+    "seen": 1790212530.067308,
+    "ast_hash": "d62e9edad1aa6f63716181136d99ef05",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Commands/LoginUser/LoginUserValidator.cs": {
@@ -1242,9 +1242,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserBiography/GetUserBiographyQuery.cs": {
-    "mtime": 1790433700.120022,
-    "seen": 1790433757.3987935,
-    "ast_hash": "4dfebf7bee0b3f9f1b02dca125833682",
+    "mtime": 1788916671.3780715,
+    "seen": 1789171730.8113606,
+    "ast_hash": "fdc33af7a130bafe2c520ebf76889c35",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserBiography/GetUserBiographyQueryHandler.cs": {
@@ -1254,9 +1254,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserDetails/GetUserDetailsQuery.cs": {
-    "mtime": 1790433700.1238174,
-    "seen": 1790433757.398797,
-    "ast_hash": "ea6a00ba4ceaeae7202ed2ab001a5a4c",
+    "mtime": 1788916671.3780715,
+    "seen": 1789171730.8113647,
+    "ast_hash": "15580680447eecc0a55af7e5c2f30bd6",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserDetails/GetUserDetailsQueryHandler.cs": {
@@ -1266,9 +1266,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserInterests/GetUserInterestsQuery.cs": {
-    "mtime": 1790433700.1238174,
-    "seen": 1790433757.398801,
-    "ast_hash": "ac8739479b2adb5022e4e2c9a65b4de9",
+    "mtime": 1788916671.3780715,
+    "seen": 1789171730.811369,
+    "ast_hash": "f1c34547dad777a8a03228e8261ea709",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserInterests/GetUserInterestsQueryHandler.cs": {
@@ -1278,9 +1278,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserProfilePicture/GetUserProfilePictureQuery.cs": {
-    "mtime": 1790433700.1276128,
-    "seen": 1790433757.398805,
-    "ast_hash": "961c4f31231f9facf1ce2e27ec403233",
+    "mtime": 1788916671.3780715,
+    "seen": 1789171730.811373,
+    "ast_hash": "3fac58e5d8b8405e1e924b77b12c03fa",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserProfilePicture/GetUserProfilePictureQueryHandler.cs": {
@@ -1302,9 +1302,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserSkills/GetUserSkillsQuery.cs": {
-    "mtime": 1790433700.1276128,
-    "seen": 1790433757.3988144,
-    "ast_hash": "68a901d99c39d5341445169784029484",
+    "mtime": 1788916671.3780715,
+    "seen": 1789171730.8113837,
+    "ast_hash": "afbdc1357b332271670d8e6ea05af50c",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/Query/GetUserSkills/GetUserSkillsQueryHandler.cs": {
@@ -1326,9 +1326,9 @@
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Features/Users/UserMapper.cs": {
-    "mtime": 1790433700.1369255,
-    "seen": 1790433757.3988307,
-    "ast_hash": "2f045e9288f12bf56de83d4b928c15a4",
+    "mtime": 1790204277.7860105,
+    "seen": 1790204741.2904096,
+    "ast_hash": "8d840c45b0a42f9a4266956b5250f9f7",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Helpers/AuthenticatedUserHelper.cs": {
