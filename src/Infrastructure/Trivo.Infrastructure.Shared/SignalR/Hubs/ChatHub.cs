@@ -7,6 +7,7 @@ using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.SignalR;
 
 using Trivo.Application.DTOs.Chat;
+using Trivo.Application.Features.Messages.Query.GetMessagePagination;
 
 namespace Trivo.Infrastructure.Shared.SignalR.Hubs;
 
@@ -82,10 +83,10 @@ public class ChatHub(
 
     public async Task GetChatMessages(Guid chatId, int pageNumber = 1, int pageSize = 20)
     {
-        // await mediator.Send(new GetMessagePagesQuery(
-        //     chatId,
-        //     pageNumber,
-        //     pageSize
-        // ));
+        await mediator.Send(new GetMessagePaginationQuery(
+            chatId,
+            pageNumber,
+            pageSize
+        ));
     }
 }
