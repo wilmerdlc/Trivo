@@ -161,11 +161,11 @@ internal sealed class ResolveReportCommandHandler(
     private static string BuildSanctionMessage(Sanction sanction, SanctionType type) => type switch
     {
         SanctionType.Warning =>
-            $"You have received a warning for breaking the platform's policies. Reason: {sanction.Reason}",
+            $"Has recibido una advertencia por incumplir las políticas de la plataforma. Motivo: {sanction.Reason}",
         SanctionType.TemporarySuspension =>
-            $"Your account has been suspended until {sanction.ExpiresAt:yyyy-MM-dd HH:mm} UTC. Reason: {sanction.Reason}",
+            $"Tu cuenta ha sido suspendida hasta el {sanction.ExpiresAt:dd/MM/yyyy HH:mm} UTC. Motivo: {sanction.Reason}",
         _ =>
-            $"Your account has been permanently banned. Reason: {sanction.Reason}"
+            $"Tu cuenta ha sido suspendida de forma permanente. Motivo: {sanction.Reason}"
     };
 
     // The decision is already committed at this point, so a failure to notify must not turn a
@@ -175,7 +175,7 @@ internal sealed class ResolveReportCommandHandler(
         try
         {
             var result = await notificationService.CreateNotificationByTypeAsync(
-                userId, NotificationType.Alert.ToString(), content, cancellationToken);
+                userId, NotificationType.Alert.ToString().ToLowerInvariant(), content, cancellationToken);
 
             if (!result.IsSuccess)
             {
