@@ -19,7 +19,8 @@ public class ReportRepository(TrivoContext context) : GenericRepository<Report>(
             .Include(r => r.ReportedUser)!.ThenInclude(u => u!.Recruiters)
             .Include(r => r.Message)
             .Include(r => r.ReviewedByAdmin)
-            .Include(r => r.Sanction)
+            .Include(r => r.Sanction)!.ThenInclude(s => s!.Admin)
+            .Include(r => r.Sanction)!.ThenInclude(s => s!.User)
             .AsSplitQuery()
             .FirstOrDefaultAsync(r => r.ReportId == reportId, cancellationToken);
 
