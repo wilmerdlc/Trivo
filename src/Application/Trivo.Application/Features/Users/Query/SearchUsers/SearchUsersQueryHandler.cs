@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Trivo.Application.Abstractions.Messages;
 using Trivo.Application.Features.Matching;
-using Trivo.Application.Interfaces.Repository;
 using Trivo.Application.Interfaces.Repository.Account;
 using Trivo.Application.Pagination;
 using Trivo.Application.Utils;
@@ -14,7 +13,6 @@ namespace Trivo.Application.Features.Users.Query.SearchUsers;
 
 internal sealed class SearchUsersQueryHandler(
     IUserRepository userRepository,
-    IMatchRepository matchRepository,
     ILogger<SearchUsersQueryHandler> logger
 ) : IQueryHandler<SearchUsersQuery, PagedResult<UserAiRecommendationDto>>
 {
@@ -64,20 +62,19 @@ internal sealed class SearchUsersQueryHandler(
 
         var targetRole = role == Roles.Recruiter.ToString() ? Roles.Expert : Roles.Recruiter;
 
-        var matchedUserIds = await matchRepository.GetMatchedCounterpartUserIdsAsync(user.Id, cancellationToken);
-
+        // Unlike recommendations, an explicit search doesn't hide users the requester already has a
+        // match with (pending, completed or rejected) — if you type someone's name, you should find them.
         var (users, total) = await userRepository.SearchByTextAsync(
             user.Id,
             targetRole,
             terms,
-            matchedUserIds,
             request.PageNumber,
             request.PageSize,
             cancellationToken
         );
 
         // Not cached, deliberately — same reasoning as the other candidate-discovery endpoints:
-        // a stale entry could keep showing a banned or already-matched user.
+        // a stale entry could keep showing a banned user.
         var items = users.Select(MapUser).ToList();
 
         logger.LogInformation(

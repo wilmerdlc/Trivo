@@ -273,7 +273,6 @@ public class UserRepository(TrivoContext context) :
         Guid requesterId,
         Roles targetRole,
         IReadOnlyList<string> terms,
-        IReadOnlyCollection<Guid> excludedUserIds,
         int pageNumber,
         int pageSize,
         CancellationToken cancellationToken)
@@ -290,25 +289,21 @@ public class UserRepository(TrivoContext context) :
             _ => query
         };
 
-        if (excludedUserIds.Count > 0)
-        {
-            query = query.Where(u => !excludedUserIds.Contains(u.Id));
-        }
-
         // Each term must hit at least one field (AND across terms, OR across fields), so
         // "juan react" finds a Juan who has React, not only profiles containing that exact phrase.
+        // Both sides go through unaccent() so "jose" matches "José" — ILIKE alone is accent-sensitive.
         foreach (var term in terms)
         {
             var pattern = $"%{term}%";
 
             query = query.Where(u =>
-                EF.Functions.ILike(u.FirstName!, pattern) ||
-                EF.Functions.ILike(u.LastName!, pattern) ||
-                EF.Functions.ILike(u.Biography!, pattern) ||
-                EF.Functions.ILike(u.Position!, pattern) ||
-                u.Recruiters!.Any(r => EF.Functions.ILike(r.CompanyName!, pattern)) ||
-                u.UserInterests!.Any(ui => EF.Functions.ILike(ui.Interest!.Name!, pattern)) ||
-                u.UserSkills!.Any(us => EF.Functions.ILike(us.Skill!.Name!, pattern)));
+                EF.Functions.ILike(EF.Functions.Unaccent(u.FirstName!), EF.Functions.Unaccent(pattern)) ||
+                EF.Functions.ILike(EF.Functions.Unaccent(u.LastName!), EF.Functions.Unaccent(pattern)) ||
+                EF.Functions.ILike(EF.Functions.Unaccent(u.Biography!), EF.Functions.Unaccent(pattern)) ||
+                EF.Functions.ILike(EF.Functions.Unaccent(u.Position!), EF.Functions.Unaccent(pattern)) ||
+                u.Recruiters!.Any(r => EF.Functions.ILike(EF.Functions.Unaccent(r.CompanyName!), EF.Functions.Unaccent(pattern))) ||
+                u.UserInterests!.Any(ui => EF.Functions.ILike(EF.Functions.Unaccent(ui.Interest!.Name!), EF.Functions.Unaccent(pattern))) ||
+                u.UserSkills!.Any(us => EF.Functions.ILike(EF.Functions.Unaccent(us.Skill!.Name!), EF.Functions.Unaccent(pattern))));
         }
 
         var total = await query.CountAsync(cancellationToken);

@@ -39,7 +39,7 @@ internal sealed class UpdateRecruiterCommandHandler(
                 "User {RequesterId} attempted to update recruiter {RecruiterId}, which belongs to a different user.",
                 request.RequesterId, request.RecruiterId);
 
-            return ResultT<RecruiterDto>.Failure(Error.Unauthorized("403", "You can only update your own recruiter profile."));
+            return ResultT<RecruiterDto>.Failure(Error.Forbidden("403", "You can only update your own recruiter profile."));
         }
 
         recruiter.CompanyName = request.CompanyName;

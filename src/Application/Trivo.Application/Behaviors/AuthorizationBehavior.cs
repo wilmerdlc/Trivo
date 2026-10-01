@@ -27,7 +27,7 @@ public sealed class AuthorizationBehavior<TRequest, TResponse>(IHttpContextAcces
 
             if (callerId != ownedRequest.UserId)
             {
-                var error = Error.Unauthorized("403", "You can only access or modify your own resources.");
+                var error = Error.Forbidden("403", "You can only access or modify your own resources.");
 
                 // TResponse is always a closed Result/ResultT<T> here (every ICommand/IQuery in this
                 // codebase resolves to one) — both expose a public static Failure(Error) factory.

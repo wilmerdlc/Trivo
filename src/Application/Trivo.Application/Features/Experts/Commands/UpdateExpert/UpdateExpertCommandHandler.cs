@@ -33,7 +33,7 @@ internal sealed class UpdateExpertCommandHandler(
                 "User {RequesterId} attempted to update expert {ExpertId}, which belongs to a different user.",
                 request.RequesterId, request.ExpertId);
 
-            return ResultT<ExpertDto>.Failure(Error.Unauthorized("403", "You can only update your own expert profile."));
+            return ResultT<ExpertDto>.Failure(Error.Forbidden("403", "You can only update your own expert profile."));
         }
 
         expert.AvailableForProjects = request.AvailableForProjects;
