@@ -46,7 +46,8 @@ HTTP Request
 4. **Handler** en la misma carpeta:
    `internal sealed class {Action}CommandHandler(ILogger<...> logger, I{Entity}Repository repo, IUnitOfWork unitOfWork, ...)`
    `: ICommandHandler<{Action}Command, TResponse>` (o `IQueryHandler<...>` para queries).
-   - Reglas de negocio (existe / no existe / duplicado) → `return ResultT<T>.Failure(Error.NotFound/Conflict/Unauthorized/Failure(...))`.
+   - Reglas de negocio (existe / no existe / duplicado) → `return ResultT<T>.Failure(Error.NotFound/Conflict/Forbidden/Failure(...))`.
+     Acceso a un recurso que no le pertenece al usuario → `Error.Forbidden` (403); `Unauthorized` (401) es solo "no autenticado".
      **Nunca lances excepciones para errores esperados.**
    - Un solo `await unitOfWork.SaveChangesAsync(cancellationToken)` al final, después de todos los
      `repo.AddAsync/UpdateAsync/DeleteAsync`. El repositorio NUNCA llama a SaveChanges.
