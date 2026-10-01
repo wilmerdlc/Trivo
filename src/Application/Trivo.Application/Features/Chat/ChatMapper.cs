@@ -56,7 +56,22 @@ public static class ChatMapper
             Participants: participants,
             CreatedAt: entity.CreatedAt,
             Name: userContext?.ChatName ?? "New Chat",
-            LastMessage: null 
+            LastMessage: entity.Messages.FirstOrDefault()?.ToMessageDto()
+        );
+    }
+
+    // Callers load at most the latest message into Chat.Messages (see ChatRepository.GetChatsByUserIdPagedAsync).
+    private static MessageDto ToMessageDto(this Message message)
+    {
+        return new MessageDto(
+            MessageId: message.MessageId ?? Guid.Empty,
+            ChatId: message.ChatId ?? Guid.Empty,
+            Content: message.Content,
+            Status: message.Status,
+            SentDate: message.SentAt,
+            SenderId: message.SenderId ?? Guid.Empty,
+            ReceiverId: message.ReceiverId,
+            MessageType: message.Type
         );
     }
 }

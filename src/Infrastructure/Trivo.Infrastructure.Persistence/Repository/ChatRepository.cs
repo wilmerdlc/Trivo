@@ -61,6 +61,7 @@ public class ChatRepository(TrivoContext context) : GenericRepository<Chat>(cont
                         SentAt = m.SentAt,
                         Status = m.Status,
                         SenderId = m.SenderId,
+                        ReceiverId = m.ReceiverId,
                         ChatId = m.ChatId,
                         Type = m.Type
                     }).ToList()
