@@ -1980,8 +1980,8 @@
     "semantic_hash": ""
   },
   "src/Infrastructure/Trivo.Infrastructure.Persistence/Repository/Account/ReportRepository.cs": {
-    "mtime": 1790818020.4058664,
-    "seen": 1790818058.2832425,
+    "mtime": 1790817695.8835354,
+    "seen": 1790817773.1462982,
     "ast_hash": "cffefda8b5027b994a08148c8f528a6f",
     "semantic_hash": ""
   },
@@ -2190,9 +2190,9 @@
     "semantic_hash": ""
   },
   ".claude/settings.json": {
-    "mtime": 1790817924.3007717,
-    "seen": 1790818058.2823684,
-    "ast_hash": "e0005f85a51d65048467ae2dd68046b1",
+    "mtime": 1788031230.837595,
+    "seen": 1789171730.8106852,
+    "ast_hash": "8a80554c91d9fca8acb82f023de02f11",
     "semantic_hash": ""
   },
   "src/Application/Trivo.Application/Abstractions/Messages/IUserOwnedRequest.cs": {
@@ -2424,9 +2424,9 @@
     "semantic_hash": ""
   },
   ".claude/skills/dotnet-endpoint-architecture/SKILL.md": {
-    "mtime": 1790817977.791604,
-    "seen": 1790818058.2833142,
-    "ast_hash": "0c3513af3e67454d32f9fc95c580ba2e",
+    "mtime": 1788029548.222841,
+    "seen": 1789171730.8118074,
+    "ast_hash": "0fc887174d046f0310454c5c284295a7",
     "semantic_hash": ""
   },
   ".claude/skills/dotnet-endpoint-architecture/reference/templates.md": {
@@ -2478,9 +2478,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1790817979.3976603,
-    "seen": 1790818058.2833364,
-    "ast_hash": "b8092077cd38315889fa4dfa405ed7b8",
+    "mtime": 1788029802.280694,
+    "seen": 1789171730.8118343,
+    "ast_hash": "82efb97a359f5c7290bf2513d14686be",
     "semantic_hash": ""
   },
   "CONTEXT-IA.MD": {
@@ -2997,24 +2997,6 @@
     "mtime": 1790815466.8671448,
     "seen": 1790816813.9666407,
     "ast_hash": "a1f3c4ba84a6bef0fec2165c2f80460a",
-    "semantic_hash": ""
-  },
-  ".claude/hooks/dotnet-guard.sh": {
-    "mtime": 1790817902.1742587,
-    "seen": 1790818058.2823591,
-    "ast_hash": "eb685f8425e9f3210c030878db15c276",
-    "semantic_hash": ""
-  },
-  ".claude/agents/dotnet-reviewer.md": {
-    "mtime": 1790817995.1609597,
-    "seen": 1790818058.2832994,
-    "ast_hash": "86579a8d18554a6eef6a42c9b35fe042",
-    "semantic_hash": ""
-  },
-  ".claude/skills/trivo-dotnet-best-practices/SKILL.md": {
-    "mtime": 1790817954.9647546,
-    "seen": 1790818058.2833295,
-    "ast_hash": "1cd46d968d136c95796e61de64d15694",
     "semantic_hash": ""
   }
 }
