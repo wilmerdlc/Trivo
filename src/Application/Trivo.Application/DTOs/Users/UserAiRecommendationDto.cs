@@ -1,10 +1,12 @@
-
+using System.Text.Json.Serialization;
 using Trivo.Application.DTOs.Interests;
+using Trivo.Application.DTOs.Matching;
 using Trivo.Application.DTOs.Skills;
-using Trivo.Application.DTOs.Users;
 
 namespace Trivo.Application.DTOs.Users;
 
+[JsonDerivedType(typeof(RecruiterAiRecommendationDto))]
+[JsonDerivedType(typeof(ExpertAiRecommendationDto))]
 public record UserAiRecommendationDto(
     Guid UserId,
     string? FirstName,
