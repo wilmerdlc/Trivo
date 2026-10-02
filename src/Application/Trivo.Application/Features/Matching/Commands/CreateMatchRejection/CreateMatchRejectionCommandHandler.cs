@@ -18,6 +18,7 @@ internal sealed class CreateMatchRejectionCommandHandler(
     IMatchRepository matchRepository,
     IRecruiterRepository recruiterRepository,
     IExpertRepository expertRepository,
+    IUserRepository userRepository,
     IMatchNotifier matchNotifier,
     ICacheService cache,
     IUnitOfWork unitOfWork
@@ -39,6 +40,16 @@ internal sealed class CreateMatchRejectionCommandHandler(
             logger.LogWarning("Expert with ID {ExpertId} was not found.", request.ExpertId);
 
             return ResultT<string>.Failure(Error.NotFound("404", "The specified expert was not found."));
+        }
+
+        var recruiterUserStatus = await userRepository.GetStatusAsync(recruiter.UserId!.Value, cancellationToken);
+        var expertUserStatus = await userRepository.GetStatusAsync(expert.UserId!.Value, cancellationToken);
+        if (IsRestricted(recruiterUserStatus) || IsRestricted(expertUserStatus))
+        {
+            logger.LogWarning("Attempted to reject a match involving a banned user. Recruiter {RecruiterId} (status {RecruiterStatus}), Expert {ExpertId} (status {ExpertStatus}).",
+                recruiter.Id, recruiterUserStatus, expert.Id, expertUserStatus);
+
+            return ResultT<string>.Failure(Error.Validation("400", "This match cannot be rejected — one of the users is banned or suspended."));
         }
 
         var existingMatch = await matchRepository.GetAsync(expert.Id, recruiter.Id, cancellationToken);
@@ -117,6 +128,9 @@ internal sealed class CreateMatchRejectionCommandHandler(
     }
 
     #region Private Methods
+
+    private static bool IsRestricted(string? userStatus) =>
+        userStatus == UserStatus.Banned.ToString() || userStatus == UserStatus.Suspended.ToString();
 
     private static readonly Dictionary<Roles, (string expertStatus, string recruiterStatus)> StatusByRole =
         new()
