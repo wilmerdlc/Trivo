@@ -133,7 +133,8 @@ public class UserRepository(TrivoContext context) :
 
         return await Context.Set<User>()
             .AsNoTracking()
-            .Where(u => userIds.Contains(u.Id))
+            .Where(u => userIds.Contains(u.Id) &&
+                        u.UserStatus == Domain.Enums.UserStatus.Active.ToString())
             .Include(u => u.UserInterests)!.ThenInclude(ui => ui.Interest)
             .Include(u => u.UserSkills)!.ThenInclude(uh => uh.Skill)
             .Include(u => u.Recruiters)
