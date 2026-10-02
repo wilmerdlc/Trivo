@@ -61,11 +61,12 @@ public sealed class AccountAccessService(
         var remaining = expiresAt is null ? (TimeSpan?)null : TimeSpan.FromTicks(Math.Max(0, (expiresAt.Value - now).Ticks));
         var isSuspension = type == SanctionType.TemporarySuspension;
 
-        var reasonText = string.IsNullOrWhiteSpace(reason) ? string.Empty : $" Reason: {reason}";
+        // Shown as-is by the frontend, so it's written in Spanish (the app's UI language).
+        var reasonText = string.IsNullOrWhiteSpace(reason) ? string.Empty : $" Motivo: {reason}";
 
         var message = isSuspension
-            ? $"Your account is suspended until {expiresAt:yyyy-MM-dd HH:mm} UTC ({Humanize(remaining!.Value)} remaining).{reasonText}"
-            : $"Your account has been permanently banned.{reasonText}";
+            ? $"Tu cuenta está suspendida hasta el {expiresAt:dd'/'MM'/'yyyy HH':'mm} UTC (quedan {Humanize(remaining!.Value)}).{reasonText}"
+            : $"Tu cuenta ha sido baneada permanentemente.{reasonText}";
 
         var extensions = new Dictionary<string, object?>
         {
@@ -83,11 +84,11 @@ public sealed class AccountAccessService(
     {
         var parts = new List<string>();
 
-        if (span.Days > 0) parts.Add($"{span.Days} day{(span.Days == 1 ? "" : "s")}");
-        if (span.Hours > 0) parts.Add($"{span.Hours} hour{(span.Hours == 1 ? "" : "s")}");
-        if (span.Minutes > 0) parts.Add($"{span.Minutes} minute{(span.Minutes == 1 ? "" : "s")}");
+        if (span.Days > 0) parts.Add($"{span.Days} día{(span.Days == 1 ? "" : "s")}");
+        if (span.Hours > 0) parts.Add($"{span.Hours} hora{(span.Hours == 1 ? "" : "s")}");
+        if (span.Minutes > 0) parts.Add($"{span.Minutes} minuto{(span.Minutes == 1 ? "" : "s")}");
 
-        return parts.Count > 0 ? string.Join(", ", parts) : "less than a minute";
+        return parts.Count > 0 ? string.Join(", ", parts) : "menos de un minuto";
     }
     #endregion
 }

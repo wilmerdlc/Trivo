@@ -14493,7 +14493,7 @@
       },
       "norm_label": ".humanize()",
       "source_file": "src/Application/Trivo.Application/Services/AccountAccessService.cs",
-      "source_location": "L83"
+      "source_location": "L82"
     },
     {
       "id": "src_application_trivo_application_features_messages_query_getmessagepagination_getmessagepaginationqueryhandler_trivo_application_features_messages_query_getmessagepagination_getmessagepaginationqueryhandler_handle",
@@ -55369,7 +55369,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Services/AccountAccessService.cs",
-      "source_location": "L68",
+      "source_location": "L67",
       "weight": 1.0
     },
     {
@@ -55381,7 +55381,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/Application/Trivo.Application/Services/AccountAccessService.cs",
-      "source_location": "L79",
+      "source_location": "L78",
       "weight": 1.0
     },
     {
@@ -117936,7 +117936,7 @@
         "ref_token": "TimeSpan"
       },
       "source_file": "src/Application/Trivo.Application/Services/AccountAccessService.cs",
-      "source_location": "L83",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -151853,7 +151853,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/Application/Trivo.Application/Services/AccountAccessService.cs",
-      "source_location": "L83",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -160671,5 +160671,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "df4b57394fa1fe061b48b6ebe51baa6889288edc"
+  "built_at_commit": "cbcf7f0357a3039ed12274bf1a129a5eb671a9fe"
 }
