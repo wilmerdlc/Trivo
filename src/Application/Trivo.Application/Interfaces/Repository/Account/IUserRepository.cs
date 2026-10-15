@@ -161,18 +161,30 @@ public interface IUserRepository : IGenericRepository<User>
     Task UpdateProfileEmbeddingAsync(Guid userId, Vector embedding, string profileTextHash, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Finds the users whose profile embedding is closest (cosine distance) to the given vector,
-    /// restricted to the target role and excluding the given user. Returns the raw distance
-    /// alongside each candidate so the caller can apply its own relevance cutoff (e.g. cut at the
-    /// largest gap between consecutive distances) — a fixed absolute distance threshold doesn't
-    /// generalize well, since "close" vs. "far" is relative to each individual query's own score
-    /// distribution, not a single global number.
+    /// Finds candidate users for recommendations by combining two signals in a single query:
+    /// how many skills and interests they share with the requester (the structural overlap), and
+    /// how close their profile embedding is (cosine distance). Candidates are restricted to active
+    /// users of the target role, with a stored embedding and at least one skill or interest in
+    /// common, excluding the requester and <paramref name="excludedUserIds"/>.
     /// </summary>
+    /// <remarks>
+    /// Results are ordered by overlap (highest first) and then by distance (closest first), and the
+    /// pool is cut after that ordering. This matters: cutting by distance alone first would let the
+    /// prose of a biography decide who even gets considered, so a candidate with exactly the right
+    /// skills but a differently-worded profile could fall outside the pool and never be seen.
+    /// The raw distance is returned alongside each candidate so the caller can apply its own
+    /// relevance cutoff (e.g. cut at the largest gap between consecutive distances) — a fixed
+    /// absolute threshold doesn't generalize, since "close" vs. "far" is relative to each query's
+    /// own score distribution.
+    /// </remarks>
     /// <param name="userId">User to exclude from the results.</param>
     /// <param name="embedding">The reference embedding to compare against.</param>
     /// <param name="targetRole">Role the candidates must belong to.</param>
+    /// <param name="skillIds">The requester's skill ids; a candidate scores one point per skill shared.</param>
+    /// <param name="interestIds">The requester's interest ids; a candidate scores one point per interest shared.</param>
+    /// <param name="excludedUserIds">Users that must not be returned (e.g. existing matches). Applied in the database, before the pool is cut, so they never occupy a slot.</param>
     /// <param name="poolSize">
-    /// How many closest candidates to fetch — larger than the final page size, so the caller has
+    /// How many candidates to fetch — larger than the final page size, so the caller has
     /// enough of the distance curve to detect a genuine relevance cutoff.
     /// </param>
     /// <param name="cancellationToken">Token to cancel the operation.</param>
@@ -180,6 +192,9 @@ public interface IUserRepository : IGenericRepository<User>
         Guid userId,
         Vector embedding,
         Roles targetRole,
+        IReadOnlyCollection<Guid> skillIds,
+        IReadOnlyCollection<Guid> interestIds,
+        IReadOnlyCollection<Guid> excludedUserIds,
         int poolSize,
         CancellationToken cancellationToken);
 

@@ -243,13 +243,17 @@ public class UserRepository(TrivoContext context) :
         Guid userId,
         Vector embedding,
         Roles targetRole,
+        IReadOnlyCollection<Guid> skillIds,
+        IReadOnlyCollection<Guid> interestIds,
+        IReadOnlyCollection<Guid> excludedUserIds,
         int poolSize,
         CancellationToken cancellationToken)
     {
         var query = Context.Set<User>()
             .AsNoTracking()
             .Where(u => u.Id != userId && u.ProfileEmbedding != null &&
-                        u.UserStatus == Domain.Enums.UserStatus.Active.ToString());
+                        u.UserStatus == Domain.Enums.UserStatus.Active.ToString() &&
+                        !excludedUserIds.Contains(u.Id));
 
         query = targetRole switch
         {
@@ -258,11 +262,23 @@ public class UserRepository(TrivoContext context) :
             _ => query
         };
 
+        // Overlap is computed in the database and used both to filter (at least one shared
+        // skill/interest) and as the primary sort key, so the pool is cut by relevance of the
+        // structured data first and by embedding distance only to order candidates within the
+        // same overlap level.
         var results = await query
             .Include(u => u.UserInterests)!.ThenInclude(ui => ui.Interest)
             .Include(u => u.UserSkills)!.ThenInclude(uh => uh.Skill)
-            .Select(u => new { User = u, Distance = u.ProfileEmbedding!.CosineDistance(embedding) })
-            .OrderBy(x => x.Distance)
+            .Select(u => new
+            {
+                User = u,
+                Overlap = u.UserSkills!.Count(us => skillIds.Contains(us.SkillId!.Value)) +
+                          u.UserInterests!.Count(ui => interestIds.Contains(ui.InterestId!.Value)),
+                Distance = u.ProfileEmbedding!.CosineDistance(embedding)
+            })
+            .Where(x => x.Overlap > 0)
+            .OrderByDescending(x => x.Overlap)
+            .ThenBy(x => x.Distance)
             .Take(poolSize)
             .AsSplitQuery()
             .ToListAsync(cancellationToken);

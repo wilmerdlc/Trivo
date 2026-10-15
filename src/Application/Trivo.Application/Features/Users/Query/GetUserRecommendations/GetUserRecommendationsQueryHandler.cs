@@ -101,25 +101,36 @@ internal sealed class GetUserRecommendationsQueryHandler(
 
         const int topN = 9;
 
+        // Don't re-suggest someone the user already has a match record with (pending, accepted,
+        // or rejected) — a repeat suggestion here is a UX bug, not a ranking decision. They are
+        // excluded inside the query, before the pool is cut, so they never take up a slot.
+        var matchedUserIds = await matchRepository.GetMatchedCounterpartUserIdsAsync(currentUser.Id, cancellationToken);
+
+        var skillIds = currentUser.UserSkills?
+            .Where(us => us.SkillId.HasValue)
+            .Select(us => us.SkillId!.Value)
+            .ToList() ?? [];
+
+        var interestIds = currentUser.UserInterests?
+            .Where(ui => ui.InterestId.HasValue)
+            .Select(ui => ui.InterestId!.Value)
+            .ToList() ?? [];
+
         // Fetch a wider pool than topN so there's enough of the distance curve to detect a real
         // relevance cutoff (see FilterByRelevanceGap) instead of a fixed distance threshold, which
-        // doesn't generalize across different queries' own score distributions.
+        // doesn't generalize across different queries' own score distributions. The pool is ordered
+        // by shared skills/interests first and embedding distance second, so a candidate with the
+        // right skills can't be left out just because their profile text is worded differently.
         var candidates = await userRepository.GetSimilarUsersAsync(
             currentUser.Id,
             embedding,
             targetRole,
+            skillIds,
+            interestIds,
+            matchedUserIds,
             poolSize: topN * 3,
             cancellationToken
         );
-
-        // Don't re-suggest someone the user already has a match record with (pending, accepted,
-        // or rejected) — a repeat suggestion here is a UX bug, not a ranking decision.
-        var matchedUserIds = await matchRepository.GetMatchedCounterpartUserIdsAsync(currentUser.Id, cancellationToken);
-        if (matchedUserIds.Count > 0)
-        {
-            var excluded = matchedUserIds.ToHashSet();
-            candidates = candidates.Where(c => !excluded.Contains(c.User.Id)).ToList();
-        }
 
         var (structuralMatches, hasStructuralOverlap) = RestrictToBestStructuralMatches(candidates, currentUser);
 
