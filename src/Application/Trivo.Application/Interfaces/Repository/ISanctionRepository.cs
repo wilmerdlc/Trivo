@@ -25,4 +25,9 @@ public interface ISanctionRepository : IGenericRepository<Sanction>
         int pageNumber,
         int pageSize,
         CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Gets the total number of sanctions ever applied, including revoked and expired ones.
+    /// </summary>
+    Task<int> GetAppliedCountAsync(CancellationToken cancellationToken);
 }
