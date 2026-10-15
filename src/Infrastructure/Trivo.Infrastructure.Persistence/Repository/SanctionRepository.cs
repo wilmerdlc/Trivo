@@ -75,4 +75,11 @@ public class SanctionRepository(TrivoContext context) : GenericRepository<Sancti
 
         return new PagedResult<Sanction>(items, total, pageNumber, pageSize);
     }
+
+    public async Task<int> GetAppliedCountAsync(CancellationToken cancellationToken)
+    {
+        return await Context.Set<Sanction>()
+            .AsNoTracking()
+            .CountAsync(cancellationToken);
+    }
 }
