@@ -8,6 +8,7 @@ using Trivo.Application.Features.Administrator.Commands.LoginAdmin;
 using Trivo.Application.Features.Administrator.Commands.UnbanUser;
 using Trivo.API.Controllers.V1.Requests;
 using Trivo.Application.Features.Administrator.Query.GetActiveUsersCount;
+using Trivo.Application.Features.Administrator.Query.GetAppliedSanctionsCount;
 using Trivo.Application.Features.Administrator.Query.GetCompletedMatchesCount;
 using Trivo.Application.Features.Administrator.Query.GetBannedUsersPaged;
 using Trivo.Application.Features.Administrator.Query.GetExpertsPaged;
@@ -148,6 +149,18 @@ public class AdminController(ISender sender) : ControllerBase
         CancellationToken cancellationToken)
     {
         return await sender.Send(new GetReportedUsersCountQuery(), cancellationToken);
+    }
+
+    [HttpGet("count/sanctions-applied")]
+    [Authorize(Roles = "Administrator")]
+    [SwaggerOperation(
+        Summary = "Applied sanctions count",
+        Description = "Gets the total number of sanctions applied on the platform, including revoked and expired ones."
+    )]
+    public async Task<ResultT<AppliedSanctionsCountDto>> GetAppliedSanctionsCountAsync(
+        CancellationToken cancellationToken)
+    {
+        return await sender.Send(new GetAppliedSanctionsCountQuery(), cancellationToken);
     }
 
     [HttpGet("banned-users/paged")]
