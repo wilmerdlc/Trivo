@@ -6,5 +6,8 @@ public enum ReportStatus
     Resolved,
     Pending,
     Approved,
-    Rejected
+    Rejected,
+
+    /// <summary>Approved, but its sanction was later lifted early by an administrator.</summary>
+    Revoked
 }

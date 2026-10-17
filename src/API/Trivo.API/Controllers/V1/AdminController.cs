@@ -115,8 +115,10 @@ public class AdminController(ISender sender) : ControllerBase
     [HttpPut("users/{userId}/unban")]
     [Authorize(Roles = "Administrator")]
     [SwaggerOperation(
-        Summary = "Unban user",
-        Description = "Unbans a previously banned user."
+        Summary = "Unban user or revoke suspension",
+        Description = "Lifts a permanent ban or a temporary suspension early. The user's active sanctions " +
+                      "and the reports that originated them are marked as revoked, and the account is " +
+                      "restored to Active. Returns 409 if the user is not banned or suspended."
     )]
     public async Task<ResultT<string>> UnbanUserAsync(
         [FromRoute] Guid userId,
@@ -209,7 +211,7 @@ public class AdminController(ISender sender) : ControllerBase
     [Authorize(Roles = "Administrator")]
     [SwaggerOperation(
         Summary = "Reports (paginated)",
-        Description = "Gets a paginated list of reports, newest first. Optionally filter by status (Pending, Approved, Rejected)."
+        Description = "Gets a paginated list of reports, newest first. Optionally filter by status (Pending, Approved, Rejected, Revoked)."
     )]
     public async Task<ResultT<PagedResult<ReportListItemDto>>> GetReportsAsync(
         [FromQuery] int pageNumber,
