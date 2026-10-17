@@ -6,8 +6,6 @@ namespace Trivo.Application.Interfaces.Repository.Account;
 
 public interface IAdministratorRepository : IGenericRepository<Administrator>
 {
-    Task UnbanAsync(Guid userId, CancellationToken cancellationToken);
-
     Task<IEnumerable<User>> GetLast10BannedUsersAsync(CancellationToken cancellationToken);
 
     Task<bool> IsUsernameInUseAsync(string username, Guid userId, CancellationToken cancellationToken);

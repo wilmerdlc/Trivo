@@ -12,18 +12,6 @@ public class AdministratorRepository(TrivoContext context) :
     GenericRepository<Administrator>(context),
     IAdministratorRepository
 {
-    public async Task UnbanAsync(Guid userId, CancellationToken cancellationToken)
-    {
-        var user = await Context.Set<User>()
-            .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
-
-        if (user != null)
-        {
-            user.UserStatus = UserStatus.Active.ToString();
-            Context.Set<User>().Update(user);
-        }
-    }
-
     public async Task<int> GetReportedCountAsync(CancellationToken cancellationToken)
     {
         return await Context.Set<Report>()

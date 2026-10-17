@@ -30,11 +30,18 @@ public class SanctionRepository(TrivoContext context) : GenericRepository<Sancti
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task RevokeActiveAsync(Guid userId, DateTime nowUtc, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<Sanction>> RevokeActiveAsync(
+        Guid userId,
+        DateTime nowUtc,
+        CancellationToken cancellationToken)
     {
         var warning = SanctionType.Warning.ToString();
+        var approved = ReportStatus.Approved.ToString();
+        var revoked = ReportStatus.Revoked.ToString();
 
+        // Tracked on purpose: the caller saves these changes through the unit of work.
         var active = await Context.Set<Sanction>()
+            .Include(s => s.Report)
             .Where(s => s.UserId == userId &&
                         s.Type != warning &&
                         s.RevokedAt == null &&
@@ -45,7 +52,14 @@ public class SanctionRepository(TrivoContext context) : GenericRepository<Sancti
         {
             sanction.RevokedAt = nowUtc;
             sanction.UpdatedAt = nowUtc;
+
+            if (sanction.Report?.ReportStatus == approved)
+            {
+                sanction.Report.ReportStatus = revoked;
+            }
         }
+
+        return active;
     }
 
     public async Task<PagedResult<Sanction>> GetPagedHistoryAsync(

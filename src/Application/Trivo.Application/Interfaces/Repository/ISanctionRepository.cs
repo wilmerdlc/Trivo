@@ -13,9 +13,11 @@ public interface ISanctionRepository : IGenericRepository<Sanction>
     Task<Sanction?> GetCurrentBlockAsync(Guid userId, DateTime nowUtc, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Marks every active restricting sanction of the user as revoked. Doesn't save.
+    /// Marks every active restricting sanction of the user as revoked, and its originating report
+    /// (if any) as <see cref="Domain.Enums.ReportStatus.Revoked"/>. Doesn't save.
     /// </summary>
-    Task RevokeActiveAsync(Guid userId, DateTime nowUtc, CancellationToken cancellationToken);
+    /// <returns>The sanctions that were revoked.</returns>
+    Task<IReadOnlyList<Sanction>> RevokeActiveAsync(Guid userId, DateTime nowUtc, CancellationToken cancellationToken);
 
     /// <summary>
     /// Gets a page of the sanction history, newest first, optionally for a single user.
